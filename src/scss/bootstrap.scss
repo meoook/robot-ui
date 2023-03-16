@@ -9,7 +9,6 @@ h2,
 h3,
 h4 {
   font-family: montserrat, sans-serif;
-  color: $texth;
   letter-spacing: 1.5px;
   font-weight: 700;
 }
@@ -55,6 +54,17 @@ input[type='checkbox'] {
     background: rgba(var(--color-msg-error), 0.35);
   }
 }
+input {
+  display: block;
+  border: 1px solid #999;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #eee;
+  &:focus {
+    background: white;
+    border-color: #111;
+  }
+}
 svg {
   fill: var(--color-secondary);
 }
@@ -93,7 +103,6 @@ a,
 button {
   color: inherit;
   background: transparent;
-  position: relative;
   letter-spacing: 1.5px;
   transition: all 0.3s;
   white-space: nowrap;
@@ -147,7 +156,7 @@ button {
 }
 .btn {
   min-width: 120px;
-  padding: 6px;
+  padding: 6px 12px;
   font-size: $indent * 3.2;
   font-weight: 700;
   color: $texth;

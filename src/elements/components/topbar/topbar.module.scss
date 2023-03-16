@@ -4,10 +4,9 @@
   background-color: var(--color-body);
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   box-sizing: border-box;
-  padding: 16px 32px;
-  border: 1px dotted white;
+  padding: 16px 0px;
   line-height: 1.5;
   white-space: nowrap;
 }

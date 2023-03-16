@@ -14,7 +14,7 @@ html {
 body {
   font-family: notosans, sans-serif;
   color: $text;
-  font-size: $font-s;
+  font-size: var(--color-body);
   font-weight: 400;
   background: rgba($shadow, 0.95);
 }
@@ -68,6 +68,17 @@ hr {
   background: rgba($texth, 0.3);
   height: 1px;
   margin: $padding / 2 0;
+}
+small {
+  &.green {
+    color: var(--color-msg-success);
+  }
+  &.red {
+    color: var(--color-msg-error);
+  }
+  &.blue {
+    color: var(--color-msg-info);
+  }
 }
 
 // *[disabled] {

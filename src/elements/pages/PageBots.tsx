@@ -16,8 +16,9 @@ export default function PageBots(props: PageBotsProps) {
   const account = accounts.find((a) => a.id === Number(id))
   return (
     <Container>
-      <Topbar />
-      <div>create bot</div>
+      <Topbar>
+        <button className='btn green'>Add bot</button>
+      </Topbar>
       {account ? accountBots.map((bot) => <Bot key={bot.id} bot={bot} />) : <div>Account with ID: {id} not found</div>}
     </Container>
   )

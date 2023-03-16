@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { AppContext } from '../../context/AppContext'
 import { IPopup } from '../../context/objects'
 import Icon from '../components/ico-get/index'

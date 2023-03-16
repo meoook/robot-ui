@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { ModalContext } from '../../../context/ModalContext'
 import style from './container.module.scss'
 
 interface ContainerProps {
@@ -5,5 +7,9 @@ interface ContainerProps {
 }
 
 export default function Container({ children }: ContainerProps) {
-  return <div className={style.container}>{children}</div>
+  return (
+    <>
+      <div className={style.container}>{children}</div>
+    </>
+  )
 }

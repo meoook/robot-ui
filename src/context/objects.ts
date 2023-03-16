@@ -60,7 +60,7 @@ export interface IAppContext extends IState {
   signin: (username: string, password: string, callback: VoidFunction) => void
   signout: VoidFunction
   // register: VoidFunction
-  accountAdd: VoidFunction
+  accountAdd: (apiKey: string, apiSecret: string) => void
   accountRemove: VoidFunction
   botAdd: VoidFunction
   botRemove: VoidFunction

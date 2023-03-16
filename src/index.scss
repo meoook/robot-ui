@@ -12,6 +12,17 @@ body {
   color: var(--color-fg-default);
   background-color: var(--color-canvas-default);
 }
+small {
+  &.green {
+    color: var(--color-msg-success);
+  }
+  &.red {
+    color: var(--color-msg-error);
+  }
+  &.blue {
+    color: var(--color-msg-info);
+  }
+}
 
 .w-100 {
   width: 100%;

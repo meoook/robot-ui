@@ -136,6 +136,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         handleError(err, 'Failed to load accounts')
       })
   }
+  const accountAdd = async (apiKey: string, apiSecret: string) => {
+    console.log(`Try create account ${apiKey} ${apiSecret}`)
+    // TODO: timeout - refresh later
+  }
   // Bots
   const botList = async (token?: string) => {
     await axios
@@ -157,7 +161,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         signin,
         signout,
         // register,
-        accountAdd: () => {},
+        accountAdd,
         accountRemove: () => {},
         botAdd: () => {},
         botRemove: () => {},
