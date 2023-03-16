@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
-import { IBot, IPair, IResponse } from '../objects/md_pair'
-
+import { IBot, IPair } from '../context/objects'
 
 export function usePairs() {
   const [pairs, setPairs] = useState<IPair[]>([])
@@ -10,14 +9,13 @@ export function usePairs() {
 
   function addBot(bot: IBot) {
     // setPairs(prev => [...prev, bot])
-
   }
 
   async function fetchProducts() {
     try {
       setLoading(true)
       setError('')
-      const response = await axios.get<IResponse<IPair>>('http://localhost:8000/api/pair/', {
+      const response = await axios.get('http://localhost:8000/api/pair/', {
         headers: { Authorization: 'Basic bWVvazoxMjM=' },
       })
       setPairs(response.data.data)
@@ -33,5 +31,5 @@ export function usePairs() {
     fetchProducts()
   }, [])
 
-  return { pairs, loading, error, addBot}
+  return { pairs, loading, error, addBot }
 }

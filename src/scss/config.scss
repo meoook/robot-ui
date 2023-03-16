@@ -1,0 +1,183 @@
+:root {
+  --color-primary: #fff;
+  // --color-fg-default: #fff;
+  --color-secondary: #99a;
+  --color-canvas-default: #1d1d23;
+  --color-body: #1d1d23;
+  --color-dialog: #202029;
+  --color-head: #23232b;
+
+  --color-input: #282831;
+  --color-active: #2c2c35;
+
+  --color-shadow: #0005;
+  --color-border: #434a56;
+
+  --color-brand: #7545d2;
+  // MSG COLORS
+  --color-msg-default: #007bff;
+  --color-msg-info: #17a2b8;
+  --color-msg-success: #28a745;
+  --color-msg-warning: #ce9c09; //#eab000;
+  --color-msg-error: #dc3545;
+  // Sizes
+  --body-font-size: 16px;
+  --radius: 8px;
+  --font-size-h1: 24px;
+  --base-size-4: 4px;
+  --base-size-8: 8px;
+  --base-size-16: 16px;
+  // Other
+  --text-weight: 600;
+}
+
+// Gray Scale
+$texth: #ffffff;
+$text: #909099;
+$textd: #505059;
+
+$active: #2c2c35;
+$input: #282831;
+
+$footer: #25252e;
+
+$elem: #23232b;
+$menu: #202029;
+
+$shadow: #101019;
+
+// App colors
+$t-help: #9bdc8b;
+
+$brand: #7545e2; // #90caf9
+$success: #63c84a;
+$error: #f63868;
+$warning: #f19037;
+$info: #48c7d5;
+
+// App vals
+$timer: 0.9s;
+// Sizing
+$font-size: 1rem;
+$indent: 0.25rem;
+$padding: 10px;
+$radius: 6px;
+$bd: 1px;
+$in-w: 300px;
+// Media (from small to xl)
+$res-s: 600px;
+$res-m: 768px;
+$res-l: 992px;
+$res-xl: 1200px;
+
+// mixins
+%absolute {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  left: 0;
+  content: '';
+}
+
+%bd {
+  border: $bd solid rgba($texth, 0.15);
+  border-radius: $radius;
+}
+
+%shadow {
+  box-shadow: 2px 4px 6px $shadow;
+}
+%shadow-light {
+  box-shadow: 2px 4px 6px rgba($shadow, 0.2);
+}
+%shadow-light-text {
+  text-shadow: 0px 0px 6px rgba($shadow, 0.2);
+}
+
+%disabled-cfg {
+  cursor: initial;
+  transform: none !important;
+  color: $textd !important;
+  background-color: transparent !important;
+  border-color: currentColor !important;
+  // border-color: rgba($textd, 0.15) !important;
+  // & svg {
+  // fill: $textd !important;
+  // }
+}
+
+%disabled {
+  &[disabled] {
+    @extend %disabled-cfg;
+  }
+}
+
+%disabled-bg {
+  &[disabled] {
+    @extend %disabled-cfg;
+    background-size: 100px 100px !important;
+    background-image: linear-gradient(
+      45deg,
+      rgba($texth, 0.05) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba($texth, 0.05) 50%,
+      rgba($texth, 0.05) 75%,
+      transparent 75%,
+      transparent
+    ) !important;
+  }
+}
+
+// @extend %absolute;
+
+// @include shadow();
+
+@mixin color($color: $texth, $bd: false, $bg: false, $hover: false) {
+  color: $color;
+  @if $bd {
+    border-color: $color;
+    outline-color: $color;
+  }
+  @if $bg {
+    background: darken($color, 6%);
+    @if $hover {
+      &:hover {
+        background: darken($color, 5%);
+      }
+    }
+  }
+}
+
+@mixin colors($color, $hover: false) {
+  background: $color;
+  color: lighten($color, 30%);
+  border-color: lighten($color, 10%);
+  @if $hover {
+    &:hover {
+      background: lighten($color, 6%);
+    }
+  }
+  &:active {
+    background: darken($color, 1%);
+  }
+}
+
+@mixin colors-all {
+  &-brand {
+    @include colors($brand, true);
+  }
+  &-success {
+    @include colors($success, true);
+  }
+  &-info {
+    @include colors($info, true);
+  }
+  &-warning {
+    @include colors($warning, true);
+  }
+  &-error {
+    @include colors($error, true);
+  }
+}

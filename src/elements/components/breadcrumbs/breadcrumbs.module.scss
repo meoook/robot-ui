@@ -1,0 +1,19 @@
+.breadcrumbs {
+  display: flex;
+  width: 100%;
+  color: var(--color-primary);
+  flex-direction: row;
+  line-height: 1.5;
+  white-space: nowrap;
+  font-weight: var(--text-weight, 600);
+  font-size: var(--size-h3, 20px) !important;
+  .divider {
+    padding: 0 16px;
+  }
+  a {
+    color: var(--color-brand);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.container {
+  font-size: var(--font-size);
+  color: var(--color-primary);
+  background-color: var(--color-body);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 960px;
+  padding: 16px 32px;
+  margin: 0 auto;
+  border: 1px dotted white;
+  line-height: 1.5;
+  white-space: nowrap;
+  & > * {
+    margin-bottom: 16px;
+  }
+}

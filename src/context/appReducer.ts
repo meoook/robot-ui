@@ -1,49 +1,53 @@
 import * as actions from './actionTypes'
-import { IPopup } from './objects'
+import { IState, IPopup, IUser, IPair, IAccount, IBot } from './objects'
 
-const getNextId = (messageList: IPopup[]) => {
-  if (messageList.length === 0) return 0
-  else return messageList[messageList.length - 1].id + 1
+type ActionHandlersMap = Record<string, (state: IState, action: IAction<any>) => IState>
+
+interface IAction<T> {
+  type: string
+  payload: T
 }
 
-
-interface Action {
-   type: string
-   payload: number 
-  }
-  
-type ActionHandlersMap = Record<string, (state: State, ...args: any[]) => State>;
+interface IActionUser {
+  user: IUser
+  token: string
+}
 
 const handlers: ActionHandlersMap = {
-  [actions.INIT_LOADER]: (state: State, { payload = true }) => ({ ...state, loading: payload }),
-  [actions.POPUP_MESSAGE_ADD]: (state, { payload }) => ({
+  [actions.INIT_LOADER]: (state, { payload }: IAction<boolean>) => ({ ...state, loading: payload }),
+  [actions.POPUP_ADD]: (state, { payload }: IAction<IPopup>): IState => ({ ...state, msgs: [...state.msgs, payload] }),
+  [actions.POPUP_REMOVE]: (state, { payload }) => ({ ...state, msgs: state.msgs.filter((msg) => msg.id !== payload) }),
+  [actions.PAIRS_REFRESH]: (state, { payload }: IAction<IPair[]>) => ({ ...state, pairs: payload }),
+  [actions.TIMEFRAMES_REFRESH]: (state, { payload }: IAction<string[]>) => ({ ...state, timeframes: payload }),
+  [actions.USER_VALID]: (state, { payload }: IAction<IActionUser>) => ({
     ...state,
-    msgs: [...state.msgs, { id: getNextId(state.msgs), ...payload }],
+    user: payload.user,
+    token: payload.token,
   }),
-  [actions.POPUP_MESSAGE_REMOVE]: (state, { payload }) => ({
+  [actions.USER_LOGOUT]: (state) => ({ ...state, user: undefined, token: undefined }),
+  [actions.USER_REGISTER]: (state) => ({ ...state, user: undefined }),
+  [actions.ACCOUNT_REFRESH]: (state, { payload }: IAction<IAccount[]>) => ({ ...state, accounts: payload }),
+  [actions.ACCOUNT_ADD]: (state, { payload }: IAction<IAccount>) => ({
     ...state,
-    msgs: state.msgs.filter((msg) => msg.id !== payload),
+    accounts: state.accounts ? [...state.accounts, payload] : [payload],
   }),
-  [actions.LANGUAGES_REFRESH]: (state, { payload }) => ({ ...state, languages: payload }),
-  [actions.USER_VALID]: (state, { payload }) => ({ ...state, user: payload }),
-  [actions.USER_LOGOUT]: (state) => ({ ...nullState }),
-  [actions.USER_REGISTER]: (state) => ({ ...nullState }),
-  [actions.USER_PROJECT_REFRESH]: (state, { payload }) => ({ ...state, projects: payload, loading: false }),
-  [actions.USER_PROJECT_ADD]: (state, { payload }) => ({ ...state, projects: [...state.projects, payload], loading: false }),
-  [actions.USER_PROJECT_REMOVE]: (state, { payload }) => ({
+  [actions.ACCOUNT_REMOVE]: (state, { payload }: IAction<number>) => ({
     ...state,
-    projects: state.projects.filter((prj) => prj.save_id !== payload),
+    accounts: state.accounts?.filter((acc) => acc.id !== payload),
   }),
-  [actions.PRJ_FOLDER_REFRESH]: (state, { payload }) => ({ ...state, folders: payload }),
-  [actions.PRJ_FOLDER_ADD]: (state, { payload }) => ({ ...state, folders: [...state.folders, payload] }),
-  [actions.PRJ_FOLDER_REMOVE]: (state, { payload }) => ({
+  [actions.BOT_REFRESH]: (state, { payload }: IAction<IBot[]>) => ({ ...state, bots: payload }),
+  [actions.BOT_ADD]: (state, { payload }: IAction<IBot>) => ({
     ...state,
-    folders: state.folders.filter((fldr) => fldr.id !== payload),
+    bots: state.bots ? [...state.bots, payload] : [payload],
+  }),
+  [actions.BOT_REMOVE]: (state, { payload }: IAction<number>) => ({
+    ...state,
+    bots: state.bots?.filter((bot) => bot.id !== payload),
   }),
   DEFAULT: (state) => state,
 }
 
-export const appReducer = (state: State, action: Action): State => {
+export const appReducer = (state: IState, action: IAction<any>): IState => {
   const handler = handlers[action.type] || handlers.DEFAULT
   return handler(state, action)
 }

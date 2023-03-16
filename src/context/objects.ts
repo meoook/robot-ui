@@ -2,54 +2,67 @@ export interface IPopup {
   id: number
   type: string
   text: string
-  title?: string
+  title: string
+  nofade?: boolean
 }
 
 export interface IUser {
-  id: number
-  name: string
+  username: string
   email: string
-  isAdmin: boolean
+  admin: boolean
 }
 
 export interface IAccount {
   id: number
-  name: string
+  error: string
+  spot: boolean
+  margin: boolean
+  futures: boolean
   apiKey?: string
   apiSecret?: string
 }
 
 export interface IBot {
   id: number
+  account: number
+  pair: string
+  timeframe: string
   name: string
-  email: string
-  isAdmin: boolean
+  active: boolean
+  error: string
+  balance_limit: number
+  circles_limit: number
+  orders_limit: number
+  peak_delta: number
 }
 
 export interface IPair {
-  id: number,
-  coin_base: string,
-  coin_quote: string,
-  symbol: string,
-  enabled: boolean,
-  spot: boolean,
-  margin: boolean,
-  futures: boolean,
-  leverage: number,
-  qty_min: number,
-  qty_max: number,
-  qty_step: number,
-  price_min: number,
-  price_max: number,
-  price_step: number
+  coin_base: string
+  coin_quote: string
+  symbol: string
+  leverage: number
 }
 
 export interface IState {
   loading: boolean
   msgs: IPopup[]
   timeframes: string[]
-  user: IUser
+  user?: IUser
+  token?: string
   pairs: IPair[]
   accounts: IAccount[]
   bots: IBot[]
+}
+
+export interface IAppContext extends IState {
+  addMsg: (type: string, text: string, title: string) => void
+  delMsg: (id: number) => void
+  signin: (username: string, password: string, callback: VoidFunction) => void
+  signout: VoidFunction
+  // register: VoidFunction
+  accountAdd: VoidFunction
+  accountRemove: VoidFunction
+  botAdd: VoidFunction
+  botRemove: VoidFunction
+  botUpdate: VoidFunction
 }

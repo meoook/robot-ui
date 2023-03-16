@@ -1,0 +1,58 @@
+.header {
+  font: normal normal 11px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  background: var(--color-head);
+  color: var(--color-primary);
+  display: flex;
+  padding: 16px 32px;
+  font-size: var(--body-font-size);
+  line-height: 1.5;
+  white-space: nowrap;
+  :last-child {
+    margin-right: 0px !important;
+  }
+  .item {
+    display: flex;
+    margin-right: 16px;
+    align-self: stretch;
+    align-items: center;
+    flex-wrap: nowrap;
+    // margin-top: calc(-1 * var(--base-size-2, 2px)) !important;
+    // margin-bottom: calc(-1 * var(--base-size-2, 2px)) !important;
+  }
+  a {
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+  .link {
+    padding: 16px 0;
+    margin: calc(-1 * var(--base-size-16, 16px)) 0;
+    font-weight: var(--text-weight, 600);
+    margin-right: var(--base-size-16, 16px);
+    color: var(--color-primary);
+    white-space: nowrap;
+  }
+  svg {
+    display: inline-block;
+    overflow: visible !important;
+    // vertical-align: text-bottom;
+    fill: currentColor;
+    vertical-align: middle;
+  }
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-self: auto;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    background-image: linear-gradient(to bottom, var(--color-shadow), transparent);
+    height: 10px;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+  }
+}
