@@ -10,5 +10,5 @@ import iconArray from './icons'
  */
 export default function Icon({ name }: { name: string }) {
   const svgIcon = iconArray[name] || iconArray.close
-  return <div className={style.Icon}>{svgIcon}</div>
+  return <div className={style.icon}>{svgIcon}</div>
 }

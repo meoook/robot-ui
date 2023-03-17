@@ -1,7 +1,11 @@
-.Icon {
+.icon {
   position: relative;
   display: inline-flex;
   color: currentColor;
+
+  // text-align: center;
+  vertical-align: text-top;
+  // line-height: 1;
   svg {
     width: 1em;
     height: 1em;

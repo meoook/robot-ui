@@ -26,7 +26,7 @@ export default function PageAccounts(props: PageAccountsProps) {
         </button>
       </Topbar>
       {accounts?.map((account) => (
-        <Account account={account} />
+        <Account key={account.id} account={account} />
       ))}
     </Container>
   )
@@ -53,7 +53,7 @@ function ModalAddAccount() {
       return
     }
     close()
-    accountAdd(credentials.apiKey, credentials.apiSecret)
+    accountAdd(credentials.apiKey.trim(), credentials.apiSecret.trim())
   }
 
   return (

@@ -1,28 +1,9 @@
 @import './scss/nullstyle.scss';
 @import './scss/config.scss';
+@import './scss/tags.scss';
 @import './scss/bootstrap.scss';
 @import './scss/input-fields.scss';
 @import './scss/elems.scss';
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji';
-  font-size: var(--body-font-size, 14px);
-  line-height: 1.5;
-  color: var(--color-fg-default);
-  background-color: var(--color-canvas-default);
-}
-small {
-  &.green {
-    color: var(--color-msg-success);
-  }
-  &.red {
-    color: var(--color-msg-error);
-  }
-  &.blue {
-    color: var(--color-msg-info);
-  }
-}
 
 .w-100 {
   width: 100%;

@@ -1,22 +1,38 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  // line-height: 1.4;
-}
-
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 body {
   font-family: notosans, sans-serif;
-  color: $text;
-  font-size: var(--color-body);
+  font-size: var(--font-size, 16px);
   font-weight: 400;
-  background: rgba($shadow, 0.95);
+  line-height: 1.5;
+  color: var(--color-primary);
+  background-color: var(--color-body);
+}
+hr {
+  padding-top: 1px;
+  margin: var(--base-size-8, 8px) 0;
+  background-color: var(--color-border);
+  border: none;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: montserrat, sans-serif;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+h1 {
+  font-size: var(--font-size-h1, 24px);
+}
+h2 {
+  font-size: var(--font-size-h2, 20px);
+}
+h3 {
+  text-transform: uppercase;
+  font-weight: 500;
 }
 button,
 input,
@@ -27,22 +43,108 @@ textarea {
   border: none;
   background: transparent;
 }
-button {
-  text-align: center;
+input[type='text'],
+input[type='password'],
+input[type='email'],
+select {
+  // height: 100%;
+  width: 100%;
+  font-size: inherit;
+  // &:focus {
+  //   border-color: $main;
+  //   box-shadow: 0 0 $indent $main !important;
+  // }
+}
+// input:focus {
+//   border-color: $main;
+//   box-shadow: 0 0 $indent $main !important;
+// }
+input[type='checkbox'] {
+  width: var(--size-checkbox, 24px);
+  height: $indent * 3;
   cursor: pointer;
+  position: relative;
+  &:checked::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(var(--color-msg-error), 0.35);
+  }
 }
 input {
-  cursor: text;
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: var(--color-input);
+  &:focus {
+    background: var(--color-active);
+    border-color: var(--color-disabled);
+  }
 }
-// code {
-//   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-//     monospace;
-// }
-// TODO: Remove
+a,
+button {
+  color: inherit;
+  background: transparent;
+  letter-spacing: 1.5px;
+  transition: all 0.3s;
+  white-space: nowrap;
+  &.underline {
+    text-transform: uppercase;
+    font-weight: 500;
+    color: $text;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      transition: all 0.3s;
+      background-color: rgba($shadow, 0.01);
+      border-radius: 1px;
+    }
+    &:hover {
+      color: var(--color-secondary);
+      &::after {
+        background-color: var(--color-secondary);
+        box-shadow: 0 0 $indent var(--color-primary) !important;
+      }
+    }
+    &.active {
+      color: var(--color-brand);
+      &:after {
+        background-color: var(--color-brand);
+      }
+      &:hover {
+        color: var(--color-primary);
+        &::after {
+          background-color: var(--color-primary);
+        }
+      }
+    }
+  }
+  &.active {
+    color: var(--color-brand);
+    &:after {
+      background-color: var(--color-brand);
+    }
+    &:hover {
+      color: var(--color-primary);
+      &::after {
+        background-color: var(--color-primary);
+      }
+    }
+  }
+}
+
 section {
-  padding: $padding;
-  margin: $padding;
-  border: 1px solid $text;
+  padding: var(--base-size-8);
+  margin: var(--base-size-8);
+  border: 1px solid var(--color-border);
 }
 svg,
 img,
@@ -57,12 +159,13 @@ svg {
   user-select: none;
 }
 img {
-  // @extend %absolute;
-  // position: absolute;
+  position: absolute;
   width: 100%;
   height: 100%;
+  border-radius: var(--radius);
   object-fit: cover;
-  // background-color: rgba($shadow, 0.8);
+  transition: all 0.3s;
+  background-color: rgba(var(--color-primary), 0.8);
 }
 hr {
   background: rgba($texth, 0.3);
@@ -81,23 +184,6 @@ small {
   }
 }
 
-// *[disabled] {
-//   background-size: 100px 100px !important;
-//   color: $textd !important;
-//   background-color: transparent !important;
-//   border-color: $textd !important;
-//   background-image: linear-gradient(
-//     45deg,
-//     rgba($texth, 0.05) 25%,
-//     transparent 25%,
-//     transparent 50%,
-//     rgba($texth, 0.05) 50%,
-//     rgba($texth, 0.05) 75%,
-//     transparent 75%,
-//     transparent
-//   ) !important;
-//   transform: none !important;
-//   & svg {
-//     fill: $textd !important;
-//   }
-// }
+*[disabled] {
+  @extend %disabled;
+}

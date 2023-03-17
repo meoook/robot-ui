@@ -12,17 +12,20 @@ export default function BreadCrumbs(props: BreadCrumbsProps) {
   const pathSegments = location.pathname.split('/').filter((segment) => segment !== '')
   const pathElemsAmount = pathSegments.length
   // Build the breadcrumbs using the path segments
-  const breadcrumbs = pathSegments.map((segment, index) => {
-    const path = `/${pathSegments.slice(0, index + 1).join('/')}`
-    return (
-      <>
-        <Link to={path} key={path} className={style.segment}>
-          {segment}
-        </Link>
-        {index + 1 !== pathElemsAmount && <span className={style.divider}>/</span>}
-      </>
-    )
-  })
 
-  return <div className={style.breadcrumbs}>{breadcrumbs}</div>
+  return (
+    <div className={style.breadcrumbs}>
+      {pathSegments.map((segment, index) => {
+        const path = `/${pathSegments.slice(0, index + 1).join('/')}`
+        return (
+          <div key={path}>
+            <Link to={path} className={style.segment}>
+              {segment}
+            </Link>
+            {index + 1 !== pathElemsAmount && <span className={style.divider}>/</span>}
+          </div>
+        )
+      })}
+    </div>
+  )
 }

@@ -42,11 +42,18 @@ textarea {
   font-family: inherit;
   font-size: inherit;
 }
+input {
+  cursor: text;
+}
 input::-ms-clear {
   display: none;
 }
+a,
 button {
   cursor: pointer;
+}
+button {
+  text-align: center;
 }
 button::-moz-focus-inner {
   padding: 0;

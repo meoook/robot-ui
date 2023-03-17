@@ -12,6 +12,7 @@
 
   --color-shadow: #0005;
   --color-border: #434a56;
+  --color-disabled: #505059;
 
   --color-brand: #7545d2;
   // MSG COLORS
@@ -21,12 +22,14 @@
   --color-msg-warning: #ce9c09; //#eab000;
   --color-msg-error: #dc3545;
   // Sizes
-  --body-font-size: 16px;
+  --font-size: 16px;
   --radius: 8px;
   --font-size-h1: 24px;
+  --font-size-h2: 20px;
   --base-size-4: 4px;
   --base-size-8: 8px;
   --base-size-16: 16px;
+  --size-checkbox: 24px;
   // Other
   --text-weight: 600;
 }
@@ -96,38 +99,32 @@ $res-xl: 1200px;
 }
 
 %disabled-cfg {
-  cursor: initial;
+  cursor: initial !important;
   transform: none !important;
-  color: $textd !important;
+  color: var(--color-secondary) !important;
   background-color: transparent !important;
-  border-color: currentColor !important;
-  // border-color: rgba($textd, 0.15) !important;
   // & svg {
-  // fill: $textd !important;
+  //   fill: var(--color-secondary) !important;
   // }
+  pointer-events: none;
+}
+%disabled-bg {
+  background-size: 100px 100px !important;
+  background-image: linear-gradient(
+    45deg,
+    var(--color-input) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--color-input) 50%,
+    var(--color-input) 75%,
+    transparent 75%,
+    transparent
+  ) !important;
 }
 
 %disabled {
-  &[disabled] {
-    @extend %disabled-cfg;
-  }
-}
-
-%disabled-bg {
-  &[disabled] {
-    @extend %disabled-cfg;
-    background-size: 100px 100px !important;
-    background-image: linear-gradient(
-      45deg,
-      rgba($texth, 0.05) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba($texth, 0.05) 50%,
-      rgba($texth, 0.05) 75%,
-      transparent 75%,
-      transparent
-    ) !important;
-  }
+  @extend %disabled-cfg;
+  @extend %disabled-bg;
 }
 
 // @extend %absolute;

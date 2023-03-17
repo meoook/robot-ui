@@ -73,7 +73,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         await accountList(token)
         await botList(token)
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         if (err.response) {
           dispatch({ type: actions.USER_LOGOUT, payload: undefined }) // go to login page
           localStorage.removeItem('token')
@@ -92,14 +92,14 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         await sign(res.data.token)
         callback()
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         handleError(err, 'Wrong username or password')
       })
   }
   const signout = async () => {
     localStorage.removeItem('token')
     if (!state.token) return
-    await axios.post(`${URL}/auth/logout/`, null, config()).catch((err) => {
+    await axios.post(`${URL}/auth/logout/`, null, config()).catch((err: AxiosError) => {
       handleError(err, 'Logout error')
     })
     dispatch({ type: actions.USER_LOGOUT, payload: undefined })
@@ -111,7 +111,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       .then((res) => {
         dispatch({ type: actions.PAIRS_REFRESH, payload: res.data })
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         handleError(err, 'Failed to load pairs')
       })
   }
@@ -121,7 +121,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       .then((res) => {
         dispatch({ type: actions.TIMEFRAMES_REFRESH, payload: res.data })
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         handleError(err, 'Failed to load timeframes')
       })
   }
@@ -132,13 +132,27 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       .then((res) => {
         dispatch({ type: actions.ACCOUNT_REFRESH, payload: res.data })
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         handleError(err, 'Failed to load accounts')
       })
   }
   const accountAdd = async (apiKey: string, apiSecret: string) => {
     console.log(`Try create account ${apiKey} ${apiSecret}`)
     // TODO: timeout - refresh later
+    await axios
+      .post(`${URL}/account/`, { api_key: apiKey, api_secret: apiSecret }, config())
+      .then(async (res) => {
+        console.log('Response', res.data)
+        dispatch({ type: actions.ACCOUNT_ADD, payload: res.data })
+        setTimeout(() => {
+          accountList()
+        }, 4500)
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to create account')
+        console.log(`Error - ${err.message}`)
+        console.warn(err)
+      })
   }
   // Bots
   const botList = async (token?: string) => {
@@ -147,7 +161,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       .then((res) => {
         dispatch({ type: actions.BOT_REFRESH, payload: res.data })
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         handleError(err, 'Failed to load bots')
       })
   }
