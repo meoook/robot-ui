@@ -21,16 +21,15 @@ export default function Bot({ bot }: BotProps) {
             <span>ID: {bot.id}</span>
           </div>
           <hr />
-          <small>{bot.name}</small>
+          <small className='gray'>{bot.name}</small>
         </div>
-        {bot.error && <div>{bot.error}</div>}
         <div className='row justify'>
           <div className='col-2'>balance limit: {bot.balance_limit}</div>
           <div className='col-2'>circles limit: {bot.circles_limit}</div>
           <div className='col-2'>peak delta: {bot.peak_delta}</div>
         </div>
         <div className='row justify'>
-          <div className='col-2'></div>
+          <div className='col-2'>{bot.error && <small className='red'>{bot.error}</small>}</div>
           <div className='col-2'>orders limit: {bot.orders_limit}</div>
           <div className='col-2'></div>
         </div>

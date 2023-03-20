@@ -1,0 +1,107 @@
+$texth: #fff;
+$textd: #505059;
+$shadow: #111;
+
+$brand: #7545e2; // #90caf9
+$input: #282831;
+
+$indent: 0.25rem;
+$font-s: 1rem;
+$padding: 10px;
+
+.switch {
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+
+  svg {
+    height: 1em;
+    width: 1em;
+  }
+}
+
+.btn {
+  font-size: var(--font-size-h2, 20px);
+  border: 1px solid var(--color-border);
+  height: 1em;
+  width: 1em;
+  border-radius: $indent;
+  transition: background-color var(--timer, 0.4s);
+  box-sizing: content-box;
+  margin-top: 6px;
+  &:hover {
+    border-color: var(--color-secondary);
+  }
+  &.big {
+    font-size: var(--font-size-h1, 24px);
+  }
+  &.small {
+    font-size: var(--font-size, 16px);
+  }
+  & .mark {
+    border-radius: 50%;
+    transition: all var(--timer, 0.4s);
+    opacity: 0;
+    margin: 1px;
+    height: calc(1em - 2px);
+    width: calc(1em - 2px);
+  }
+  // styles
+  &.toggle {
+    display: inline-flex;
+    width: 1.6em;
+    border-radius: calc(1.2em / 2);
+    & .mark {
+      opacity: 1;
+      background: var(--color-primary);
+    }
+    &.active {
+      & .mark {
+        transform: translateX(0.6em);
+      }
+    }
+  }
+  &.radio {
+    border-radius: 50%;
+    background: transparent !important;
+    & .mark {
+      background: var(--color-brand);
+    }
+    &.disabled {
+      .mark {
+        background-color: var(--color-disabled);
+      }
+    }
+  }
+  &.check {
+    background-color: transparent !important;
+    & .mark {
+      margin: 0px;
+      line-height: normal;
+    }
+  }
+  // status
+  &.disabled {
+    cursor: initial;
+    transform: none !important;
+    color: var(--color-disabled) !important;
+    background-color: transparent !important;
+    border-color: currentColor !important;
+    &.active {
+      background-color: var(--color-disabled) !important;
+    }
+    & .mark {
+      background-color: var(--color-secondary);
+    }
+  }
+
+  &.active {
+    color: var(--color-primary);
+    background-color: var(--color-brand);
+
+    .mark {
+      opacity: 1;
+    }
+  }
+}

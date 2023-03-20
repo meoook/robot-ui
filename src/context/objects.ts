@@ -22,18 +22,21 @@ export interface IAccount {
   apiSecret?: string
 }
 
-export interface IBot {
-  id: number
-  account: number
-  pair: string
-  timeframe: string
+export interface IBotCfg {
   name: string
   active: boolean
-  error: string
   balance_limit: number
   circles_limit: number
   orders_limit: number
   peak_delta: number
+}
+
+export interface IBot extends IBotCfg {
+  id: number
+  account: number
+  pair: string
+  timeframe: string
+  error: string
 }
 
 export interface IPair {
@@ -61,8 +64,8 @@ export interface IAppContext extends IState {
   signout: VoidFunction
   // register: VoidFunction
   accountAdd: (apiKey: string, apiSecret: string) => void
-  accountRemove: VoidFunction
-  botAdd: VoidFunction
-  botRemove: VoidFunction
-  botUpdate: VoidFunction
+  accountRemove: (accountID: number) => void
+  botAdd: (name: string, pair: string, timeframe: string) => void
+  botRemove: (botID: number) => void
+  botUpdate: (botID: number, botCfg: IBotCfg) => void
 }

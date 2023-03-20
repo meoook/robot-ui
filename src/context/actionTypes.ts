@@ -10,10 +10,12 @@ export const USER_VALID = 'USER_VALID'
 export const USER_LOGOUT = 'USER_LOGOUT'
 export const USER_REGISTER = 'USER_REGISTER'
 // ACCOUNT
+export const ACCOUNT_LIST = 'ACCOUNT_LIST'
 export const ACCOUNT_REFRESH = 'ACCOUNT_REFRESH'
 export const ACCOUNT_ADD = 'ACCOUNT_ADD'
 export const ACCOUNT_REMOVE = 'ACCOUNT_REMOVE'
 // BOT
+export const BOT_LIST = 'BOT_LIST'
 export const BOT_REFRESH = 'BOT_REFRESH'
 export const BOT_ADD = 'BOT_ADD'
 export const BOT_REMOVE = 'BOT_REMOVE'

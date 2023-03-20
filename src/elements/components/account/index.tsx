@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { IAccount } from '../../../context/objects'
-import Icon from '../ico-get'
-import Loader from '../loader'
+import Valid from '../valid'
 import style from './account.module.scss'
 
 interface AccountProps {
@@ -12,32 +11,32 @@ interface AccountProps {
 export default function Account({ account }: AccountProps) {
   const loading: boolean = !account.margin && !account.error
   return (
-    <Link to={`/accounts/${account.id}`} className={`${style.account} ${(loading || account.error) && 'disabled'}`}>
-      <div>
-        <div className='row justify'>
-          <div>
-            {loading ? (
-              <span>
-                <Loader />
-              </span>
-            ) : account.error ? (
-              <span className={style.err}>
-                <Icon name='warning' />
-              </span>
-            ) : (
-              <span className={style.ok}>
-                <Icon name='check' />
-              </span>
-            )}
-            <span>&nbsp;</span>
-            <span>ID: {account.id}</span>
-          </div>
-          {account.error ?? <div>{account.error}</div>}
+    <Link to={`/accounts/${account.id}`} className={style.account}>
+      <div className='row justify'>
+        <div>
+          <Valid valid={loading ? undefined : !account.error} />
+          <span>&nbsp;</span>
+          <span>ID: {account.id}</span>
         </div>
-        <div></div>
-        <div>spot: {account.spot ? 'enabled' : 'disabled'}</div>
-        <div>margin: {account.margin ? 'enabled' : 'disabled'}</div>
-        <div>fututres: {account.futures ? 'enabled' : 'disabled'}</div>
+        {account.error ?? <div>{account.error}</div>}
+      </div>
+      <div className='row'>
+        <div className='col-1'>spot:</div>
+        <div className='col-1'>
+          <Valid valid={account.spot} />
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col-1'>margin:</div>
+        <div className='col-1'>
+          <Valid valid={account.margin} />
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col-1'>futures:</div>
+        <div className='col-1'>
+          <Valid valid={account.futures} />
+        </div>
       </div>
     </Link>
   )

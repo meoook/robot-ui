@@ -1,9 +1,9 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { useEffect, useReducer } from 'react'
 import * as actions from './actionTypes'
 import { AppContext } from './AppContext'
 import { appReducer } from './appReducer'
-import { IPopup } from './objects'
+import { IBotCfg, IPopup } from './objects'
 
 const getNextId = (messageList: IPopup[]) => {
   if (messageList.length === 0) return 0
@@ -64,7 +64,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     loading(true)
     await axios
       .get(`${URL}/user`, config(token))
-      .then((res) => {
+      .then((res: AxiosResponse) => {
         dispatch({ type: actions.USER_VALID, payload: { user: res.data, token: token } })
       })
       .then(async () => {
@@ -87,7 +87,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     if (state.token && state.user) return
     await axios
       .post(`${URL}/auth/login/`, { username, password })
-      .then(async (res) => {
+      .then(async (res: AxiosResponse) => {
         localStorage.setItem('token', res.data.token)
         await sign(res.data.token)
         callback()
@@ -108,7 +108,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
   const loadPairs = async (token: string) => {
     await axios
       .get(`${URL}/pair`, config(token))
-      .then((res) => {
+      .then((res: AxiosResponse) => {
         dispatch({ type: actions.PAIRS_REFRESH, payload: res.data })
       })
       .catch((err: AxiosError) => {
@@ -118,7 +118,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
   const loadTimeframs = async (token: string) => {
     await axios
       .get(`${URL}/timeframe`, config(token))
-      .then((res) => {
+      .then((res: AxiosResponse) => {
         dispatch({ type: actions.TIMEFRAMES_REFRESH, payload: res.data })
       })
       .catch((err: AxiosError) => {
@@ -129,41 +129,95 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
   const accountList = async (token?: string) => {
     await axios
       .get(`${URL}/account`, config(token))
-      .then((res) => {
-        dispatch({ type: actions.ACCOUNT_REFRESH, payload: res.data })
+      .then((res: AxiosResponse) => {
+        dispatch({ type: actions.ACCOUNT_LIST, payload: res.data })
       })
       .catch((err: AxiosError) => {
         handleError(err, 'Failed to load accounts')
       })
   }
+  const accountGet = async (accountID: string) => {
+    await axios
+      .get(`${URL}/account/${accountID}`, config())
+      .then((res: AxiosResponse) => {
+        dispatch({ type: actions.ACCOUNT_REFRESH, payload: res.data })
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to load account')
+      })
+  }
   const accountAdd = async (apiKey: string, apiSecret: string) => {
-    console.log(`Try create account ${apiKey} ${apiSecret}`)
-    // TODO: timeout - refresh later
     await axios
       .post(`${URL}/account/`, { api_key: apiKey, api_secret: apiSecret }, config())
-      .then(async (res) => {
-        console.log('Response', res.data)
+      .then(async (res: AxiosResponse) => {
         dispatch({ type: actions.ACCOUNT_ADD, payload: res.data })
-        setTimeout(() => {
-          accountList()
+        setTimeout(async () => {
+          await accountGet(res.data.id)
         }, 4500)
       })
       .catch((err: AxiosError) => {
         handleError(err, 'Failed to create account')
-        console.log(`Error - ${err.message}`)
-        console.warn(err)
+      })
+  }
+  const accountRemove = async (accountID: number) => {
+    await axios
+      .delete(`${URL}/account/${accountID}/`, config())
+      .then(async (res: AxiosResponse) => {
+        dispatch({ type: actions.ACCOUNT_REMOVE, payload: accountID })
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to delete account')
       })
   }
   // Bots
   const botList = async (token?: string) => {
     await axios
       .get(`${URL}/bot`, config(token))
-      .then((res) => {
-        dispatch({ type: actions.BOT_REFRESH, payload: res.data })
+      .then((res: AxiosResponse) => {
+        dispatch({ type: actions.BOT_LIST, payload: res.data })
       })
       .catch((err: AxiosError) => {
         handleError(err, 'Failed to load bots')
       })
+  }
+  const botGet = async (botID: string) => {
+    await axios
+      .get(`${URL}/bot/${botID}`, config())
+      .then((res: AxiosResponse) => {
+        dispatch({ type: actions.BOT_REFRESH, payload: res.data })
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to load bot')
+      })
+  }
+  const botUpdate = async (botID: number, botCfg: IBotCfg) => {
+    await axios
+      .put(`${URL}/bot/${botID}/`, botCfg, config())
+      .then((res: AxiosResponse) => {
+        dispatch({ type: actions.BOT_REFRESH, payload: res.data })
+        setTimeout(async () => {
+          await botGet(res.data.id)
+          await accountGet(res.data.account)
+        }, 4500)
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to update bot')
+      })
+  }
+  const botAdd = async (name: string, pair: string, timeframe: string) => {
+    console.log('Adding bot with params:', name, pair, timeframe)
+
+    // await axios
+    //   .post(`${URL}/bot/`, { name: name, pair: pair, timeframe: timeframe }, config())
+    //   .then(async (res: AxiosResponse) => {
+    //     dispatch({ type: actions.BOT_ADD, payload: res.data })
+    //     setTimeout(async () => {
+    //       await botGet(res.data.id)
+    //     }, 4500)
+    //   })
+    //   .catch((err: AxiosError) => {
+    //     handleError(err, 'Failed to create bot')
+    //   })
   }
 
   return (
@@ -176,10 +230,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         signout,
         // register,
         accountAdd,
-        accountRemove: () => {},
-        botAdd: () => {},
+        accountRemove,
+        botAdd,
         botRemove: () => {},
-        botUpdate: () => {},
+        botUpdate,
       }}>
       {children}
     </AppContext.Provider>

@@ -26,19 +26,35 @@ const handlers: ActionHandlersMap = {
   }),
   [actions.USER_LOGOUT]: (state) => ({ ...state, user: undefined, token: undefined }),
   [actions.USER_REGISTER]: (state) => ({ ...state, user: undefined }),
-  [actions.ACCOUNT_REFRESH]: (state, { payload }: IAction<IAccount[]>) => ({ ...state, accounts: payload }),
+  [actions.ACCOUNT_LIST]: (state, { payload }: IAction<IAccount[]>) => ({
+    ...state,
+    accounts: payload.sort((a, b) => a.id - b.id),
+  }),
+  [actions.ACCOUNT_REFRESH]: (state, { payload }: IAction<IAccount>) => ({
+    ...state,
+    accounts: state.accounts
+      .map((accounts) => (accounts.id === payload.id ? payload : accounts))
+      .sort((a, b) => a.id - b.id),
+  }),
   [actions.ACCOUNT_ADD]: (state, { payload }: IAction<IAccount>) => ({
     ...state,
-    accounts: state.accounts ? [...state.accounts, payload] : [payload],
+    accounts: state.accounts ? [...state.accounts, payload].sort((a, b) => a.id - b.id) : [payload],
   }),
   [actions.ACCOUNT_REMOVE]: (state, { payload }: IAction<number>) => ({
     ...state,
     accounts: state.accounts?.filter((acc) => acc.id !== payload),
   }),
-  [actions.BOT_REFRESH]: (state, { payload }: IAction<IBot[]>) => ({ ...state, bots: payload }),
+  [actions.BOT_LIST]: (state, { payload }: IAction<IBot[]>) => ({
+    ...state,
+    bots: payload.sort((a, b) => a.id - b.id),
+  }),
+  [actions.BOT_REFRESH]: (state, { payload }: IAction<IBot>) => ({
+    ...state,
+    bots: state.bots.map((bot) => (bot.id === payload.id ? payload : bot)).sort((a, b) => a.id - b.id),
+  }),
   [actions.BOT_ADD]: (state, { payload }: IAction<IBot>) => ({
     ...state,
-    bots: state.bots ? [...state.bots, payload] : [payload],
+    bots: state.bots ? [...state.bots, payload].sort((a, b) => a.id - b.id) : [payload],
   }),
   [actions.BOT_REMOVE]: (state, { payload }: IAction<number>) => ({
     ...state,

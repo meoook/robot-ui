@@ -7,7 +7,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-shadow);
+  // background-color: var(--color-shadow);
+  background-color: #2019207f;
 }
 .modal {
   position: absolute;
@@ -23,7 +24,8 @@
   font-size: var(--font-size, 16px);
   color: var(--color-primary);
   background-color: var(--color-dialog);
-  border-radius: 4px;
+  border-radius: var(--radius, 8px);
+  border: 1px solid var(--color-border);
   .title {
     font-size: var(--font-size-h1, 24px);
     font-weight: 600;
