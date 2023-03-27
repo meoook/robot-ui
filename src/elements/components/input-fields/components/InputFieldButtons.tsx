@@ -5,7 +5,7 @@ import styles from '../input.module.scss'
 interface InputFieldProps {
   canReset: boolean
   reset: (event: React.PointerEvent<HTMLInputElement>) => void
-  helpText: string
+  helpText?: string
   loading: boolean
   disabled: boolean
 }
@@ -23,7 +23,7 @@ export default function InputFieldButtons(props: InputFieldProps) {
   return (
     <div className={styles.btns}>
       {props.loading ? <Loader /> : <ResetToggle avalible={props.canReset} reset={props.reset} />}
-      <HelpIcon text={props.helpText} />
+      {props.helpText && <HelpIcon text={props.helpText} />}
     </div>
   )
 }

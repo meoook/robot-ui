@@ -23,6 +23,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     pairs: [],
     accounts: [],
     bots: [],
+    stats: [],
   }
   const [state, dispatch] = useReducer(appReducer, initialState)
 
@@ -72,6 +73,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         await loadTimeframs(token)
         await accountList(token)
         await botList(token)
+        await loadStats(token)
       })
       .catch((err: AxiosError) => {
         if (err.response) {
@@ -104,6 +106,17 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     })
     dispatch({ type: actions.USER_LOGOUT, payload: undefined })
   }
+  const register = async ({ email, password }: { email: string; password: string }) => {
+    await axios
+      .post(`${URL}/auth/register/`, { email, password })
+      .then(async (res: AxiosResponse) => {
+        localStorage.setItem('token', res.data.token)
+        await sign(res.data.token)
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to register')
+      })
+  }
   // Options
   const loadPairs = async (token: string) => {
     await axios
@@ -119,10 +132,23 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     await axios
       .get(`${URL}/timeframe`, config(token))
       .then((res: AxiosResponse) => {
-        dispatch({ type: actions.TIMEFRAMES_REFRESH, payload: res.data })
+        dispatch({
+          type: actions.TIMEFRAMES_REFRESH,
+          payload: res.data.map((e: string[]) => ({ timeframe: e[0], name: e[1] })),
+        })
       })
       .catch((err: AxiosError) => {
         handleError(err, 'Failed to load timeframes')
+      })
+  }
+  const loadStats = async (token: string) => {
+    await axios
+      .get(`${URL}/stats`, config(token))
+      .then((res: AxiosResponse) => {
+        dispatch({ type: actions.BOT_STATS, payload: res.data.data })
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to load stats')
       })
   }
   // Accounts
@@ -204,20 +230,28 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         handleError(err, 'Failed to update bot')
       })
   }
-  const botAdd = async (name: string, pair: string, timeframe: string) => {
-    console.log('Adding bot with params:', name, pair, timeframe)
-
-    // await axios
-    //   .post(`${URL}/bot/`, { name: name, pair: pair, timeframe: timeframe }, config())
-    //   .then(async (res: AxiosResponse) => {
-    //     dispatch({ type: actions.BOT_ADD, payload: res.data })
-    //     setTimeout(async () => {
-    //       await botGet(res.data.id)
-    //     }, 4500)
-    //   })
-    //   .catch((err: AxiosError) => {
-    //     handleError(err, 'Failed to create bot')
-    //   })
+  const botAdd = async (account: number, name: string, pair: string, timeframe: string) => {
+    await axios
+      .post(`${URL}/bot/`, { account, name, pair, timeframe }, config())
+      .then(async (res: AxiosResponse) => {
+        dispatch({ type: actions.BOT_ADD, payload: res.data })
+        setTimeout(async () => {
+          await botGet(res.data.id)
+        }, 4500)
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to create bot')
+      })
+  }
+  const botRemove = async (botID: number) => {
+    await axios
+      .delete(`${URL}/bot/${botID}/`, config())
+      .then(async (res: AxiosResponse) => {
+        dispatch({ type: actions.BOT_REMOVE, payload: botID })
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Failed to delete bot')
+      })
   }
 
   return (
@@ -228,11 +262,11 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         delMsg,
         signin,
         signout,
-        // register,
+        register,
         accountAdd,
         accountRemove,
         botAdd,
-        botRemove: () => {},
+        botRemove,
         botUpdate,
       }}>
       {children}

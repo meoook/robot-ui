@@ -72,11 +72,13 @@ input {
   padding: 8px 12px;
   color: var(--color-primary);
   background: var(--color-input);
+  background: transparent;
   &:focus {
     background: var(--color-active);
     border-color: var(--color-disabled);
   }
 }
+
 a,
 button {
   color: inherit;
@@ -87,7 +89,8 @@ button {
   &.underline {
     text-transform: uppercase;
     font-weight: 500;
-    color: $text;
+    color: var(--color-secondary);
+    position: relative;
     &:after {
       content: '';
       position: absolute;
@@ -96,14 +99,13 @@ button {
       bottom: 0;
       height: 1px;
       transition: all 0.3s;
-      background-color: rgba($shadow, 0.01);
+      background-color: transparent;
       border-radius: 1px;
     }
     &:hover {
       color: var(--color-secondary);
       &::after {
         background-color: var(--color-secondary);
-        box-shadow: 0 0 $indent var(--color-primary) !important;
       }
     }
     &.active {

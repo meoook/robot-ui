@@ -1,4 +1,4 @@
-import Icon from '../../ico-get/index.js'
+import Icon from '../../ico-get'
 import styles from '../input.module.scss'
 
 interface InputFieldProps {

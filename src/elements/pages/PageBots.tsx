@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
 import Container from '../components/container'
 import Topbar from '../components/topbar'
@@ -27,7 +27,7 @@ export default function PageBots(props: PageBotsProps) {
     <Container>
       {modal && (
         <Modal title='Create bot'>
-          <ModalAddBot />
+          <ModalAddBot account={Number(id)} />
         </Modal>
       )}
       <Topbar>
@@ -41,12 +41,13 @@ export default function PageBots(props: PageBotsProps) {
         </div>
       </Topbar>
       {account ? accountBots.map((bot) => <Bot key={bot.id} bot={bot} />) : <div>Account with ID: {id} not found</div>}
+      {accountBots.length === 0 && <div>Add bot to continue</div>}
     </Container>
   )
 }
 
-function ModalAddBot() {
-  const { botAdd } = useContext(AppContext)
+function ModalAddBot({ account }: { account: number }) {
+  const { botAdd, pairs, timeframes } = useContext(AppContext)
   const { close } = useContext(ModalContext)
   const [params, setParams] = useState({ name: '', pair: '', timeframe: '' })
   const [error, setError] = useState('')
@@ -66,11 +67,16 @@ function ModalAddBot() {
       return
     }
     if (!params.timeframe.trim()) {
-      setError('Enter pair')
+      setError('Enter timeframe')
+      return
+    }
+    const timeframe = timeframes.find((e) => e.name === params.timeframe)?.timeframe
+    if (timeframe) botAdd(account, params.name.trim(), params.pair.trim(), timeframe)
+    else {
+      setError(`Invalid timeframe ${params.timeframe}`)
       return
     }
     close()
-    botAdd(params.name.trim(), params.pair.trim(), params.timeframe.trim())
     // TODO: callback redirect
   }
 
@@ -79,9 +85,14 @@ function ModalAddBot() {
       <label>bot name</label>
       <input type='text' name='name' onChange={onChange} />
       <label>pair</label>
-      <input type='text' name='pair' onChange={onChange} />
+      <Dropdown name='pair' choices={pairs} selected={params.pair} onChange={onChange} />
       <label>timeframe</label>
-      <input type='text' name='timeframe' onChange={onChange} />
+      <Dropdown
+        name='timeframe'
+        choices={timeframes.map((e) => e.name)}
+        selected={params.timeframe}
+        onChange={onChange}
+      />
       <small className='red'>{error}&nbsp;</small>
 
       <div className='row justify'>
@@ -91,5 +102,28 @@ function ModalAddBot() {
         </button>
       </div>
     </>
+  )
+}
+
+interface DropdownProps {
+  children?: React.ReactNode
+  name: string
+  choices: string[]
+  selected: string
+  onChange: (event: React.ChangeEvent<any>) => void
+}
+
+function Dropdown(props: DropdownProps) {
+  return (
+    <div>
+      <select name={props.name} value={props.selected} onChange={props.onChange}>
+        <option value=''>Select {props.name}</option>
+        {props.choices.map((e) => (
+          <option value={e} key={e}>
+            {e}
+          </option>
+        ))}
+      </select>
+    </div>
   )
 }

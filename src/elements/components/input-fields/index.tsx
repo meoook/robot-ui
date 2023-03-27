@@ -9,15 +9,15 @@ interface InputTextProps {
   title?: string // label with outline or placeholder
   name: string
   value: string
-  ph: string // Placeholder (displayed only with choices or with icon field)
-  icon: string // icon name before text
-  errorText: string // error text (out - red)
-  helpText: string // help text onHover info Icon
-  outColor: string // if set - display outline border & label control
+  type?: string
+  ph?: string // Placeholder (displayed only with choices or with icon field)
+  icon?: string // icon name before text
+  errorText?: string // error text (out - red)
+  helpText?: string // help text onHover info Icon
+  outColor?: string // if set - display outline border & label control
   loading?: boolean // State for field loading (choices and icon)
   disabled?: boolean // disable ui control
   onChange: (name: string, value: string) => void
-  onFinish: (name: string, value: string) => void // Callback: reset or onBlur or keyEnter or select from choices
 }
 
 export default function InputTextField(props: InputTextProps) {
@@ -82,8 +82,9 @@ export default function InputTextField(props: InputTextProps) {
           props.helpText ? styles.two : styles.one
         )}>
         <input
+          // className={styles.field}
           tabIndex={0}
-          type='text'
+          type={props.type || 'text'}
           autoComplete='off'
           ref={inRef}
           value={props.value}
@@ -92,7 +93,7 @@ export default function InputTextField(props: InputTextProps) {
           required={required}
           disabled={props.disabled}
         />
-        <InputFieldIcon icon={props.icon} error={Boolean(props.errorText)} />
+        {props.icon && <InputFieldIcon icon={props.icon} error={Boolean(props.errorText)} />}
         <InputFieldButtons
           canReset={Boolean(props.value)}
           reset={handleReset}
@@ -102,7 +103,7 @@ export default function InputTextField(props: InputTextProps) {
         />
         <InputFieldOutline title={props.title || ''} color={outlineColor} />
       </div>
-      <InputFieldError text={props.errorText} />
+      {props.errorText && <InputFieldError text={props.errorText} />}
     </div>
   )
 }

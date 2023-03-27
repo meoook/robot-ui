@@ -28,6 +28,7 @@ export default function PageAccounts(props: PageAccountsProps) {
       {accounts?.map((account) => (
         <Account key={account.id} account={account} />
       ))}
+      {accounts.length === 0 && <div>Add account to continue</div>}
     </Container>
   )
 }

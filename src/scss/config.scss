@@ -90,7 +90,7 @@ $res-xl: 1200px;
 }
 
 %shadow {
-  box-shadow: 2px 4px 6px $shadow;
+  box-shadow: 0 2px 4px var(--color-shadow) !important;
 }
 %shadow-light {
   box-shadow: 2px 4px 6px rgba($shadow, 0.2);

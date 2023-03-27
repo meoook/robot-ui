@@ -1,38 +1,52 @@
 import { useState, useContext } from 'react'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
+import InputTextField from '../components/input-fields'
 
-const PageLogin = () => {
+export default function PageLogin() {
   let navigate = useNavigate()
   let location = useLocation()
   let from = location.state?.from?.pathname || '/'
 
   const { signin } = useContext(AppContext)
-  const [auth, setAuth] = useState({ username: '', password: '' })
+  const [auth, setAuth] = useState({ email: '', password: '' })
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setAuth({ ...auth, [event.target.name]: event.target.value })
-  const handleKeyBoard = (event: React.KeyboardEvent) => event.key === 'Enter' && handleSubmit()
-
-  const handleSubmit = () => {
-    signin(auth.username, auth.password, () => {
+  const signIn = () => {
+    signin(auth.email, auth.password, () => {
       navigate(from, { replace: true })
     })
   }
 
+  const handleChange = (name: string, value: string) => setAuth({ ...auth, [name]: value })
+
   return (
     <div className='column center middle max-h'>
-      <div className='shadow-box col col-3'>
-        <h1>Авторизация</h1>
-        <label>Ваш логин</label>
-        <input className='m-1' name='username' type='text' onChange={onChange} onKeyDown={handleKeyBoard} />
-        <label>Ваш пароль</label>
-        <input className='m-1' name='password' type='password' onChange={onChange} onKeyDown={handleKeyBoard} />
-        <div className='row center justify'>
+      <div className='shadow-box column'>
+        <h1 className='mb-2'>Авторизация</h1>
+        <InputTextField
+          name='email'
+          onChange={handleChange}
+          value={auth.email}
+          icon='user'
+          title='Ваша почта'
+          ph='укажите почту'
+          outColor='brand'
+        />
+        <InputTextField
+          name='password'
+          type='password'
+          onChange={handleChange}
+          value={auth.password}
+          icon='key'
+          title='Ваш пароль'
+          ph='укажите пароль'
+          outColor='brand'
+        />
+        <div className='row center justify mt-2'>
           <NavLink to={'/reg'} className='underline'>
             Регистрация
           </NavLink>
-          <button className='btn green' onClick={handleSubmit}>
+          <button className='btn green' onClick={signIn}>
             Login
           </button>
         </div>
@@ -40,5 +54,3 @@ const PageLogin = () => {
     </div>
   )
 }
-
-export default PageLogin

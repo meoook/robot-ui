@@ -8,6 +8,7 @@ import PageBot from './elements/pages/PageBot'
 import PageBots from './elements/pages/PageBots'
 import PageHome from './elements/pages/PageHome'
 import PageLogin from './elements/pages/PageLogin'
+import PageRegister from './elements/pages/PageRegister'
 
 export default function NavRouter() {
   return (
@@ -19,9 +20,9 @@ export default function NavRouter() {
       </Route>
       <Route element={<LayoutNotAuthed />}>
         <Route path='/login' element={<PageLogin />} />
+        <Route path='/reg' element={<PageRegister />} />
       </Route>
       <Route path='/' element={<PageHome />} />
-      <Route path='/reg' element={<PageHome />} />
       <Route path='*' element={<Page404 />} />
     </Routes>
   )
@@ -37,7 +38,8 @@ function LayoutProtected() {
 }
 
 function LayoutNotAuthed() {
-  const { user } = useContext(AppContext)
+  const { user, loading } = useContext(AppContext)
+  if (loading) return <LoaderCar />
   if (user) return <Navigate to='/' replace />
   return <Outlet />
 }

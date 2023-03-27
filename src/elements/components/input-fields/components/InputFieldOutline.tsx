@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from '../input.module.scss'
 
 const InputFieldOutline = ({ title, color }: { title: string; color: string }) => {

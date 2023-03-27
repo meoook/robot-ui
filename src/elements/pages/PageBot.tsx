@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react'
 import { AppContext } from '../../context/AppContext'
 import Container from '../components/container'
 import Topbar from '../components/topbar'
-import { IBot, IBotCfg } from '../../context/objects'
+import { IBot, IBotCfg, IBotStats } from '../../context/objects'
 import InputNumber from '../components/input-number'
 import InputSwitch from '../components/input-switch'
 
@@ -13,10 +13,11 @@ interface PageBotsProps {
 export default function PageBot(props: PageBotsProps) {
   const { id } = useParams()
   const { botid } = useParams()
-  const { bots, botRemove, botUpdate } = useContext(AppContext)
+  const { bots, botRemove, botUpdate, stats } = useContext(AppContext)
   const navigate = useNavigate()
   const [edit, setEdit] = useState(false)
   const [bot, setBot] = useState<IBot>()
+  const [stat, setStat] = useState<IBotStats[]>()
   const [botCfg, setBotCfg] = useState<IBotCfg>({
     name: '',
     active: false,
@@ -28,9 +29,11 @@ export default function PageBot(props: PageBotsProps) {
 
   useEffect(() => {
     const lookup = bots.find((b) => b.id === Number(botid) && b.account === Number(id))
+    const botStats = stats.filter((b) => b.bot === Number(botid))
+    setStat(botStats)
     setBot(lookup)
     if (lookup) setBotCfg(lookup)
-  }, [bots, botid, id])
+  }, [bots, botid, id, stats])
 
   const handleDelete = () => {
     botRemove(Number(botid))
@@ -130,6 +133,15 @@ export default function PageBot(props: PageBotsProps) {
               onChange={onChange}
             />
           </div>
+          {stat?.map((st) => (
+            <div key={`${st.bot}${st.month}`} className='row justify'>
+              <div className='col col-2'>month: {st.month.substring(0, 7)}</div>
+              <div className='col col-2'>buy: {st.buy}</div>
+              <div className='col col-2'>sell: {st.sell}</div>
+              <div className='col col-2'>total: {Math.round((st.sell || 0) - (st.buy || 0))}</div>
+              <div className='col col-2'>fee: {st.fee}</div>
+            </div>
+          ))}
         </div>
       ) : (
         <div>

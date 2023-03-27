@@ -46,15 +46,30 @@ export interface IPair {
   leverage: number
 }
 
+export interface ITimeFrame {
+  timeframe: string
+  name: string
+}
+
+export interface IBotStats {
+  bot: number
+  month: string
+  buy: number
+  sell: number
+  fee: number
+}
+
 export interface IState {
   loading: boolean
   msgs: IPopup[]
-  timeframes: string[]
+  timeframes: ITimeFrame[]
   user?: IUser
   token?: string
-  pairs: IPair[]
+  // pairs: IPair[]
+  pairs: string[]
   accounts: IAccount[]
   bots: IBot[]
+  stats: IBotStats[]
 }
 
 export interface IAppContext extends IState {
@@ -62,10 +77,10 @@ export interface IAppContext extends IState {
   delMsg: (id: number) => void
   signin: (username: string, password: string, callback: VoidFunction) => void
   signout: VoidFunction
-  // register: VoidFunction
+  register: ({ email, password }: { email: string; password: string }) => void
   accountAdd: (apiKey: string, apiSecret: string) => void
   accountRemove: (accountID: number) => void
-  botAdd: (name: string, pair: string, timeframe: string) => void
+  botAdd: (account: number, name: string, pair: string, timeframe: string) => void
   botRemove: (botID: number) => void
   botUpdate: (botID: number, botCfg: IBotCfg) => void
 }

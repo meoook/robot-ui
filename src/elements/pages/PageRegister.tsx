@@ -1,39 +1,47 @@
-import React, { useState, useContext } from 'react'
-import PropTypes from 'prop-types'
-import { redirect } from 'react-router-dom'
-// import AppContext from '../../context/application/appContext'
+import { useState, useContext } from 'react'
+import { AppContext } from '../../context/AppContext'
+import InputTextField from '../components/input-fields'
 
 // TODO: COMPONENT AND REDUCER NOT DONE
 
-const PageRegister = () => {
-  // const { user, accRegister } = useContext(AppContext)
-  // const [credentials, setCredentials] = useState({ username: '', password: '', email: '' })
-  // const onChange = (event) => setCredentials({ ...credentials, [event.target.name]: event.target.value })
-  const onChange = () => {}
-  // const onRegister = (event) => {
-  //   accRegister(credentials)
-  // }
-  // if (user.id) return redirect('/')
+export default function PageRegister() {
+  const { register } = useContext(AppContext)
+  const [credentials, setCredentials] = useState({ email: '', password: '' })
+  const onRegister = () => {
+    register(credentials)
+  }
+  const onChange = (name: string, value: string) => setCredentials({ ...credentials, [name]: value })
 
   return (
     <div className='column center middle max-h'>
-      <div className='shadow-box col col-3'>
-        <h1>Регистрация</h1>
-        <label>Укажите ваш логин</label>
-        <input name='username' type='text' onChange={onChange} />
-        <label>Укажите почту</label>
-        <input name='email' type='email' onChange={onChange} />
-        <label>Укажите пароль</label>
-        <input name='password' type='password' onChange={onChange} />
-        <div className='row center justify'>
+      <div className='shadow-box column'>
+        <h1 className='mb-2'>Регистрация</h1>
+        <InputTextField
+          name='email'
+          onChange={onChange}
+          value={credentials.email}
+          icon='user'
+          title='Ваша почта'
+          ph='Укажите почту'
+          outColor='brand'
+        />
+        <InputTextField
+          name='password'
+          type='password'
+          onChange={onChange}
+          value={credentials.password}
+          icon='key'
+          title='Ваш пароль'
+          ph='Укажите пароль'
+          outColor='brand'
+        />
+        <div className='row center justify mt-2'>
           <div>&nbsp;</div>
-          {/* <button className='btn green' onClick={onRegister}>
+          <button className='btn green' onClick={onRegister}>
             Register
-          </button> */}
+          </button>
         </div>
       </div>
     </div>
   )
 }
-
-PageRegister.propTypes = { auth: PropTypes.object }

@@ -1,5 +1,5 @@
 import * as actions from './actionTypes'
-import { IState, IPopup, IUser, IPair, IAccount, IBot } from './objects'
+import { IState, IPopup, IUser, ITimeFrame, IAccount, IBot, IBotStats } from './objects'
 
 type ActionHandlersMap = Record<string, (state: IState, action: IAction<any>) => IState>
 
@@ -17,8 +17,8 @@ const handlers: ActionHandlersMap = {
   [actions.INIT_LOADER]: (state, { payload }: IAction<boolean>) => ({ ...state, loading: payload }),
   [actions.POPUP_ADD]: (state, { payload }: IAction<IPopup>): IState => ({ ...state, msgs: [...state.msgs, payload] }),
   [actions.POPUP_REMOVE]: (state, { payload }) => ({ ...state, msgs: state.msgs.filter((msg) => msg.id !== payload) }),
-  [actions.PAIRS_REFRESH]: (state, { payload }: IAction<IPair[]>) => ({ ...state, pairs: payload }),
-  [actions.TIMEFRAMES_REFRESH]: (state, { payload }: IAction<string[]>) => ({ ...state, timeframes: payload }),
+  [actions.PAIRS_REFRESH]: (state, { payload }: IAction<string[]>) => ({ ...state, pairs: payload }),
+  [actions.TIMEFRAMES_REFRESH]: (state, { payload }: IAction<ITimeFrame[]>) => ({ ...state, timeframes: payload }),
   [actions.USER_VALID]: (state, { payload }: IAction<IActionUser>) => ({
     ...state,
     user: payload.user,
@@ -60,6 +60,7 @@ const handlers: ActionHandlersMap = {
     ...state,
     bots: state.bots?.filter((bot) => bot.id !== payload),
   }),
+  [actions.BOT_STATS]: (state, { payload }: IAction<IBotStats[]>) => ({ ...state, stats: payload }),
   DEFAULT: (state) => state,
 }
 
