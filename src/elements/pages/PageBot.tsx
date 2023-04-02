@@ -6,6 +6,7 @@ import Topbar from '../components/topbar'
 import { IBot, IBotCfg, IBotStats } from '../../context/objects'
 import InputNumber from '../components/input-number'
 import InputSwitch from '../components/input-switch'
+import BotMonthStats from '../components/stats'
 
 interface PageBotsProps {
   children?: React.ReactNode
@@ -30,7 +31,11 @@ export default function PageBot(props: PageBotsProps) {
   useEffect(() => {
     const lookup = bots.find((b) => b.id === Number(botid) && b.account === Number(id))
     const botStats = stats.filter((b) => b.bot === Number(botid))
-    setStat(botStats)
+    setStat(
+      botStats.sort((a, b) =>
+        Math.round(Number(b.month.substring(0, 7).replace('-', '')) - Number(a.month.substring(0, 7).replace('-', '')))
+      )
+    )
     setBot(lookup)
     if (lookup) setBotCfg(lookup)
   }, [bots, botid, id, stats])
@@ -75,9 +80,9 @@ export default function PageBot(props: PageBotsProps) {
             <h1 className='row justify'>
               <div className='row'>
                 <span className='pr-2'>{bot.pair}</span>
-                <span>{bot.timeframe}</span>
+                <span>{bot.timeframe} 🚑</span>
               </div>
-              <div>ID: {bot.id} ❌</div>
+              <div>ID: {bot.id}</div>
             </h1>
           </div>
           <hr />
@@ -133,15 +138,7 @@ export default function PageBot(props: PageBotsProps) {
               onChange={onChange}
             />
           </div>
-          {stat?.map((st) => (
-            <div key={`${st.bot}${st.month}`} className='row justify'>
-              <div className='col col-2'>month: {st.month.substring(0, 7)}</div>
-              <div className='col col-2'>buy: {st.buy}</div>
-              <div className='col col-2'>sell: {st.sell}</div>
-              <div className='col col-2'>total: {Math.round((st.sell || 0) - (st.buy || 0))}</div>
-              <div className='col col-2'>fee: {st.fee}</div>
-            </div>
-          ))}
+          <BotMonthStats stats={stat} />
         </div>
       ) : (
         <div>

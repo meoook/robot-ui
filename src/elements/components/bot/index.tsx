@@ -15,6 +15,7 @@ export default function Bot({ bot }: BotProps) {
         <div>
           <div className={style.head}>
             <div className='row'>
+              <span>{bot.active ? '✔️' : '❌'}</span>
               <span className='pr-2'>{bot.pair}</span>
               <span>{bot.timeframe}</span>
             </div>

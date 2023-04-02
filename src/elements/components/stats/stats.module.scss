@@ -1,0 +1,28 @@
+.stats {
+  & > h1 {
+    margin: calc(var(--padding, 8px) * 2) var(--padding, 8px) var(--padding, 8px);
+  }
+}
+.table {
+  border: 1px solid transparent;
+  border-radius: calc(var(--padding, 8px) * 2);
+  background-color: var(--color-dialog);
+  tr {
+    border-bottom: 1px solid var(--color-border);
+    &:last-of-type {
+      border-bottom: 0;
+    }
+  }
+  th,
+  td {
+    text-align: center;
+    padding: 8px 0px;
+  }
+  th {
+    font-size: var(--font-size-h2);
+    text-transform: uppercase;
+  }
+  td {
+    color: var(--color-secondary);
+  }
+}
