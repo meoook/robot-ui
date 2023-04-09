@@ -15,8 +15,8 @@ export interface IUser {
 export interface IAccount {
   id: number
   error: string
-  spot: boolean
-  margin: boolean
+  trade: boolean
+  loan: boolean
   futures: boolean
   apiKey?: string
   apiSecret?: string
@@ -25,10 +25,11 @@ export interface IAccount {
 export interface IBotCfg {
   name: string
   active: boolean
+  next_month: boolean
   balance_limit: number
   circles_limit: number
   orders_limit: number
-  peak_delta: number
+  delta: number
 }
 
 export interface IBot extends IBotCfg {
@@ -54,9 +55,11 @@ export interface ITimeFrame {
 export interface IBotStats {
   bot: number
   month: string
+  quantity: number
   buy: number
   sell: number
   fee: number
+  bot_fee: number
 }
 
 export interface IState {

@@ -22,10 +22,11 @@ export default function PageBot(props: PageBotsProps) {
   const [botCfg, setBotCfg] = useState<IBotCfg>({
     name: '',
     active: false,
+    next_month: false,
     balance_limit: 0,
     circles_limit: 0,
     orders_limit: 0,
-    peak_delta: 0,
+    delta: 0,
   })
 
   useEffect(() => {
@@ -101,6 +102,7 @@ export default function PageBot(props: PageBotsProps) {
               size='big'
               onChange={onChange}
             />
+            {/* TODO: next_month toggle */}
             <InputNumber
               title='balance limit'
               name='balance_limit'
@@ -115,7 +117,7 @@ export default function PageBot(props: PageBotsProps) {
               name='circles_limit'
               value={botCfg.circles_limit}
               min={1}
-              max={20}
+              max={10}
               disabled={!edit}
               onChange={onChange}
             />
@@ -124,16 +126,16 @@ export default function PageBot(props: PageBotsProps) {
               name='orders_limit'
               value={botCfg.orders_limit}
               min={1}
-              max={20}
+              max={9}
               disabled={!edit}
               onChange={onChange}
             />
             <InputNumber
-              title='peak delta'
-              name='peak_delta'
-              value={botCfg.peak_delta}
-              min={20}
-              max={80}
+              title='delta'
+              name='delta'
+              value={botCfg.delta}
+              min={10}
+              max={70}
               disabled={!edit}
               onChange={onChange}
             />

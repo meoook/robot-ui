@@ -35,7 +35,7 @@ export default function PageBots(props: PageBotsProps) {
           <button className='btn red' onClick={handleDelete}>
             Remove account
           </button>
-          <button className='btn green' onClick={open} disabled={!account?.margin}>
+          <button className='btn green' onClick={open} disabled={!account?.loan}>
             Add bot
           </button>
         </div>

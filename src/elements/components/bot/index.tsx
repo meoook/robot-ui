@@ -27,7 +27,7 @@ export default function Bot({ bot }: BotProps) {
         <div className='row justify'>
           <div className='col-2'>balance limit: {bot.balance_limit}</div>
           <div className='col-2'>circles limit: {bot.circles_limit}</div>
-          <div className='col-2'>peak delta: {bot.peak_delta}</div>
+          <div className='col-2'>peak delta: {bot.delta}</div>
         </div>
         <div className='row justify'>
           <div className='col-2'>{bot.error && <small className='red'>{bot.error}</small>}</div>

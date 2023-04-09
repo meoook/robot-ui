@@ -9,7 +9,7 @@ interface AccountProps {
 }
 
 export default function Account({ account }: AccountProps) {
-  const loading: boolean = !account.margin && !account.error
+  const loading: boolean = !account.loan && !account.error
   return (
     <Link to={`/accounts/${account.id}`} className={style.account}>
       <div className='row justify'>
@@ -21,15 +21,15 @@ export default function Account({ account }: AccountProps) {
         {account.error ?? <div>{account.error}</div>}
       </div>
       <div className='row'>
-        <div className='col-1'>spot:</div>
+        <div className='col-1'>trade:</div>
         <div className='col-1'>
-          <Valid valid={account.spot} />
+          <Valid valid={account.trade} />
         </div>
       </div>
       <div className='row'>
-        <div className='col-1'>margin:</div>
+        <div className='col-1'>loan:</div>
         <div className='col-1'>
-          <Valid valid={account.margin} />
+          <Valid valid={account.loan} />
         </div>
       </div>
       <div className='row'>
