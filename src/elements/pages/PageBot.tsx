@@ -102,7 +102,6 @@ export default function PageBot(props: PageBotsProps) {
               size='big'
               onChange={onChange}
             />
-            {/* TODO: next_month toggle */}
             <InputNumber
               title='balance limit'
               name='balance_limit'
@@ -137,6 +136,15 @@ export default function PageBot(props: PageBotsProps) {
               min={10}
               max={70}
               disabled={!edit}
+              onChange={onChange}
+            />
+            <InputSwitch
+              title='next month'
+              name='next_month'
+              value={botCfg.next_month}
+              disabled={!edit}
+              type='check'
+              size='big'
               onChange={onChange}
             />
           </div>

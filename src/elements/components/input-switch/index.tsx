@@ -40,10 +40,10 @@ const InputSwitch = (props: InputSwitchProps) => {
 
   return (
     // <div className={nameClass} onClick={toogle} disabled={disabled}>
-    <div className={styles.switch} onClick={toogle}>
+    <div className={`${styles.switch} ${props.disabled ? styles.disabled : ''}`} onClick={toogle}>
       {props.title && <small>{props.title}</small>}
       <div className={nameClass}>
-        <div className={styles.mark}>{!['radio', 'toggle'].includes(props.type || '') && <Icon name='check' />}</div>
+        <div className={styles.mark}>{props.type === 'check' && <Icon name='check' />}</div>
       </div>
     </div>
   )

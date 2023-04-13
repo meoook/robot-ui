@@ -141,7 +141,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         handleError(err, 'Failed to load timeframes')
       })
   }
-  const loadStats = async (token: string) => {
+  const loadStats = async (token?: string) => {
     await axios
       .get(`${URL}/stats`, config(token))
       .then((res: AxiosResponse) => {
@@ -237,6 +237,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         dispatch({ type: actions.BOT_ADD, payload: res.data })
         setTimeout(async () => {
           await botGet(res.data.id)
+          await loadStats()
         }, 4500)
       })
       .catch((err: AxiosError) => {

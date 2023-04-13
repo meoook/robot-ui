@@ -6,10 +6,11 @@ interface BotMonthProps {
 }
 
 export default function BotMonthStats({ stats }: BotMonthProps) {
+  const haveStats: boolean = stats?.length !== 0
   return (
     <div className={style.stats}>
-      <h1>{stats ? 'Bot statistic' : "Bot don't trade yet"} </h1>
-      {stats && (
+      <h1>{haveStats ? 'Bot statistic' : "Bot don't trade yet"} </h1>
+      {haveStats && (
         <table className={style.table}>
           <thead>
             <tr>
