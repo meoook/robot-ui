@@ -105,6 +105,10 @@
   }
 }
 
+.w-100 {
+  width: 100%;
+}
+
 // CREATE MIXIN and SO ON
 .col {
   width: 100%;
@@ -293,93 +297,6 @@
     }
     &-3 {
       padding-right: $indent * 3;
-    }
-  }
-}
-// FIXIT - MB MEDIA PUT ON THE BOTTOM ? AND SIZE IN $variable
-
-.msg {
-  @keyframes msgRunProgress {
-    0% {
-      width: 0%;
-      background-color: rgba($texth, 0.3);
-    }
-    100% {
-      width: 100%;
-      background-color: rgba($texth, 1);
-    }
-  }
-  @keyframes fadeOut {
-    0% {
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-      transform: translateY(0px);
-    }
-    99% {
-      opacity: 0;
-      transform: translateY(-30px);
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  &-frame {
-    position: fixed;
-    top: $indent * 2;
-    right: 0;
-    z-index: 5;
-    width: $indent * 50;
-  }
-  &-progress {
-    position: absolute;
-    bottom: 2px;
-    left: $indent * 1.8;
-    border-radius: $indent / 4;
-    width: 0;
-    max-width: $indent * 43;
-    height: $indent / 2;
-    background-color: rgba($texth, 0.9);
-  }
-  &-item {
-    min-height: $indent * 8;
-    position: relative;
-    margin: $indent * 2;
-    padding: $indent $indent * 1.5 $indent/1.5;
-    color: #fff;
-    border-radius: $indent / 2;
-    i {
-      background-size: $indent * 5;
-      & > svg {
-        fill: $texth;
-        width: 32px;
-        height: 32px;
-      }
-    }
-    &.fade {
-      animation: fadeOut 3.9s linear forwards;
-      .msg-progress {
-        animation: msgRunProgress 3.5s linear forwards 0.5s;
-      }
-    }
-    &.default {
-      background-color: var(--color-primary);
-    }
-    &.info {
-      background-color: var(--color-msg-info);
-    }
-    &.success {
-      background-color: var(--color-msg-success);
-    }
-    &.warning {
-      background-color: var(--color-msg-warning);
-    }
-    &.error {
-      background-color: var(--color-msg-error);
     }
   }
 }

@@ -1,17 +1,12 @@
-import axios, { AxiosError, AxiosResponse } from 'axios'
-import { useEffect, useReducer } from 'react'
+import Web3 from 'web3'
+import axios, { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
+import { useState, useEffect, useReducer } from 'react'
 import * as actions from './actionTypes'
 import { AppContext } from './AppContext'
 import { appReducer } from './appReducer'
-import { IBotCfg, IPopup } from './objects'
+import { IBotCfg, Web3Message } from './objects'
 
-const getNextId = (messageList: IPopup[]) => {
-  if (messageList.length === 0) return 0
-  else return messageList[messageList.length - 1].id + 1
-}
-
-// const URL = process.env.REACT_APP_API_URL
-const URL = 'http://127.0.0.1:8000/api'
+const URL = process.env.REACT_APP_BACKEND_URL
 
 export const AppState = ({ children }: { children: React.ReactNode }) => {
   const initialState = {
@@ -26,13 +21,23 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     stats: [],
   }
   const [state, dispatch] = useReducer(appReducer, initialState)
+  const [web3, setWeb3] = useState<Web3>()
+
+  useEffect(() => {
+    if ((window as any).ethereum) {
+      const web3Instance = new Web3((window as any).ethereum)
+      setWeb3(web3Instance)
+    } else {
+      addMsg('warning', 'No Ethereum provider detected')
+    }
+  }, [])
 
   useEffect(() => {
     init()
     // eslint-disable-next-line
   }, [])
 
-  const config = (token?: string) => {
+  const config = (token?: string): AxiosRequestConfig => {
     const bearer = token ? token : state.token
     return {
       headers: {
@@ -48,8 +53,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
   }
 
   const loading = (loadState: boolean) => dispatch({ type: actions.INIT_LOADER, payload: loadState })
-  const addMsg = (type: string, text: string, title: string = '') =>
-    dispatch({ type: actions.POPUP_ADD, payload: { id: getNextId(state.msgs), text, title, type } })
+  const addMsg = async (type: string, text: string, title?: string, nofade?: boolean) =>
+    dispatch({ type: actions.POPUP_ADD, payload: { text, title, type, nofade } })
   const delMsg = (id: number) => dispatch({ type: actions.POPUP_REMOVE, payload: +id })
 
   const init = async () => {
@@ -59,12 +64,72 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       dispatch({ type: actions.USER_LOGOUT, payload: undefined }) // TODO: not correct
     }
   }
+
+  // Web3
+  const handleSignMessage = async ({ address, nonce, domain, statement, uri, chainId, timeout }: Web3Message) => {
+    try {
+      const message: string = `${domain} wants you to sign in with your\nEthereum account: ${address}\n\n${statement}\n\nURI: ${uri}\nChain ID: ${chainId}\nNonce: ${nonce}\nTimeout: ${timeout}`
+      const signature: string = await web3!.eth.personal.sign(message, address, '')
+      return { message, signature }
+    } catch (err) {
+      addMsg('error', 'You need to sign the message to be able to log in', 'Web3')
+    }
+  }
+
+  const handleAuthenticate = async ({ message, signature }: { message: string; signature: string }) =>
+    await axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/auth/web3`, { message, signature })
+      .then(async (res: AxiosResponse) => {
+        console.log('Response 2', res)
+        localStorage.setItem('token', res.data.token)
+        await sign(res.data.token)
+      })
+
+  const web3login = async () => {
+    try {
+      await (window as any).ethereum.enable()
+    } catch (err: any) {
+      addMsg('warning', err.message, 'Web3')
+      return
+    }
+    if (!web3) {
+      addMsg('error', 'Web3 wallet app not found', 'Web3')
+      return
+    }
+    let chainId: number | null = null
+    try {
+      chainId = await web3.eth.getChainId()
+    } catch (error: any) {
+      addMsg('warning', error.message, 'Web3')
+      return
+    }
+    if (!chainId) {
+      addMsg('error', 'Failed to get ChainID', 'Web3')
+      return
+    }
+    const coinbase = await web3.eth.getCoinbase()
+    if (!coinbase) {
+      addMsg('warning', 'Please activate MetaMask first', 'Web3')
+      return
+    }
+    const address = coinbase.toLowerCase()
+    await axios
+      .get(`${URL}/auth/web3`, { params: { chain: chainId, address } })
+      .then(async (res: AxiosResponse) => {
+        const signed: { message: string; signature: string } | undefined = await handleSignMessage(res.data)
+        if (signed) await handleAuthenticate(signed)
+      })
+      .catch((err: AxiosError) => {
+        handleError(err, 'Web3 sign in error')
+      })
+  }
+
   // Auth
   const sign = async (token: string) => {
     if (!token) return
     loading(true)
     await axios
-      .get(`${URL}/user`, config(token))
+      .get(`${URL}/auth/user`, config(token))
       .then((res: AxiosResponse) => {
         dispatch({ type: actions.USER_VALID, payload: { user: res.data, token: token } })
       })
@@ -263,6 +328,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         delMsg,
         signin,
         signout,
+        web3login,
         register,
         accountAdd,
         accountRemove,

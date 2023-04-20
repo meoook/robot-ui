@@ -1,13 +1,26 @@
-export interface IPopup {
-  id: number
+export interface IPopupOptions {
   type: string
   text: string
-  title: string
+  title?: string
   nofade?: boolean
 }
 
+export interface IPopup extends IPopupOptions {
+  id: number
+}
+
+export interface Web3Message {
+  address: string
+  nonce: string
+  domain: string
+  statement: string
+  uri: string
+  chainId: number
+  timeout: number
+}
+
 export interface IUser {
-  username: string
+  address: string
   email: string
   admin: boolean
 }
@@ -76,10 +89,11 @@ export interface IState {
 }
 
 export interface IAppContext extends IState {
-  addMsg: (type: string, text: string, title: string) => void
+  addMsg: (type: string, text: string, title?: string, nofade?: boolean) => void
   delMsg: (id: number) => void
   signin: (username: string, password: string, callback: VoidFunction) => void
   signout: VoidFunction
+  web3login: VoidFunction
   register: ({ email, password }: { email: string; password: string }) => void
   accountAdd: (apiKey: string, apiSecret: string) => void
   accountRemove: (accountID: number) => void

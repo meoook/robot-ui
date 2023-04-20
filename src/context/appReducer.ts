@@ -1,5 +1,5 @@
 import * as actions from './actionTypes'
-import { IState, IPopup, IUser, ITimeFrame, IAccount, IBot, IBotStats } from './objects'
+import { IState, IPopup, IUser, ITimeFrame, IAccount, IBot, IBotStats, IPopupOptions } from './objects'
 
 type ActionHandlersMap = Record<string, (state: IState, action: IAction<any>) => IState>
 
@@ -13,9 +13,17 @@ interface IActionUser {
   token: string
 }
 
+const getNextId = (messageList: IPopup[]) => {
+  if (messageList.length === 0) return 0
+  else return messageList[messageList.length - 1].id + 1
+}
+
 const handlers: ActionHandlersMap = {
   [actions.INIT_LOADER]: (state, { payload }: IAction<boolean>) => ({ ...state, loading: payload }),
-  [actions.POPUP_ADD]: (state, { payload }: IAction<IPopup>): IState => ({ ...state, msgs: [...state.msgs, payload] }),
+  [actions.POPUP_ADD]: (state, { payload }: IAction<IPopupOptions>) => ({
+    ...state,
+    msgs: [...state.msgs, { id: getNextId(state.msgs), ...payload }],
+  }),
   [actions.POPUP_REMOVE]: (state, { payload }) => ({ ...state, msgs: state.msgs.filter((msg) => msg.id !== payload) }),
   [actions.PAIRS_REFRESH]: (state, { payload }: IAction<string[]>) => ({ ...state, pairs: payload }),
   [actions.TIMEFRAMES_REFRESH]: (state, { payload }: IAction<ITimeFrame[]>) => ({ ...state, timeframes: payload }),

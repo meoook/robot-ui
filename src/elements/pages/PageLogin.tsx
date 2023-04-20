@@ -8,7 +8,7 @@ export default function PageLogin() {
   let location = useLocation()
   let from = location.state?.from?.pathname || '/'
 
-  const { signin } = useContext(AppContext)
+  const { signin, web3login } = useContext(AppContext)
   const [auth, setAuth] = useState({ email: '', password: '' })
 
   const signIn = () => {
@@ -23,6 +23,10 @@ export default function PageLogin() {
     <div className='column center middle max-h'>
       <div className='shadow-box column'>
         <h1 className='mb-2'>Авторизация</h1>
+        <button className='btn green' onClick={web3login}>
+          Login with metamask
+        </button>
+        <hr />
         <InputTextField
           name='email'
           onChange={handleChange}

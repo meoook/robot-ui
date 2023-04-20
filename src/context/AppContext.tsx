@@ -13,6 +13,7 @@ export const AppContext = createContext<IAppContext>({
   delMsg: () => {},
   signin: () => {},
   signout: () => {},
+  web3login: () => {},
   register: () => {},
   accountAdd: () => {},
   accountRemove: () => {},

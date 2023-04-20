@@ -19,7 +19,7 @@ export default function Bot({ bot }: BotProps) {
               <span className='pr-2'>{bot.pair}</span>
               <span>{bot.timeframe}</span>
             </div>
-            <span>ID: {bot.id}</span>
+            <span>💙ID: {bot.id}</span>
           </div>
           <hr />
           <small className='gray'>{bot.name}</small>

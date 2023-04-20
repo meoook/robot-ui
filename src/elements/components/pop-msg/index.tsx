@@ -1,12 +1,13 @@
+import style from './pop.module.scss'
 import { useContext, useEffect } from 'react'
-import { AppContext } from '../../context/AppContext'
-import { IPopup } from '../../context/objects'
-import Icon from '../components/ico-get/index'
+import { AppContext } from '../../../context/AppContext'
+import { IPopup } from '../../../context/objects'
+import Icon from '../ico-get'
 
 export default function PopupMsgs() {
   const { msgs, delMsg } = useContext(AppContext)
   return (
-    <div className='msg-frame'>
+    <div className={style.msgframe}>
       {msgs.map((msg) => (
         <Message msg={msg} delMsg={delMsg} key={msg.id} />
       ))}
@@ -15,31 +16,30 @@ export default function PopupMsgs() {
 }
 
 const Message = ({ msg, delMsg }: { msg: IPopup; delMsg: Function }) => {
-  const msgStyle = `${msg.type}${msg.nofade ? '' : ' fade'}`
+  const msgStyle = `${style.msgitem} ${style[msg.type]}${msg.nofade ? '' : ` ${style.fade}`}`
 
   useEffect(() => {
     if (!msg.nofade) {
       setTimeout(() => {
         delMsg(msg.id)
-      }, 4500)
+      }, 6500)
     }
     // eslint-disable-next-line
   }, [])
+
   return (
-    <div className={`msg-item ${msgStyle} row center`}>
+    <div className={msgStyle}>
       <div className='row center'>
-        <i>
-          <Icon name={msg.type} />
-        </i>
-        <div>
-          {msg.title && <h3>{msg.title}</h3>}
+        <Icon name={msg.type} />
+        <div className={style.context}>
+          {msg.title && <h3>{msg.title} </h3>}
           {msg.text && <div>{msg.text}</div>}
         </div>
         <button className='btn-close' onClick={delMsg.bind(this, msg.id)}>
           &times;
         </button>
       </div>
-      <div className='msg-progress' />
+      <div className={style.msgprogress} />
     </div>
   )
 }

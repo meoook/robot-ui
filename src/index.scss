@@ -2,25 +2,3 @@
 @import './scss/config.scss';
 @import './scss/tags.scss';
 @import './scss/bootstrap.scss';
-
-.w-100 {
-  width: 100%;
-}
-.w-login {
-  width: 260px;
-}
-.mb-n1 {
-  margin-bottom: calc(-1 * var(--base-size-4, 4px)) !important;
-}
-.mt-n1 {
-  margin-top: calc(-1 * var(--base-size-4, 4px)) !important;
-}
-.mb-md-n3 {
-  margin-bottom: calc(-1 * var(--base-size-2, 2px)) !important;
-}
-.mt-md-n3 {
-  margin-top: calc(-1 * var(--base-size-2, 2px)) !important;
-}
-.mr-md-3 {
-  margin-right: var(--base-size-16, 16px) !important;
-}

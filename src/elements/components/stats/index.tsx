@@ -27,12 +27,12 @@ export default function BotMonthStats({ stats }: BotMonthProps) {
             {stats?.map((st) => (
               <tr key={`${st.bot}${st.month}`}>
                 <td>{st.month.substring(0, 7)}</td>
-                <td>{st.buy}</td>
-                <td>{st.sell}</td>
+                <td>{st.buy ? st.buy : '💛'}</td>
+                <td>{st.sell ? st.sell : '💛'}</td>
                 <td>{((st.sell || 0) - (st.buy || 0)).toFixed(2)}</td>
-                <td>{st.quantity}</td>
-                <td>{st.fee}</td>
-                <td>{st.bot_fee}</td>
+                <td>{st.quantity ? st.quantity : '💛'}</td>
+                <td>{st.fee ? st.fee : '💛'}</td>
+                <td>{st.bot_fee ? st.bot_fee : '💛'}</td>
               </tr>
             ))}
           </tbody>

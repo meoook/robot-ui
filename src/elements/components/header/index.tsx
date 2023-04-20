@@ -25,14 +25,14 @@ export default function Header() {
             Accounts
           </NavLink>
           <NavLink to='/bots' className={style.link}>
-            Bots
+            Auction
           </NavLink>
         </nav>
       </div>
       <div className={style.item}>
         {Boolean(user) ? (
           <>
-            <span className='mh-3'>{user?.username}</span>
+            <span className='mh-3'>{user?.address}</span>
             <button className='btn red' onClick={logOff}>
               Sign out
             </button>
