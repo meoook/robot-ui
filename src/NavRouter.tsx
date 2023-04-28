@@ -29,12 +29,11 @@ export default function NavRouter() {
 }
 
 function LayoutProtected() {
-  const { token, user, loading } = useContext(AppContext)
+  const { token, loading } = useContext(AppContext)
   let location = useLocation()
 
   if (!token) return <Navigate to='/login' state={{ from: location }} replace />
   if (loading) return <LoaderCar />
-  if (!user) return <Navigate to='/' replace />
   return <Outlet />
 }
 

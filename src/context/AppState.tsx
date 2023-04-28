@@ -80,7 +80,6 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/auth/web3`, { message, signature })
       .then(async (res: AxiosResponse) => {
-        console.log('Response 2', res)
         localStorage.setItem('token', res.data.token)
         await sign(res.data.token)
       })

@@ -17,9 +17,10 @@ export default function BotMonthStats({ stats }: BotMonthProps) {
               <th>month</th>
               <th>buy</th>
               <th>sell</th>
-              <th>delta</th>
+              {/* <th>delta</th> */}
               <th>quantity</th>
               <th>fee</th>
+              <th>profit</th>
               <th>bot fee</th>
             </tr>
           </thead>
@@ -29,9 +30,10 @@ export default function BotMonthStats({ stats }: BotMonthProps) {
                 <td>{st.month.substring(0, 7)}</td>
                 <td>{st.buy ? st.buy : '💛'}</td>
                 <td>{st.sell ? st.sell : '💛'}</td>
-                <td>{((st.sell || 0) - (st.buy || 0)).toFixed(2)}</td>
+                {/* <td>{((st.sell || 0) - (st.buy || 0)).toFixed(2)}</td> */}
                 <td>{st.quantity ? st.quantity : '💛'}</td>
                 <td>{st.fee ? st.fee : '💛'}</td>
+                <td>{st.profit ? st.profit : '💛'}</td>
                 <td>{st.bot_fee ? st.bot_fee : '💛'}</td>
               </tr>
             ))}

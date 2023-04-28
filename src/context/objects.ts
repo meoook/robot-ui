@@ -53,6 +53,8 @@ export interface IBot extends IBotCfg {
   error: string
 }
 
+export type BotList = { [key: number]: IBot }
+
 export interface IPair {
   coin_base: string
   coin_quote: string
@@ -72,6 +74,7 @@ export interface IBotStats {
   buy: number
   sell: number
   fee: number
+  profit: number
   bot_fee: number
 }
 
