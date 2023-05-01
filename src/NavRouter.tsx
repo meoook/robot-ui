@@ -9,11 +9,15 @@ import PageBots from './elements/pages/PageBots'
 import PageHome from './elements/pages/PageHome'
 import PageLogin from './elements/pages/PageLogin'
 import PageRegister from './elements/pages/PageRegister'
+import PageUser from './elements/pages/PageUser'
 
 export default function NavRouter() {
+  const { loading } = useContext(AppContext)
+  if (loading) return <LoaderCar />
   return (
     <Routes>
       <Route element={<LayoutProtected />}>
+        <Route path='/user' element={<PageUser />} />
         <Route path='/accounts' element={<PageAccounts />} />
         <Route path='/accounts/:id' element={<PageBots />} />
         <Route path='/accounts/:id/:botid' element={<PageBot />} />
@@ -29,17 +33,16 @@ export default function NavRouter() {
 }
 
 function LayoutProtected() {
-  const { token, loading } = useContext(AppContext)
+  const { token, user } = useContext(AppContext)
   let location = useLocation()
 
   if (!token) return <Navigate to='/login' state={{ from: location }} replace />
-  if (loading) return <LoaderCar />
+  // if (!user) return <Navigate to='/' replace /> // service unavalible
   return <Outlet />
 }
 
 function LayoutNotAuthed() {
-  const { user, loading } = useContext(AppContext)
-  if (loading) return <LoaderCar />
+  const { user } = useContext(AppContext)
   if (user) return <Navigate to='/' replace />
   return <Outlet />
 }

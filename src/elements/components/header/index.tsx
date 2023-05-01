@@ -27,6 +27,9 @@ export default function Header() {
           <NavLink to='/bots' className={style.link}>
             Auction
           </NavLink>
+          <NavLink to='/user' className={style.link}>
+            User
+          </NavLink>
         </nav>
       </div>
       <div className={style.item}>

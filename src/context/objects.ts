@@ -21,7 +21,7 @@ export interface Web3Message {
 
 export interface IUser {
   address: string
-  email: string
+  email?: string
   admin: boolean
 }
 

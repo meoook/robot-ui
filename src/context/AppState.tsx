@@ -28,7 +28,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       const web3Instance = new Web3((window as any).ethereum)
       setWeb3(web3Instance)
     } else {
-      addMsg('warning', 'No Ethereum provider detected')
+      addMsg('warning', 'No Ethereum provider detected') // TODO: download provider page
     }
   }, [])
 
@@ -77,12 +77,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
   }
 
   const handleAuthenticate = async ({ message, signature }: { message: string; signature: string }) =>
-    await axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/auth/web3`, { message, signature })
-      .then(async (res: AxiosResponse) => {
-        localStorage.setItem('token', res.data.token)
-        await sign(res.data.token)
-      })
+    await axios.post(`${URL}/auth/web3`, { message, signature }).then(async (res: AxiosResponse) => {
+      localStorage.setItem('token', res.data.token)
+      await sign(res.data.token)
+    })
 
   const web3login = async () => {
     try {
@@ -92,7 +90,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       return
     }
     if (!web3) {
-      addMsg('error', 'Web3 wallet app not found', 'Web3')
+      addMsg('error', 'Blockchain provider not found', 'Web3')
       return
     }
     let chainId: number | null = null
