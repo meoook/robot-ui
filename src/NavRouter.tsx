@@ -10,10 +10,11 @@ import PageHome from './elements/pages/PageHome'
 import PageLogin from './elements/pages/PageLogin'
 import PageRegister from './elements/pages/PageRegister'
 import PageUser from './elements/pages/PageUser'
+import { useAppSelector } from './store/hooks'
 
 export default function NavRouter() {
-  const { loading } = useContext(AppContext)
-  if (loading) return <LoaderCar />
+  const { loading } = useAppSelector((state) => state.profile)
+  // if (loading) return <LoaderCar />
   return (
     <Routes>
       <Route element={<LayoutProtected />}>
@@ -33,16 +34,19 @@ export default function NavRouter() {
 }
 
 function LayoutProtected() {
-  const { token, user } = useContext(AppContext)
-  let location = useLocation()
+  const { token, loading } = useAppSelector((state) => state.profile)
+  const location = useLocation()
 
   if (!token) return <Navigate to='/login' state={{ from: location }} replace />
-  // if (!user) return <Navigate to='/' replace /> // service unavalible
+  // if (loading) return <LoaderCar />
   return <Outlet />
 }
 
 function LayoutNotAuthed() {
-  const { user } = useContext(AppContext)
-  if (user) return <Navigate to='/' replace />
+  const { token, loading } = useAppSelector((state) => state.profile)
+  const location = useLocation()
+
+  // if (loading) return <LoaderCar />
+  if (token) return <Navigate to={location} replace />
   return <Outlet />
 }

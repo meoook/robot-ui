@@ -1,31 +1,17 @@
-import { useState, useContext } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import { AppContext } from '../../context/AppContext'
+import { useState } from 'react'
 import InputTextField from '../components/input-fields'
+import { useSignInMutation } from '../../store/srv.api'
 
 export default function PageLogin() {
-  let navigate = useNavigate()
-  let location = useLocation()
-  let from = location.state?.from?.pathname || '/'
-
-  const { signin, web3login } = useContext(AppContext)
   const [auth, setAuth] = useState({ email: '', password: '' })
-
-  const signIn = () => {
-    signin(auth.email, auth.password, () => {
-      navigate(from, { replace: true })
-    })
-  }
-
+  const [fetchSignIn, { isLoading, isError, error }] = useSignInMutation()
   const handleChange = (name: string, value: string) => setAuth({ ...auth, [name]: value })
 
   return (
     <div className='column center middle max-h'>
       <div className='shadow-box column'>
         <h1 className='mb-2'>Авторизация</h1>
-        <button className='btn green' onClick={web3login}>
-          Login with metamask
-        </button>
+        <button className='btn green'>Login with metamask</button>
         <hr />
         <InputTextField
           name='email'
@@ -35,6 +21,7 @@ export default function PageLogin() {
           title='Ваша почта'
           ph='укажите почту'
           outColor='brand'
+          disabled={isLoading}
         />
         <InputTextField
           name='password'
@@ -42,15 +29,14 @@ export default function PageLogin() {
           onChange={handleChange}
           value={auth.password}
           icon='key'
+          errorText={isError && (error as any)}
           title='Ваш пароль'
           ph='укажите пароль'
           outColor='brand'
+          disabled={isLoading}
         />
         <div className='row center justify mt-2'>
-          <NavLink to={'/reg'} className='underline'>
-            Регистрация
-          </NavLink>
-          <button className='btn green' onClick={signIn}>
+          <button className='btn green' onClick={() => fetchSignIn(auth)} disabled={isLoading}>
             Login
           </button>
         </div>

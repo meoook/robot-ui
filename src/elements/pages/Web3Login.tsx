@@ -56,7 +56,7 @@ export default function Web3Login(props: Web3LoginProps) {
     // Check if MetaMask is installed
     if (!web3) return
 
-    let chainId: number | null = null
+    let chainId: bigint | null = null
     try {
       chainId = await web3.eth.getChainId()
     } catch (error: any) {
