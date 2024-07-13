@@ -22,7 +22,9 @@ export interface Web3Message {
 export interface IUser {
   address: string
   email?: string
-  admin: boolean
+  email_validated: boolean
+  telegram_id: string
+  locked: number
 }
 
 export interface IAccount {

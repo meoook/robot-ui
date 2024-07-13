@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Container from '../components/container'
-import { AppContext } from '../../context/AppContext'
+import { AppContext } from '../context/AppContext'
 
 interface Page404Props {
   children?: React.ReactNode

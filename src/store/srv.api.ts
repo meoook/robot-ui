@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { RootState } from './store'
-import { IApiAgreement, IApiInvoice, IApiTransaction, IApiUser, ListResponse } from '../model'
-import { destroyToken, setLoading, setToken } from './profile.slice'
+import { ListResponse, ITimeFrame, IPair, IApiUser, IAccount, IBot, IBotChange, IBotStats, IBotTrades } from '../model'
+import { setLoading, setToken, destroyToken } from './profile.slice'
 
 export const srvApi = createApi({
   reducerPath: 'server/api',
@@ -15,7 +15,7 @@ export const srvApi = createApi({
     },
   }),
 
-  tagTypes: ['User'],
+  tagTypes: ['User', 'Account', 'Bot'],
 
   endpoints: (build) => ({
     signIn: build.mutation<string, { email: string; password: string }>({
@@ -57,50 +57,80 @@ export const srvApi = createApi({
       }),
       providesTags: ['User'],
     }),
-    getAggreements: build.query<ListResponse<IApiAgreement>, number | void>({
-      query: (offset: number = 0) => ({
-        url: 'agreement',
-        params: { offset },
+    getPairs: build.query<IPair[], void>({
+      query: () => ({
+        url: 'pair',
       }),
     }),
-    updateAggreement: build.query({
+    getTimeframes: build.query<ITimeFrame[], void>({
       query: () => ({
-        url: 'agreement',
+        url: 'timeframe',
+      }),
+    }),
+    getAccounts: build.query<IAccount[], void>({
+      query: () => ({
+        url: 'account',
+      }),
+      providesTags: ['Account'],
+    }),
+    createAccount: build.mutation<IAccount, { api_key: string; api_secret: string }>({
+      query: ({ api_key, api_secret }) => ({
+        url: 'account',
+        method: 'POST',
+        body: { api_key, api_secret },
+      }),
+      invalidatesTags: ['Account'],
+    }),
+    deleteAccount: build.mutation<void, number>({
+      query: (accountID: number) => ({
+        url: `account/${accountID}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Account'],
+    }),
+    getBots: build.query<IBot[], number>({
+      query: (accountID: number) => ({
+        url: 'bot',
+        params: { account_id: accountID },
+      }),
+      providesTags: ['Bot'],
+    }),
+    createBot: build.mutation<IBot, { account: number; name: string; pair: string; timeframe: string }>({
+      query: ({ account, name, pair, timeframe }) => ({
+        url: 'bot',
+        method: 'POST',
+        data: { account, name, pair, timeframe },
+      }),
+      invalidatesTags: ['Bot'],
+    }),
+    updateBot: build.mutation<IBot, { botID: number; changes: IBotChange }>({
+      query: ({ botID, changes }) => ({
+        url: `bot/${botID}`,
         method: 'PUT',
+        data: changes,
       }),
+      invalidatesTags: ['Bot'],
     }),
-    getMyAggreements: build.query({
-      query: () => ({
-        url: 'my/agreement',
+    deleteBot: build.mutation<IBot, number>({
+      query: (botID) => ({
+        url: `bot/${botID}`,
+        method: 'DELETE',
       }),
+      invalidatesTags: ['Bot'],
     }),
-    updateMyAggreement: build.query({
-      query: () => ({
-        url: 'my/agreement',
-        method: 'PUT',
+    getStats: build.query<ListResponse<IBotStats>, number>({
+      query: (bot_id: number) => ({
+        url: 'bot',
+        params: { bot_id, limit: 10 },
       }),
+      // providesTags: ['Bot'],
     }),
-    getInvoces: build.query<ListResponse<IApiInvoice>, number | void>({
-      query: (offset: number = 0) => ({
-        url: 'invoice',
-        params: { offset },
+    getTrades: build.query<ListResponse<IBotTrades>, number>({
+      query: (bot_id: number) => ({
+        url: 'bot',
+        params: { bot_id, limit: 10 },
       }),
-    }),
-    getMyInvoces: build.query({
-      query: () => ({
-        url: 'my/invoice',
-      }),
-    }),
-    getTransactions: build.query<ListResponse<IApiTransaction>, number | void>({
-      query: (offset: number = 0) => ({
-        url: 'transaction',
-        params: { offset },
-      }),
-    }),
-    getMyTransactions: build.query({
-      query: () => ({
-        url: 'my/transaction',
-      }),
+      // providesTags: ['Bot'],
     }),
   }),
 })
@@ -109,7 +139,15 @@ export const {
   useSignInMutation,
   useSingOutMutation,
   useGetUserQuery,
-  useGetAggreementsQuery,
-  useGetInvocesQuery,
-  useGetTransactionsQuery,
+  useGetPairsQuery,
+  useGetTimeframesQuery,
+  useGetAccountsQuery,
+  useCreateAccountMutation,
+  useDeleteAccountMutation,
+  useGetBotsQuery,
+  useCreateBotMutation,
+  useUpdateBotMutation,
+  useDeleteBotMutation,
+  useGetStatsQuery,
+  useGetTradesQuery,
 } = srvApi

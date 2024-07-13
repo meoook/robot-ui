@@ -93,7 +93,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
       addMsg('error', 'Blockchain provider not found', 'Web3')
       return
     }
-    let chainId: number | null = null
+    let chainId: bigint | null = null
     try {
       chainId = await web3.eth.getChainId()
     } catch (error: any) {

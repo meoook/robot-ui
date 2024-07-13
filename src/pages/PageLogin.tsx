@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import InputTextField from '../components/input-fields'
-import { useSignInMutation } from '../../store/srv.api'
+import InputTextField from '../components/input-field'
+import { useSignInMutation } from '../store/srv.api'
 
 export default function PageLogin() {
   const [auth, setAuth] = useState({ email: '', password: '' })

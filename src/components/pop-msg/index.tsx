@@ -2,7 +2,7 @@ import style from './pop.module.scss'
 import { useContext, useEffect } from 'react'
 import { AppContext } from '../../../context/AppContext'
 import { IPopup } from '../../../context/objects'
-import Icon from '../ico-get'
+import Icon from '../../../components/ico-get'
 
 export default function PopupMsgs() {
   const { msgs, delMsg } = useContext(AppContext)

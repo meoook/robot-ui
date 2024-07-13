@@ -1,5 +1,5 @@
 import style from './stats.module.scss'
-import { IBotStats } from '../../../context/objects'
+import { IBotStats } from '../../model'
 
 interface BotMonthProps {
   stats?: IBotStats[]

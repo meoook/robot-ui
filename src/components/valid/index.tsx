@@ -1,6 +1,6 @@
 import style from './valid.module.scss'
-import Icon from '../ico-get'
-import Loader from '../loader'
+import Icon from '../../../components/ico-get'
+import Loader from '../../../components/loader'
 
 interface ValidProps {
   children?: React.ReactNode

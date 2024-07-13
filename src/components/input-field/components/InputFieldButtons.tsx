@@ -32,7 +32,7 @@ function ResetToggle({ avalible, reset }: { avalible: boolean; reset: React.Mous
   if (!avalible || !reset) return null
   return (
     <button tabIndex={-1} className={styles.reset + ' btn btn-ico'} onClick={reset}>
-      <Icon name='close' />
+      <Icon name='error' />
     </button>
   )
 }

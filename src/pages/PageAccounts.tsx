@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react'
-import { AppContext } from '../../context/AppContext'
-import { ModalContext } from '../../context/ModalContext'
-import Account from '../components/account'
+import { AppContext } from '../context/AppContext'
+import { ModalContext } from '../store/ModalContext'
 import Container from '../components/container'
-import Modal from '../components/modal'
 import Topbar from '../components/topbar'
+import Modal from '../components/modal'
+import Account from '../components/account'
 
 interface PageAccountsProps {
   children?: React.ReactNode

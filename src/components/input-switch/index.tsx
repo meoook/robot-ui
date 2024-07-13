@@ -1,4 +1,4 @@
-import Icon from '../ico-get'
+import Icon from '../../../components/ico-get'
 import styles from './switch.module.scss'
 
 interface InputSwitchProps {

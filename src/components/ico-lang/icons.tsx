@@ -1,5 +1,3 @@
-import React from 'react'
-
 const svgProps = { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 512 512' }
 
 const IcoChinese = () => (
@@ -157,18 +155,6 @@ const IcoWorld = () => (
     />
   </svg>
 )
-// const IcoTest = () => (
-//   <svg viewBox='0 0 300 300' width='300' height='300'>
-//     <defs>
-//       <clipPath id='myClip'>
-//         <circle cx='150' cy='150' r='150' />
-//       </clipPath>
-//     </defs>
-//     <rect width='300' height='100' fill='#000000' clipPath='url(#myClip)' />
-//     <rect width='300' height='100' fill='#FFDA44' clipPath='url(#myClip)' y='100' />
-//     <rect width='300' height='100' fill='#D80027' clipPath='url(#myClip)' y='200' />
-//   </svg>
-// )
 
 const IcoTest = () => (
   <svg viewBox='0 0 300 300' width='300' height='300'>
@@ -198,14 +184,12 @@ const IcoTest = () => (
     */}
   </svg>
 )
-// const Ico = () => ()
-// const Ico = () => ()
-// const Ico = () => ()
-// const Ico = () => ()
-// const Ico = () => ()
-// const Ico = () => ()
 
-const iconArray = {
+type IconArrayType = {
+  [key: string]: JSX.Element
+}
+
+const iconArray: IconArrayType = {
   chinese: <IcoChinese />,
   english: <IcoEnglish />,
   german: <IcoGerman />,

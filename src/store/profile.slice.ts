@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-// Define a type for the slice state
 interface IProfileState {
   token: string | null
   loading: boolean
@@ -9,7 +8,6 @@ interface IProfileState {
 
 const LOCAL_STORAGE_TOKEN_KEY: string = 'token'
 
-// Define the initial state using that type
 const initialState: IProfileState = {
   token: localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
   loading: false,

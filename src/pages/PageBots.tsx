@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom'
 import React, { useContext, useState } from 'react'
-import { AppContext } from '../../context/AppContext'
+import { useParams, useNavigate } from 'react-router-dom'
+import { AppContext } from '../context/AppContext'
+import { ModalContext } from '../store/ModalContext'
 import Container from '../components/container'
 import Topbar from '../components/topbar'
-import Bot from '../components/bot'
-import { ModalContext } from '../../context/ModalContext'
 import Modal from '../components/modal'
+import Bot from '../components/bot'
 
 interface PageBotsProps {
   children?: React.ReactNode
