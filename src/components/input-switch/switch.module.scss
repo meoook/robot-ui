@@ -56,10 +56,11 @@ $padding: 10px;
     & .mark {
       opacity: 1;
       background: var(--color-primary);
+      transform: translateX(0.6em);
     }
     &.active {
       & .mark {
-        transform: translateX(0.6em);
+        transform: translateX(0em);
       }
     }
   }

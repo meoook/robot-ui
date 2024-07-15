@@ -1,22 +1,29 @@
 import style from './pop.module.scss'
-import { useContext, useEffect } from 'react'
-import { AppContext } from '../../../context/AppContext'
-import { IPopup } from '../../../context/objects'
-import Icon from '../../../components/ico-get'
+import { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { removeMessage } from '../../store/profile.slice'
+import { IPopup } from '../../model'
+import Icon from '../ico-get'
 
 export default function PopupMsgs() {
-  const { msgs, delMsg } = useContext(AppContext)
+  const { messages } = useAppSelector((state) => state.profile)
+
   return (
     <div className={style.msgframe}>
-      {msgs.map((msg) => (
-        <Message msg={msg} delMsg={delMsg} key={msg.id} />
+      {messages.map((message) => (
+        <Message msg={message} key={message.id} />
       ))}
     </div>
   )
 }
 
-const Message = ({ msg, delMsg }: { msg: IPopup; delMsg: Function }) => {
+const Message = ({ msg }: { msg: IPopup }) => {
   const msgStyle = `${style.msgitem} ${style[msg.type]}${msg.nofade ? '' : ` ${style.fade}`}`
+  const dispatch = useAppDispatch()
+
+  const delMsg = (messageID: number) => {
+    dispatch(removeMessage(messageID))
+  }
 
   useEffect(() => {
     if (!msg.nofade) {

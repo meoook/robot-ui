@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom'
-import { IAccount } from '../../../context/objects'
-import Valid from '../valid'
 import style from './account.module.scss'
+import { Link } from 'react-router-dom'
+import { IAccount } from '../../model'
+import Valid from '../valid'
 
 interface AccountProps {
   children?: React.ReactNode
@@ -21,6 +21,10 @@ export default function Account({ account }: AccountProps) {
         {account.error ?? <div>{account.error}</div>}
       </div>
       <div className='row'>
+        <div className='col-1'>Name:</div>
+        <div className='col-1'>{account.name}</div>
+      </div>
+      <div className='row'>
         <div className='col-1'>trade:</div>
         <div className='col-1'>
           <Valid valid={account.trade} />
@@ -30,12 +34,6 @@ export default function Account({ account }: AccountProps) {
         <div className='col-1'>loan:</div>
         <div className='col-1'>
           <Valid valid={account.loan} />
-        </div>
-      </div>
-      <div className='row'>
-        <div className='col-1'>futures:</div>
-        <div className='col-1'>
-          <Valid valid={account.futures} />
         </div>
       </div>
     </Link>

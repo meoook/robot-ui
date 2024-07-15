@@ -1,7 +1,6 @@
 import style from './email.module.scss'
-import { useContext, useState } from 'react'
-import { AppContext } from '../../../context/AppContext'
-import InputTextField from '../input-fields'
+import { useState } from 'react'
+import InputTextField from '../input-field'
 
 interface EmailProps {
   children?: React.ReactNode
@@ -9,12 +8,13 @@ interface EmailProps {
 }
 
 export default function Email({ email }: EmailProps) {
-  const { register } = useContext(AppContext)
   const [active, setActive] = useState(!email)
   const [field, setField] = useState(email || '')
 
   const onChange = (name: string, value: string) => setField(value)
-  const emailSet = () => register({ email: field, password: '' })
+  const emailSet = () => {
+    const x = { email: field, password: '' }
+  }
 
   return (
     <>

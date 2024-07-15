@@ -1,25 +1,27 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useState, useEffect, useContext } from 'react'
-import { AppContext } from '../context/AppContext'
+import { useState, useEffect } from 'react'
 import Container from '../components/container'
 import Topbar from '../components/topbar'
-import { IBot, IBotCfg, IBotStats } from '../context/objects'
 import InputNumber from '../components/input-number'
 import InputSwitch from '../components/input-switch'
 import BotMonthStats from '../components/stats'
+import { useDeleteBotMutation, useGetBotsQuery, useUpdateBotMutation } from '../store/srv.api'
+import { IBot, IBotChange, IBotStats, IBotTrades } from '../model'
 
 interface PageBotsProps {
   children?: React.ReactNode
 }
 export default function PageBot(props: PageBotsProps) {
   const { id } = useParams()
+  const { data: bots } = useGetBotsQuery()
+  const [botRemove] = useDeleteBotMutation()
+  const [botUpdate] = useUpdateBotMutation()
+
   const { botid } = useParams()
-  const { bots, botRemove, botUpdate, stats } = useContext(AppContext)
   const navigate = useNavigate()
   const [edit, setEdit] = useState(false)
   const [bot, setBot] = useState<IBot>()
-  const [stat, setStat] = useState<IBotStats[]>()
-  const [botCfg, setBotCfg] = useState<IBotCfg>({
+  const [botCfg, setBotCfg] = useState<IBotChange>({
     name: '',
     active: false,
     next_month: false,
@@ -30,16 +32,10 @@ export default function PageBot(props: PageBotsProps) {
   })
 
   useEffect(() => {
-    const lookup = bots.find((b) => b.id === Number(botid) && b.account === Number(id))
-    const botStats = stats.filter((b) => b.bot === Number(botid))
-    setStat(
-      botStats.sort((a, b) =>
-        Math.round(Number(b.month.substring(0, 7).replace('-', '')) - Number(a.month.substring(0, 7).replace('-', '')))
-      )
-    )
+    const lookup = bots?.find((b) => b.id === Number(id))
     setBot(lookup)
     if (lookup) setBotCfg(lookup)
-  }, [bots, botid, id, stats])
+  }, [bots, botid, id])
 
   const handleDelete = () => {
     botRemove(Number(botid))
@@ -48,7 +44,7 @@ export default function PageBot(props: PageBotsProps) {
 
   const handleSave = () => {
     setEdit(false)
-    if (bot) botUpdate(bot.id, botCfg)
+    if (bot) botUpdate({ botID: bot.id, changes: botCfg })
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -148,7 +144,8 @@ export default function PageBot(props: PageBotsProps) {
               onChange={onChange}
             />
           </div>
-          <BotMonthStats stats={stat} />
+          <BotMonthStats bot={bot.id} />
+          <div>Trades</div>
         </div>
       ) : (
         <div>

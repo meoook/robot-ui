@@ -1,9 +1,9 @@
 import style from './header.module.scss'
 import { Link, NavLink } from 'react-router-dom'
-import iconArray from '../ico-get/icons'
-import { useAppSelector } from '../../../store/hooks'
-import { useGetUserQuery, useSingOutMutation } from '../../../store/srv.api'
+import { useGetUserQuery, useSingOutMutation } from '../../store/srv.api'
+import { useAppSelector } from '../../store/hooks'
 import LoaderCar from '../loader-car'
+import iconArray from '../ico-get/icons'
 
 export default function Header() {
   const { token, loading } = useAppSelector((state) => state.profile)
@@ -24,14 +24,14 @@ export default function Header() {
             </NavLink>
             {Boolean(token) && (
               <>
+                <NavLink to='/profile' className={style.link}>
+                  Profile
+                </NavLink>
                 <NavLink to='/accounts' className={style.link}>
                   Accounts
                 </NavLink>
-                <NavLink to='/invoices' className={style.link}>
-                  Invoices
-                </NavLink>
-                <NavLink to='/transactions' className={style.link}>
-                  Transactions
+                <NavLink to='/bots' className={style.link}>
+                  Bots
                 </NavLink>
               </>
             )}

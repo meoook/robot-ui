@@ -1,16 +1,17 @@
 import { useContext, useState } from 'react'
-import { AppContext } from '../context/AppContext'
 import { ModalContext } from '../store/ModalContext'
+import { useCreateAccountMutation, useGetAccountsQuery } from '../store/srv.api'
 import Container from '../components/container'
 import Topbar from '../components/topbar'
 import Modal from '../components/modal'
 import Account from '../components/account'
+import { IAccountCreate } from '../model'
 
 interface PageAccountsProps {
   children?: React.ReactNode
 }
 export default function PageAccounts(props: PageAccountsProps) {
-  const { accounts } = useContext(AppContext)
+  const { data } = useGetAccountsQuery()
   const { modal, open } = useContext(ModalContext)
 
   return (
@@ -25,44 +26,50 @@ export default function PageAccounts(props: PageAccountsProps) {
           Add account
         </button>
       </Topbar>
-      {accounts?.map((account) => (
+      {data?.map((account) => (
         <Account key={account.id} account={account} />
       ))}
-      {accounts.length === 0 && <div>Add account to continue</div>}
+      {data?.length === 0 && <div>Add account to continue</div>}
     </Container>
   )
 }
 
 function ModalAddAccount() {
-  const { accountAdd } = useContext(AppContext)
+  const [addAccount] = useCreateAccountMutation()
   const { close } = useContext(ModalContext)
-  const [credentials, setCredentials] = useState({ apiKey: '', apiSecret: '' })
+  const [credentials, setCredentials] = useState<IAccountCreate>({ name: '', api_key: '', api_secret: '' })
   const [error, setError] = useState('')
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCredentials({ ...credentials, [event.target.name]: event.target.value })
+    setCredentials({ ...credentials, [event.target.name]: event.target.value.trim() })
     if (error) setError('')
   }
 
   const handleSubmit = () => {
-    if (!credentials.apiKey.trim()) {
+    if (!credentials.name.trim()) {
+      setError('Invalid name')
+      return
+    }
+    if (!credentials.api_key.trim()) {
       setError('Enter api key')
       return
     }
-    if (!credentials.apiSecret.trim()) {
+    if (!credentials.api_secret.trim()) {
       setError('Enter api secret')
       return
     }
     close()
-    accountAdd(credentials.apiKey.trim(), credentials.apiSecret.trim())
+    addAccount(credentials)
   }
 
   return (
     <>
+      <label>name</label>
+      <input type='text' name='name' onChange={onChange} />
       <label>api key</label>
-      <input type='text' name='apiKey' onChange={onChange} />
+      <input type='text' name='api_key' onChange={onChange} />
       <label>api secret</label>
-      <input type='text' name='apiSecret' onChange={onChange} />
+      <input type='text' name='api_secret' onChange={onChange} />
       <small className='red'>{error}&nbsp;</small>
       <div className='row justify'>
         <div />

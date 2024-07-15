@@ -1,6 +1,17 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { RootState } from './store'
-import { ListResponse, ITimeFrame, IPair, IApiUser, IAccount, IBot, IBotChange, IBotStats, IBotTrades } from '../model'
+import {
+  ListResponse,
+  ITimeFrame,
+  IPair,
+  IApiUser,
+  IAccount,
+  IBot,
+  IBotChange,
+  IBotStats,
+  IBotTrades,
+  IAccountCreate,
+} from '../model'
 import { setLoading, setToken, destroyToken } from './profile.slice'
 
 export const srvApi = createApi({
@@ -56,6 +67,13 @@ export const srvApi = createApi({
         url: 'auth/user',
       }),
       providesTags: ['User'],
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (error) {
+          dispatch(destroyToken())
+        }
+      },
     }),
     getPairs: build.query<IPair[], void>({
       query: () => ({
@@ -73,11 +91,11 @@ export const srvApi = createApi({
       }),
       providesTags: ['Account'],
     }),
-    createAccount: build.mutation<IAccount, { api_key: string; api_secret: string }>({
-      query: ({ api_key, api_secret }) => ({
+    createAccount: build.mutation<IAccount, IAccountCreate>({
+      query: (account) => ({
         url: 'account',
         method: 'POST',
-        body: { api_key, api_secret },
+        body: account,
       }),
       invalidatesTags: ['Account'],
     }),
@@ -88,10 +106,9 @@ export const srvApi = createApi({
       }),
       invalidatesTags: ['Account'],
     }),
-    getBots: build.query<IBot[], number>({
-      query: (accountID: number) => ({
+    getBots: build.query<IBot[], void>({
+      query: () => ({
         url: 'bot',
-        params: { account_id: accountID },
       }),
       providesTags: ['Bot'],
     }),
@@ -120,7 +137,7 @@ export const srvApi = createApi({
     }),
     getStats: build.query<ListResponse<IBotStats>, number>({
       query: (bot_id: number) => ({
-        url: 'bot',
+        url: 'stats',
         params: { bot_id, limit: 10 },
       }),
       // providesTags: ['Bot'],

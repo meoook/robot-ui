@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
-import { IBot } from '../../../context/objects'
 import style from './bot.module.scss'
+import { Link } from 'react-router-dom'
+import { IBot } from '../../model'
 
 interface BotProps {
   children?: React.ReactNode
@@ -10,7 +10,7 @@ interface BotProps {
 
 export default function Bot({ bot }: BotProps) {
   return (
-    <Link to={`/accounts/${bot.account}/${bot.id}`}>
+    <Link to={`/bots/${bot.id}`}>
       <div className={style.bot}>
         <div>
           <div className={style.head}>

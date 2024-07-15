@@ -1,3 +1,14 @@
+export interface IPopupOptions {
+  type: string
+  text: string
+  title?: string
+  nofade?: boolean
+}
+
+export interface IPopup extends IPopupOptions {
+  id: number
+}
+
 export interface ListResponse<T> {
   total: number
   data: T[]
@@ -23,14 +34,18 @@ export interface IPair {
   leverage: number
 }
 
+export interface IAccountCreate {
+  name: string
+  api_key: string
+  api_secret: string
+}
+
 export interface IAccount {
   id: number
+  name: string
   error: string
   trade: boolean
   loan: boolean
-  futures: boolean
-  apiKey?: string
-  apiSecret?: string
 }
 
 export interface IBotChange {

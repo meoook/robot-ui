@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { IPopup, IPopupOptions } from '../model'
 
 interface IProfileState {
   token: string | null
   loading: boolean
-  error: string | null
+  messages: IPopup[]
 }
 
 const LOCAL_STORAGE_TOKEN_KEY: string = 'token'
@@ -11,8 +12,13 @@ const LOCAL_STORAGE_TOKEN_KEY: string = 'token'
 const initialState: IProfileState = {
   token: localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
   loading: false,
-  error: null,
+  messages: [],
 }
+
+// const getNextId = (messages: IPopup[]) => {
+//   if (messages.length === 0) return 0
+//   else return messages[messages.length - 1].id + 1
+// }
 
 export const profileSlice = createSlice({
   name: 'profile',
@@ -29,8 +35,15 @@ export const profileSlice = createSlice({
       state.token = null
       localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
     },
+    addMessage: (state, action: PayloadAction<IPopupOptions>) => {
+      const messageID: number = state.messages.length === 0 ? 0 : state.messages[state.messages.length - 1].id + 1
+      state.messages.push({ id: messageID, ...action.payload })
+    },
+    removeMessage: (state, action: PayloadAction<number>) => {
+      state.messages = state.messages.filter((message) => message.id !== action.payload)
+    },
   },
 })
 
 export const profileReducer = profileSlice.reducer
-export const { setLoading, setToken, destroyToken } = profileSlice.actions
+export const { setLoading, setToken, destroyToken, addMessage, removeMessage } = profileSlice.actions

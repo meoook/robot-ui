@@ -1,5 +1,5 @@
-import Icon from '../../../components/ico-get'
 import styles from './switch.module.scss'
+import Icon from '../ico-get'
 
 interface InputSwitchProps {
   title?: string

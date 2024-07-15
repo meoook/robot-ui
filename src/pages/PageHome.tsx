@@ -8,7 +8,7 @@ interface PageHomeProps {
 export default function PageHome(props: PageHomeProps) {
   return (
     <Container>
-      <div>Page home 🎼🦴🐾🚧🛰🚀</div>
+      <div>Page home 🎼🦴🐾🚧🛰🚀💛</div>
       <div className='row justify'>
         <Icon name='add_o' />
         <Icon name='arrows' />

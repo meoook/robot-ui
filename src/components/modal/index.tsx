@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { ModalContext } from '../../../context/ModalContext'
 import style from './modal.module.scss'
+import { ModalContext } from '../../store/ModalContext'
 
 interface ModalProps {
   children?: React.ReactNode

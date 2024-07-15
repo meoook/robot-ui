@@ -26,7 +26,12 @@
     justify-content: center;
     width: 0;
     opacity: 0;
-    border-radius: var(--radius, 8px);
+    &:first-of-type {
+      border-radius: var(--radius, 8px) 0 0 var(--radius, 8px);
+    }
+    &:last-of-type {
+      border-radius: 0 var(--radius, 8px) var(--radius, 8px) 0;
+    }
     &:hover {
       background-color: var(--color-active);
     }
