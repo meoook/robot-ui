@@ -1,9 +1,48 @@
 :root {
+  // new colors
+  // --colors-white: #fff;
+  // --colors-failure: #ed4b9e;
+  // --colors-failure33: #ed4b9e33;
+  // --colors-primary: #1fc7d4;
+  // --colors-primary0f: #1fc7d40f;
+  // --colors-primary3D: #1fc7d43d;
+  // --colors-primaryBright: #53dee9;
+  // --colors-primaryDark: #0098a1;
+  // --colors-success: #31d0aa;
+  // --colors-success19: #31d0aa19;
+  // --colors-warning: #ffb237;
+  // --colors-warning2D: #ed4b9e2d;
+  // --colors-warning33: #ed4b9e33;
+  // --colors-binance: #f0b90b;
+  // --colors-overlay: #452a7a;
+  // --colors-gold: #ffc700;
+  // --colors-silver: #b2b2b2;
+  // --colors-bronze: #e7974d;
+  // --colors-yellow: #d67e0a;
+  // --colors-secondary: #a881fc;
+  // --colors-secondary80: #a881fc80;
+  // --colors-background: #08060b;
+  // --colors-backgroundDisabled: #3c3742;
+  // --colors-backgroundAlt: #27262c;
+  // --colors-backgroundAlt2: #27262cb3;
+  // --colors-cardBorder: #383241;
+  // --colors-dropdown: #1e1d20;
+  // --colors-dropdownDeep: #100c18;
+  // --colors-invertedContrast: #191326;
+  // --colors-input: #372f47;
+  // --colors-inputSecondary: #262130;
+  // --colors-tertiary: #353547;
+  // --colors-text: #f4eeff;
+  // --colors-text99: #f4eeff99;
+  // --colors-textDisabled: #666171;
+  // --colors-textSubtle: #b8add2;
+  // --colors-disabled: #524b63;
+
   --color-primary: #fff;
   // --color-fg-default: #fff;
   --color-secondary: #99a;
   --color-canvas-default: #1d1d23;
-  --color-body: #1d1d23;
+  --color-body: #1d1d23; // 1c1f24
   --color-dialog: #202029;
   --color-head: #23232b;
 
@@ -11,7 +50,7 @@
   --color-active: #2c2c35;
 
   --color-shadow: #2222;
-  --color-border: #434a56;
+  --color-border: #434a56; // #464e5a
   --color-disabled: #505059;
 
   --color-brand: #7545d2;
@@ -101,14 +140,15 @@ $res-xl: 1200px;
 }
 
 %disabled-cfg {
-  cursor: initial !important;
+  // cursor: initial !important;
+  pointer-events: none;
+  cursor: not-allowed !important;
   transform: none !important;
   color: var(--color-secondary) !important;
   background-color: transparent !important;
   // & svg {
   //   fill: var(--color-secondary) !important;
   // }
-  pointer-events: none;
 }
 %disabled-bg {
   background-size: 100px 100px !important;

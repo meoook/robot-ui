@@ -16,7 +16,7 @@ interface PageBotsProps {
   children?: React.ReactNode
 }
 export default function PageBots(props: PageBotsProps) {
-  const { data } = useGetBotsQuery()
+  const { data: bots } = useGetBotsQuery()
   const { data: accounts } = useGetAccountsQuery()
   const canAdd = accounts?.filter((acc) => acc.trade)
 
@@ -36,10 +36,10 @@ export default function PageBots(props: PageBotsProps) {
           </button>
         </div>
       </Topbar>
-      {data?.map((bot) => (
+      {bots?.map((bot) => (
         <Bot key={bot.id} bot={bot} />
       ))}
-      {data?.length === 0 && <div>Add bot to continue</div>}
+      {bots?.length === 0 && <div>Add bot to continue</div>}
     </Container>
   )
 }

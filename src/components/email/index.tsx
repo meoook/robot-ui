@@ -1,37 +1,31 @@
 import style from './email.module.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSetEmailMutation } from '../../store/srv.api'
 import InputTextField from '../input-field'
 
 interface EmailProps {
   children?: React.ReactNode
-  email?: string
+  email: string
 }
 
 export default function Email({ email }: EmailProps) {
-  const [active, setActive] = useState(!email)
-  const [field, setField] = useState(email || '')
+  const [setEmail, { isSuccess, isError, error }] = useSetEmailMutation()
+  const [editable, setEditable] = useState(!email)
+  const [field, setField] = useState(email)
 
-  const onChange = (name: string, value: string) => setField(value)
-  const emailSet = () => {
-    const x = { email: field, password: '' }
+  useEffect(() => {
+    if (isSuccess) setEditable(!isSuccess)
+  }, [isSuccess])
+
+  const onChange = (name: string, value: string) => setField(value.trim())
+  const changeMail = () => {
+    setEmail(field.trim())
   }
 
   return (
     <>
       <h1>Email</h1>
-      {Boolean(email) && (
-        <div className='row'>
-          <span>{email}</span>
-          <button
-            className='btn'
-            onClick={() => {
-              setActive((prev: boolean) => !prev)
-            }}>
-            {active ? '/\\' : '\\/'}
-          </button>
-        </div>
-      )}
-      <div className={`${style.dropdown}${active ? '' : ` ${style.hidden}`}`}>
+      <div className={style.dropdown}>
         <InputTextField
           name='email'
           onChange={onChange}
@@ -40,10 +34,22 @@ export default function Email({ email }: EmailProps) {
           title='Ваша почта'
           ph='Укажите почту'
           outColor='brand'
+          errorText={isError ? `${error}` : undefined}
+          disabled={!editable}
         />
-        <button className='btn green' onClick={emailSet}>
-          Set email
-        </button>
+        {editable ? (
+          <button className='btn green' onClick={changeMail} disabled={!field.trim()}>
+            Set email
+          </button>
+        ) : (
+          <button
+            className='btn orange'
+            onClick={() => {
+              setEditable(true)
+            }}>
+            Edit
+          </button>
+        )}
       </div>
     </>
   )

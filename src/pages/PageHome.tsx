@@ -25,6 +25,7 @@ export default function PageHome(props: PageHomeProps) {
         <Icon name='languages' />
         <Icon name='logout' />
         <Icon name='menu' />
+        <Icon name='metamask' />
         <Icon name='more' />
         <Icon name='info' />
         <Icon name='search' />

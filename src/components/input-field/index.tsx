@@ -1,9 +1,9 @@
+import styles from './input.module.scss'
 import { useRef, useEffect } from 'react'
 import InputFieldButtons from './components/InputFieldButtons'
 import InputFieldIcon from './components/InputFieldIcon'
 import InputFieldOutline from './components/InputFieldOutline'
 import InputFieldError from './components/InputFieldError'
-import styles from './input.module.scss'
 
 interface InputTextProps {
   title?: string // label with outline or placeholder

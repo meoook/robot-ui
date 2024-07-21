@@ -13,6 +13,7 @@ import {
   IAccountCreate,
 } from '../model'
 import { setLoading, setToken, destroyToken } from './profile.slice'
+import { Web3Message } from './w3'
 
 export const srvApi = createApi({
   reducerPath: 'server/api',
@@ -27,9 +28,37 @@ export const srvApi = createApi({
   }),
 
   tagTypes: ['User', 'Account', 'Bot'],
-
   endpoints: (build) => ({
+    w3nonce: build.mutation<Web3Message, { chain: number; address: string }>({
+      query: ({ chain, address }) => ({
+        url: 'auth/web3',
+        params: { chain, address },
+      }),
+    }),
+    w3auth: build.mutation<string, { message: string; signature: string }>({
+      // invalidatesTags: ['User'],
+      query: ({ message, signature }) => ({
+        url: 'auth/web3',
+        method: 'POST',
+        body: { message, signature },
+      }),
+      transformResponse: (response: any) => response.token,
+      transformErrorResponse: (response: any) => {
+        if (response.status === 'FETCH_ERROR') return 'server unreacheble'
+        return 'invalid signature'
+      },
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        dispatch(setLoading(true))
+        try {
+          const { data: token } = await queryFulfilled
+          dispatch(setToken(token))
+        } catch (error) {
+          dispatch(setLoading(false))
+        }
+      },
+    }),
     signIn: build.mutation<string, { email: string; password: string }>({
+      // invalidatesTags: ['User'],
       query: ({ email, password }) => ({
         url: 'auth/login/',
         method: 'POST',
@@ -45,21 +74,22 @@ export const srvApi = createApi({
         try {
           const { data: token } = await queryFulfilled
           dispatch(setToken(token))
-        } catch (error) {}
-        dispatch(setLoading(false))
+        } catch (error) {
+          dispatch(setLoading(false))
+        }
       },
     }),
     singOut: build.mutation<void, void>({
+      invalidatesTags: ['User', 'Account', 'Bot'],
       query: () => ({
         url: 'auth/logout/',
         method: 'POST',
       }),
-      invalidatesTags: ['User'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
           dispatch(destroyToken())
-        } catch (error) {}
+        } catch {}
       },
     }),
     getUser: build.query<IApiUser, null>({
@@ -70,9 +100,45 @@ export const srvApi = createApi({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
+          dispatch(setLoading(false))
         } catch (error) {
           dispatch(destroyToken())
         }
+      },
+    }),
+    telegramNonce: build.mutation<{ nonce: number; expire: number }, void>({
+      query: () => ({
+        url: 'auth/user/telegram',
+      }),
+    }),
+    setPassword: build.mutation<void, string>({
+      query: (password) => ({
+        url: 'auth/user/password',
+        method: 'POST',
+        body: { password },
+      }),
+    }),
+    setEmail: build.mutation<void, string>({
+      // invalidatesTags: ['User'],
+      query: (email) => ({
+        url: 'auth/user/email',
+        method: 'POST',
+        body: { email },
+      }),
+      transformErrorResponse: (response: any) => {
+        if (response.status === 'FETCH_ERROR') return 'server unreacheble'
+        if (response.data.email) return response.data.email[0]
+        return 'invalid email'
+      },
+      async onQueryStarted(email, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          dispatch(
+            srvApi.util.updateQueryData('getUser', null, (draft) => {
+              draft.email = email
+            })
+          )
+        } catch {}
       },
     }),
     getPairs: build.query<IPair[], void>({
@@ -84,6 +150,7 @@ export const srvApi = createApi({
       query: () => ({
         url: 'timeframe',
       }),
+      transformResponse: (response: Array<string[]>) => response.map((e) => ({ timeframe: e[0], name: e[1] })),
     }),
     getAccounts: build.query<IAccount[], void>({
       query: () => ({
@@ -140,22 +207,25 @@ export const srvApi = createApi({
         url: 'stats',
         params: { bot_id, limit: 10 },
       }),
-      // providesTags: ['Bot'],
     }),
     getTrades: build.query<ListResponse<IBotTrades>, number>({
       query: (bot_id: number) => ({
         url: 'bot',
         params: { bot_id, limit: 10 },
       }),
-      // providesTags: ['Bot'],
     }),
   }),
 })
 
 export const {
+  useW3nonceMutation,
+  useW3authMutation,
   useSignInMutation,
   useSingOutMutation,
   useGetUserQuery,
+  useTelegramNonceMutation,
+  useSetPasswordMutation,
+  useSetEmailMutation,
   useGetPairsQuery,
   useGetTimeframesQuery,
   useGetAccountsQuery,

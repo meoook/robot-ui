@@ -29,7 +29,7 @@ const Message = ({ msg }: { msg: IPopup }) => {
     if (!msg.nofade) {
       setTimeout(() => {
         delMsg(msg.id)
-      }, 6500)
+      }, 4000)
     }
     // eslint-disable-next-line
   }, [])

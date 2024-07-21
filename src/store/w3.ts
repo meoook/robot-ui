@@ -11,13 +11,6 @@ export interface Web3Message {
   timeout: number
 }
 
-declare global {
-  interface Window {
-    ethereum: any
-    web3: any
-  }
-}
-
 class W3Client {
   private w3: Web3
   private account: string | null = null
@@ -34,12 +27,14 @@ class W3Client {
         .catch((err: any) => {
           console.error('User denied account access', err)
         })
-    } else if (window.web3) {
-      this.w3 = new Web3(window.web3.currentProvider)
     } else {
       throw new Error('Non-Ethereum browser detected')
     }
   }
+
+  // getAddress = () => {
+  //   this.w3.eth.requestAccounts()
+  // }
 
   handleError = (err: AxiosError, text: string) => {
     if (!err.response) throw new Error('Connection error')

@@ -1,5 +1,5 @@
 export interface IPopupOptions {
-  type: string
+  type: string // 'default' | 'success' | 'info' | 'warning' | 'error'
   text: string
   title?: string
   nofade?: boolean
@@ -64,6 +64,7 @@ export interface IBot extends IBotChange {
   pair: string
   timeframe: string
   error: string
+  locked: number
 }
 
 export interface IBotStats {
@@ -84,4 +85,14 @@ export interface IBotTrades {
   fee: number
   total: number
   time: number
+}
+
+export interface Web3Message {
+  address: string
+  nonce: string
+  domain: string
+  statement: string
+  uri: string
+  chainId: number
+  timeout: number
 }

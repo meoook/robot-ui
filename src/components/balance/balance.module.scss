@@ -5,12 +5,10 @@
 }
 .table {
   border: 1px solid transparent;
-  // border: 1px solid var(--color-border);
-  border-radius: var(--padding, 8px);
+  border-radius: calc(var(--padding, 8px) * 2);
   background-color: var(--color-dialog);
   thead tr {
     border-bottom: 1px solid var(--color-border) !important;
-    // background-color: var(--color-input);
   }
   tr {
     border-bottom: 1px solid var(--color-border);
