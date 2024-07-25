@@ -48,6 +48,17 @@ export interface IAccount {
   loan: boolean
 }
 
+export interface IBotIndicator {
+  orders: number
+  circles: number
+  base: number
+  quote: number
+  base_borrowed: number
+  quote_borrowed: number
+  liquidation: number
+  balance: number
+}
+
 export interface IBotChange {
   name: string
   active: boolean
@@ -65,6 +76,7 @@ export interface IBot extends IBotChange {
   timeframe: string
   error: string
   locked: number
+  indicator: IBotIndicator
 }
 
 export interface IBotStats {

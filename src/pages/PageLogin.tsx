@@ -22,8 +22,10 @@ export default function PageLogin() {
       if (!msg.data) return
       const { message, signature } = await dispatch(handleSignMessage(msg.data)).unwrap()
       await authW3({ message, signature })
-    } catch (err) {
-      dispatch(addMessage({ type: 'error', text: `${err}`, title: 'Web3 Error', nofade: false }))
+    } catch (err: any) {
+      console.log('THIS IS ERR', err)
+      const text = err.message ? err.message : err
+      dispatch(addMessage({ type: 'error', text, title: 'Web3 Error', nofade: false }))
     }
     setDisabled(false)
   }
@@ -47,6 +49,7 @@ export default function PageLogin() {
           ph='укажите почту'
           outColor='brand'
           disabled={isLoading}
+          helpText='some text'
         />
         <InputTextField
           name='password'

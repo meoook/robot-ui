@@ -1,0 +1,32 @@
+.banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 36px 0;
+  // white-space: nowrap;
+}
+
+.content {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.content:only-child {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.title {
+  font-size: 72px;
+  line-height: 110%;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.subtitle {
+  font-size: 32px;
+  color: var(--color-secondary);
+}

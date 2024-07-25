@@ -1,33 +1,39 @@
-.stats {
-  & > h1 {
-    margin: calc(var(--padding, 8px) * 2) var(--padding, 8px) var(--padding, 8px);
-  }
+.head {
+  padding: 2rem 2rem 1rem;
+  background-color: var(--color-head);
 }
-.table {
-  border: 1px solid transparent;
-  border-radius: calc(var(--padding, 8px) * 2);
-  background-color: var(--color-dialog);
-  thead tr {
-    border-bottom: 1px solid var(--color-border) !important;
+
+.switch {
+  padding: 1rem 2rem;
+  background-color: var(--color-canvas-default);
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    background-color: var(--color-input);
+    border-radius: 20px;
   }
-  tr {
-    border-bottom: 1px solid var(--color-border);
-    &:last-of-type {
-      border-bottom: 0;
+  & button {
+    box-sizing: border-box;
+    padding: var(--padding);
+    width: 50%;
+    border-radius: 20px;
+    &.active {
+      background-color: var(--color-brand);
     }
   }
-  th,
-  td {
-    text-align: center;
-    padding: 8px 0px;
+}
+
+.item {
+  margin: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  & > button {
+    margin-top: var(--padding);
   }
-  th {
-    font-size: var(--font-size-h2);
-    text-transform: uppercase;
-  }
-  td {
-    color: var(--color-secondary);
-    // width: 12.5%;
-    width: 12.5%;
+  &:last-of-type {
+    margin-bottom: 2rem;
   }
 }

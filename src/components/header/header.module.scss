@@ -1,24 +1,20 @@
 .header {
-  font: normal normal 11px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji';
+  position: relative;
   background: var(--color-head);
   color: var(--color-primary);
   display: flex;
   padding: 16px 32px;
-  font-size: var(--body-font-size);
-  line-height: 1.5;
   white-space: nowrap;
-  :last-child {
+  & > :last-child {
     margin-right: 0px !important;
   }
-  .item {
+  .item,
+  .address {
     display: flex;
     margin-right: 16px;
     align-self: stretch;
     align-items: center;
     flex-wrap: nowrap;
-    // margin-top: calc(-1 * var(--base-size-2, 2px)) !important;
-    // margin-bottom: calc(-1 * var(--base-size-2, 2px)) !important;
   }
   a {
     &:hover {
@@ -27,17 +23,14 @@
   }
   .link {
     padding: 16px 0;
-    margin: calc(-1 * var(--base-size-16, 16px)) 0;
-    font-weight: var(--text-weight, 600);
+    margin: calc(-1 * var(--base-size-16)) 0;
+    font-weight: 500;
     margin-right: var(--base-size-16, 16px);
-    color: var(--color-primary);
     white-space: nowrap;
   }
   svg {
     display: inline-block;
     overflow: visible !important;
-    // vertical-align: text-bottom;
-    fill: currentColor;
     vertical-align: middle;
   }
   nav {
@@ -50,9 +43,46 @@
     position: absolute;
     background-image: linear-gradient(to bottom, var(--color-shadow), transparent);
     height: 10px;
-    top: 65px;
+    top: 100%;
     left: 0;
     right: 0;
     bottom: 0px;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  background-color: var(--color-head);
+  color: green;
+  min-width: 135px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 12px 0px;
+  box-shadow: 0px 2px 16px var(--color-shadow);
+  & span {
+    margin-right: 4px;
+  }
+  & span:only-child {
+    margin-right: 0px;
+  }
+}
+
+.address {
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    color: var(--color-secondary);
+    & .dropdown {
+      visibility: visible;
+    }
+  }
+  & > div {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
   }
 }

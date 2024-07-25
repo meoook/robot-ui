@@ -1,13 +1,15 @@
-import Container from '../components/container'
+import Banner from '../components/banner'
 import Icon from '../components/ico-get'
 import IcoLang from '../components/ico-lang'
+import { SvgFallingStars } from '../svg/star'
+import imgRobo from '../svg/robo.png'
 
 interface PageHomeProps {
   children?: React.ReactNode
 }
 export default function PageHome(props: PageHomeProps) {
   return (
-    <Container>
+    <>
       <div>Page home 🎼🦴🐾🚧🛰🚀💛</div>
       <div className='row justify'>
         <Icon name='add_o' />
@@ -24,6 +26,7 @@ export default function PageHome(props: PageHomeProps) {
         <Icon name='key' />
         <Icon name='languages' />
         <Icon name='logout' />
+        <Icon name='logout2' />
         <Icon name='menu' />
         <Icon name='metamask' />
         <Icon name='more' />
@@ -39,6 +42,7 @@ export default function PageHome(props: PageHomeProps) {
         <Icon name='success' />
         <Icon name='tultip' />
         <Icon name='user' />
+        <Icon name='wallet' />
         <Icon name='warning' />
         <Icon name='work' />
         <Icon name='work_out' />
@@ -53,6 +57,15 @@ export default function PageHome(props: PageHomeProps) {
         <IcoLang name='world' />
         <IcoLang name='test' />
       </div>
-    </Container>
+      <Banner title={`Everyone's Favorite BOT`} subtitle='Trade, earn, and own crypto on the all-in-one multichain DEX'>
+        <img src={imgRobo} alt='Favorit BOT' />
+      </Banner>
+      <Banner title='Your Funds Protected' subtitle='No direct access to your funds'>
+        <div />
+      </Banner>
+      <Banner title='Fee Only For Profit' subtitle='We take comission only from your profit'>
+        <SvgFallingStars />
+      </Banner>
+    </>
   )
 }

@@ -8,6 +8,11 @@ interface BotProps {
   bot: IBot
 }
 
+// preventScrollReset?: boolean;
+// relative?: RelativeRoutingType;
+// to: To;
+// unstable_viewTransition?: boolean;
+
 export default function Bot({ bot }: BotProps) {
   return (
     <Link to={`/bots/${bot.id}`}>

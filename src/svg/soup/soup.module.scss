@@ -1,0 +1,65 @@
+.soup {
+  // --color-1: #0036a4;
+  // --color-2: #6a2364;
+  // --color-3: #4cceff;
+
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  // background-color: #06021d;
+  z-index: -1;
+}
+
+.ballbig {
+  animation: ballbig_s_do 12000ms linear infinite normal forwards;
+}
+
+@keyframes ballbig_s_do {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 300;
+  }
+}
+
+.ballsm {
+  animation: ballsm_s_do 12000ms linear infinite normal forwards;
+}
+
+@keyframes ballsm_s_do {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 500;
+  }
+}
+
+.starssm {
+  animation: starssm_s_do 12000ms linear infinite normal forwards;
+}
+@keyframes starssm_s_do {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 360;
+  }
+}
+
+.starsbig {
+  animation: starsbig_s_do 12000ms linear infinite normal forwards;
+}
+
+@keyframes starsbig_s_do {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 360;
+  }
+}

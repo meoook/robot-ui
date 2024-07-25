@@ -1,0 +1,33 @@
+.footer {
+  box-sizing: border-box;
+  white-space: nowrap;
+  background-color: var(--color-head);
+  min-height: 30vh;
+  hr {
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+}
+
+.content {
+  box-sizing: border-box;
+  width: 960px;
+  margin: 0 auto;
+  padding: 40px 2rem;
+  line-height: 1.5;
+}
+
+.head {
+  text-transform: uppercase;
+  color: var(--color-brand);
+  font-weight: 600;
+  // color: var(--color-secondary);
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  & > div {
+    margin-right: 16px;
+  }
+}

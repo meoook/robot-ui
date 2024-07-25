@@ -1,0 +1,72 @@
+.coin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  vertical-align: baseline;
+  background-color: var(--color-input);
+  & > label {
+    position: relative;
+    background-color: var(--color-input);
+    vertical-align: baseline;
+    border-radius: var(--radius);
+    &:focus-within {
+      box-shadow: 0px 0px 0px 1px #7645d9, 0px 0px 0px 4px rgba(118, 69, 217, 0.6);
+    }
+  }
+  & input {
+    position: relative;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0;
+    color: var(--colors-text);
+    text-align: right;
+  }
+}
+
+.input {
+  padding: 12px 16px 0px 16px;
+}
+
+.amount {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  & > button {
+    display: inline-flex;
+    position: relative;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    opacity: 1;
+    outline: 0px;
+    transition: all 0.2s ease 0s;
+    height: 20px;
+    font-size: 12px;
+    padding: 0px 8px;
+    margin-left: 5px;
+    background-color: transparent;
+    border: 2px solid var(--color-primary);
+    box-shadow: none;
+    color: var(--colors-primary);
+    &:hover {
+      opacity: 0.65;
+    }
+  }
+}

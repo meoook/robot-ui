@@ -5,6 +5,8 @@ import { Web3Message } from './w3'
 import { BOT_PAY_ABI, BOT_PAY_ADDRESS } from './botPay'
 import { LTR_ABI, LTR_ADDRESS } from './ltr'
 
+export const VALID_CHAIN_ID: number = 97
+
 declare global {
   interface Window {
     ethereum: any
@@ -76,14 +78,16 @@ const initialState: IW3State = {
   status: 'idle',
 }
 
-export const checkNetwork = async (chainId: number): Promise<void> => {
-  if (window.ethereum.net_version === chainId) return
+export const setNetwork = createAsyncThunk('w3/setNetwork', async () => {
+  const currentNetwork = await web3.eth.getChainId()
+  if (Number(currentNetwork) === VALID_CHAIN_ID) return VALID_CHAIN_ID
 
   try {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: web3.utils.toHex(chainId) }],
+      params: [{ chainId: web3.utils.toHex(VALID_CHAIN_ID) }],
     })
+    return VALID_CHAIN_ID
   } catch (err: any) {
     // https://docs.metamask.io/wallet/reference/wallet_addethereumchain/
     if (err.code === 4902) {
@@ -98,7 +102,7 @@ export const checkNetwork = async (chainId: number): Promise<void> => {
           // },
           {
             chainName: 'BSC Testnet',
-            chainId: web3.utils.toHex(chainId), // 97
+            chainId: web3.utils.toHex(VALID_CHAIN_ID), // 97
             nativeCurrency: { name: 'BNB', decimals: 18, symbol: 'BNB' },
             rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
             blockExplorerUrls: ['https://testnet.bscscan.com'],
@@ -112,9 +116,11 @@ export const checkNetwork = async (chainId: number): Promise<void> => {
           // },
         ],
       })
+      return VALID_CHAIN_ID
     }
   }
-}
+  return Number(currentNetwork)
+})
 
 export const addToken = async (): Promise<void> => {
   const tokenSymbol = 'LTR'
@@ -190,14 +196,23 @@ export const addAllowence = async (address: string, amount: number): Promise<voi
   }
 }
 
-export const addToLocked = async (address: string, amount: number): Promise<void> => {
-  const wei: string = web3.utils.toWei(500, 'ether')
+export const w3AddLocked = async (address: string, amount: number): Promise<void> => {
+  const wei: string = web3.utils.toWei(amount, 'ether')
   try {
     await w3BotPayContract.methods.addLocked(wei).send({ from: address })
   } catch (err: any) {
+    // TODO: dispatch error
     if (err.code === 100) console.log('User denied transaction signature')
-    console.log('addToLocked', err)
-    // console.log('addToLocked', JSON.stringify(err))
+  }
+}
+
+export const w3LockFree = async (address: string, amount: number): Promise<void> => {
+  const wei: string = web3.utils.toWei(amount, 'ether')
+  try {
+    await w3BotPayContract.methods.lockFree(wei).send({ from: address })
+  } catch (err: any) {
+    if (err.code === 100) console.log('User denied transaction signature')
+    console.log('lockFree', err)
   }
 }
 
@@ -233,6 +248,9 @@ export const w3Slice = createSlice({
       })
       .addCase(getBalance.rejected, (state) => {
         state.status = 'failed'
+      })
+      .addCase(setNetwork.fulfilled, (state, action: PayloadAction<number>) => {
+        state.chain = action.payload
       })
   },
 })

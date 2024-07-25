@@ -1,26 +1,22 @@
-import { Navigate } from 'react-router-dom'
-import { useState } from 'react'
-import Container from '../components/container'
-import Email from '../components/email'
+// import { Navigate } from 'react-router-dom'
 import { useGetUserQuery } from '../store/srv.api'
-import Balance from '../components/balance'
+import Email from '../components/email'
+import TelegramNonce from '../components/telegram'
+import Password from '../components/password'
+import Card from '../components/card'
 
 interface PageUserProps {
   children?: React.ReactNode
 }
 export default function PageUser(props: PageUserProps) {
   const { data: user } = useGetUserQuery(null)
-  // const [credentials, setCredentials] = useState({ email: '', password: '' })
-  // const onChange = (name: string, value: string) => setCredentials({ ...credentials, [name]: value })
 
-  if (!user) return <Navigate to='/' replace />
-
+  // if (!user) return <Navigate to='/' replace />
   return (
-    <Container>
-      <Balance userAddress={user.address} />
-      <Email email={user.email} />
-      <div>Set telegram</div>
-      <div>Change password</div>
-    </Container>
+    <Card border={true}>
+      <TelegramNonce telegram={user?.telegram_id} />
+      <Email email={user?.email} />
+      {user?.email && <Password />}
+    </Card>
   )
 }

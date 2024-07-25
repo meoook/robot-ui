@@ -1,120 +1,221 @@
 import style from './balance.module.scss'
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { checkNetwork, addToken, getAddress, getBalance, addAllowence, addToLocked } from '../../store/w3.slice'
 import { useGetBotsQuery } from '../../store/srv.api'
+import {
+  getAddress,
+  getBalance,
+  addAllowence,
+  w3AddLocked,
+  VALID_CHAIN_ID,
+  setNetwork,
+  w3LockFree,
+} from '../../store/w3.slice'
+import Card from '../card'
+import Notify from '../notify'
+import CoinInput from '../coin'
+import Loader from '../loader'
 
 interface BalanceProps {
-  userAddress: string
+  userAddress?: string
 }
 
-const VALID_CHAIN_ID: number = 97
 const ALLOWENCE_MIN: number = 10_000
 const ALLOWENCE_MAX: number = 24_000_000
 
 export default function Balance({ userAddress }: BalanceProps) {
-  const dispatch = useAppDispatch()
+  return (
+    <Card border={true} nopadding={true}>
+      {!userAddress && <Loader />}
+      {userAddress && <BalanceHead />}
+      {userAddress && <AddBlock userAddress={userAddress} />}
+    </Card>
+  )
+}
+
+function BalanceHead() {
+  const { allowence, locked, symbol, perBot } = useAppSelector((state) => state.w3)
   const { data: bots } = useGetBotsQuery()
-  const { address, balance, allowence, locked, free, symbol, perBot, chain } = useAppSelector((state) => state.w3)
-  const [eq, setEq] = useState(false)
-  const [validChain, setValidChain] = useState(false)
-  const [busy, setBusy] = useState(false)
+  const botsUsed: number = bots?.reduce((prev, curr) => prev + curr.locked, 0) || 0
+
+  return (
+    <div className={style.head}>
+      <h1>Lock for bots</h1>
+      <div className='row'>
+        <div className='col-4'>used for bots</div>
+        <div className='col-3'>
+          {botsUsed.toFixed(2)} {symbol}
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col-4'>locked</div>
+        <div className='col-3'>
+          {locked.toFixed(2)} {symbol}
+        </div>
+      </div>
+      {perBot > 0 && (
+        <div className='row'>
+          <div className='col-4'>to enable one bot</div>
+          <div className='col-3'>
+            {perBot.toFixed(2)} {symbol}
+          </div>
+        </div>
+      )}
+      <div className='row'>
+        <div className='col-4'>allowence (debug)</div>
+        <div className='col-3'>
+          {allowence.toFixed(2)} {symbol}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AddBlock({ userAddress }: { userAddress: string }) {
+  const dispatch = useAppDispatch()
+  const { address, allowence, chain, connected } = useAppSelector((state) => state.w3)
+  const [balanceOn, setBalanceOn] = useState(true)
 
   useEffect(() => {
-    dispatch(getBalance(userAddress))
-  }, [userAddress, dispatch])
+    if (chain === VALID_CHAIN_ID) dispatch(getBalance(userAddress))
+  }, [userAddress, chain, dispatch])
 
   useEffect(() => {
     if (!address) dispatch(getAddress())
-    else setEq(userAddress === address.toLowerCase())
   }, [address, userAddress, dispatch])
 
-  useEffect(() => {
-    if (chain) {
-      checkNetwork(VALID_CHAIN_ID)
-      setValidChain(chain === VALID_CHAIN_ID)
-    }
-  }, [chain])
+  let err = undefined
+  if (!connected) err = <Notify type='info'>Not connected</Notify>
+  else if (chain !== VALID_CHAIN_ID) err = <InvalidNetwork />
+  else if (!address) err = <Notify type='info'>No active provider</Notify>
+  else if (userAddress !== address.toLowerCase())
+    err = <Notify type='error'>You connected with other wallet (contract functions disabled)</Notify>
+  else if (!allowence || allowence < ALLOWENCE_MIN) err = <AllowToken userAddress={userAddress} />
+  if (err) return <div className={style.item}>{err}</div>
 
-  const allow = async () => {
+  return (
+    <>
+      <div className={style.switch}>
+        <div>
+          <button className={balanceOn ? style.active : undefined} onClick={() => setBalanceOn(true)}>
+            From balance
+          </button>
+          <button className={!balanceOn ? style.active : undefined} onClick={() => setBalanceOn(false)}>
+            From unlocked
+          </button>
+        </div>
+      </div>
+      {balanceOn ? <AddFromBalance userAddress={userAddress} /> : <AddFromFree userAddress={userAddress} />}
+    </>
+  )
+}
+
+function InvalidNetwork() {
+  const dispatch = useAppDispatch()
+  const [busy, setBusy] = useState(false)
+  const switchNetwok = () => {
     setBusy(true)
-    await addAllowence(userAddress, ALLOWENCE_MAX)
+    dispatch(setNetwork())
     setBusy(false)
   }
 
-  const addLocked = async () => {
+  return (
+    <>
+      <Notify type='warning'>Not connected to Binance Smart Network (Testnet)</Notify>
+      <button className='btn green' onClick={switchNetwok} disabled={busy}>
+        Switch network
+      </button>
+    </>
+  )
+}
+
+function AllowToken({ userAddress }: { userAddress: string }) {
+  const dispatch = useAppDispatch()
+  const [busy, setBusy] = useState(false)
+  const allow = async () => {
     setBusy(true)
-    await addToLocked(userAddress, balance)
+    await addAllowence(userAddress, ALLOWENCE_MAX)
     setBusy(false)
     setTimeout(() => {
       dispatch(getBalance(userAddress))
     }, 3000)
   }
 
-  // TODO: MB take from user.locked ? or no
-  const botsUsed: number = bots?.reduce((prev, curr) => prev + curr.locked, 0) || 0
-  const enabled: boolean = Boolean(allowence) && allowence > ALLOWENCE_MIN
+  return (
+    <button className='btn green' disabled={busy} onClick={allow}>
+      Enable
+    </button>
+  )
+}
+
+function AddFromBalance({ userAddress }: { userAddress: string }) {
+  const dispatch = useAppDispatch()
+  const { balance, symbol } = useAppSelector((state) => state.w3)
+  const [busy, setBusy] = useState(false)
+  const [amount, setAmount] = useState('0')
+
+  const addLocked = async () => {
+    setBusy(true)
+    await w3AddLocked(userAddress, Number(amount))
+    setBusy(false)
+    setTimeout(() => {
+      dispatch(getBalance(userAddress))
+    }, 3000)
+  }
+  const disabled = busy || balance <= 0 || Number(amount) <= 0
 
   return (
     <>
-      <h1>Web3 address:</h1>
-      {address && !eq && <div>You connected by other wallet (contract functions disabled)</div>}
-      {!validChain && <div>Connect to Binance Smart Network (Testnet)</div>}
-      <div className='row'>
-        <div className='col-8'>{userAddress}</div>
-        <div className='col-2'>
-          allowence {allowence} {symbol}
+      <div className={style.item}>
+        <div className='row justify'>
+          <div>Balance</div>
+          <div>
+            {balance.toFixed(2)} {symbol}
+          </div>
         </div>
+        <CoinInput balance={balance} value={amount} onChange={setAmount} />
       </div>
-      <div className='row'>
-        <div className='col-2'>Balance</div>
-        <div className='col-2'>
-          {balance} {symbol}
-        </div>
-        {eq && (
-          <div className='col-2'>
-            {enabled ? (
-              <button className='btn green' disabled={busy || balance <= 0} onClick={addLocked}>
-                Add to locked
-              </button>
-            ) : (
-              <button className='btn green' disabled={busy} onClick={allow}>
-                Enable
-              </button>
-            )}
-          </div>
-        )}
+      <div className={style.item}>
+        <button className='btn green' disabled={disabled} onClick={addLocked}>
+          Add to locked
+        </button>
       </div>
-      <div className='row'>
-        <div className='col-3'>used for bots / locked</div>
-        <div className='col-3'>
-          {botsUsed} / {locked} {symbol}
-        </div>
-        {perBot > 0 && (
-          <div className='col-2'>
-            {perBot} {symbol} to enable one bot
+    </>
+  )
+}
+
+function AddFromFree({ userAddress }: { userAddress: string }) {
+  const dispatch = useAppDispatch()
+  const { free, symbol } = useAppSelector((state) => state.w3)
+  const [busy, setBusy] = useState(false)
+  const [amount, setAmount] = useState('0')
+
+  const addLocked = async () => {
+    setBusy(true)
+    await w3LockFree(userAddress, Number(amount))
+    setBusy(false)
+    setTimeout(() => {
+      dispatch(getBalance(userAddress))
+    }, 3000)
+  }
+
+  const disabled = busy || free <= 0 || Number(amount) <= 0
+
+  return (
+    <>
+      <div className={style.item}>
+        <div className='row justify'>
+          <div>Unlocked</div>
+          <div>
+            {free.toFixed(2)} {symbol}
           </div>
-        )}
+        </div>
+        <CoinInput balance={free} value={amount} onChange={setAmount} />
       </div>
-      <div className='row'>
-        <div className='col-2'>unlocked</div>
-        <div className='col-2'>
-          {free} {symbol}
-        </div>
-        {eq && (
-          <div className='col-2'>
-            <button className='btn green' disabled={free <= 0}>
-              Lock for bots
-            </button>
-          </div>
-        )}
-        {eq && (
-          <div className='col-2'>
-            <button className='btn green' disabled={free <= 0}>
-              Widthraw
-            </button>
-          </div>
-        )}
+      <div className={style.item}>
+        <button className='btn green' disabled={disabled} onClick={addLocked}>
+          Add to locked
+        </button>
       </div>
     </>
   )

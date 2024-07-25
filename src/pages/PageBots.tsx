@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { ModalContext } from '../store/ModalContext'
-import Container from '../components/container'
 import Topbar from '../components/topbar'
 import Modal from '../components/modal'
 import Bot from '../components/bot'
@@ -23,7 +22,7 @@ export default function PageBots(props: PageBotsProps) {
   const { modal, open } = useContext(ModalContext)
 
   return (
-    <Container>
+    <>
       {modal && (
         <Modal title='Create bot'>
           <ModalAddBot />
@@ -40,7 +39,7 @@ export default function PageBots(props: PageBotsProps) {
         <Bot key={bot.id} bot={bot} />
       ))}
       {bots?.length === 0 && <div>Add bot to continue</div>}
-    </Container>
+    </>
   )
 }
 

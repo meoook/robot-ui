@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react'
 import { ModalContext } from '../store/ModalContext'
 import { useCreateAccountMutation, useGetAccountsQuery } from '../store/srv.api'
+import { IAccountCreate } from '../model'
 import Container from '../components/container'
 import Topbar from '../components/topbar'
 import Modal from '../components/modal'
 import Account from '../components/account'
-import { IAccountCreate } from '../model'
 
 interface PageAccountsProps {
   children?: React.ReactNode

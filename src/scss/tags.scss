@@ -14,10 +14,9 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 body {
-  font-family: notosans, sans-serif;
-  font-size: var(--font-size, 16px);
+  font-family: Kanit, notosans, sans-serif;
+  font-size: var(--font-size);
   font-weight: 400;
-  line-height: 1.5;
   color: var(--color-primary);
   background-color: var(--color-body);
   overflow-y: scroll;
@@ -95,11 +94,10 @@ a,
 button {
   color: inherit;
   background: transparent;
-  letter-spacing: 1.5px;
-  transition: all 0.3s;
+  letter-spacing: 0.9px;
+  transition: background-color 0.3s, color 0.3s;
   white-space: nowrap;
   &.underline {
-    text-transform: uppercase;
     font-weight: 500;
     color: var(--color-secondary);
     position: relative;
@@ -165,7 +163,6 @@ svg {
   user-select: none;
 }
 img {
-  position: absolute;
   width: 100%;
   height: 100%;
   border-radius: var(--radius);

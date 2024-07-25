@@ -1,0 +1,21 @@
+.tg_block {
+  min-height: 50px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.tgid {
+  padding-right: var(--padding);
+}
+
+.nonce {
+  padding: var(--padding) calc(var(--padding) * 2);
+  margin-right: var(--padding);
+  color: #f9ecc4;
+  background: var(--color-msg-warning);
+  font-weight: 600;
+  letter-spacing: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}

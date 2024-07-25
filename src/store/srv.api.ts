@@ -153,54 +153,54 @@ export const srvApi = createApi({
       transformResponse: (response: Array<string[]>) => response.map((e) => ({ timeframe: e[0], name: e[1] })),
     }),
     getAccounts: build.query<IAccount[], void>({
+      providesTags: ['Account'],
       query: () => ({
         url: 'account',
       }),
-      providesTags: ['Account'],
     }),
     createAccount: build.mutation<IAccount, IAccountCreate>({
+      invalidatesTags: ['Account'],
       query: (account) => ({
         url: 'account',
         method: 'POST',
         body: account,
       }),
-      invalidatesTags: ['Account'],
     }),
     deleteAccount: build.mutation<void, number>({
+      invalidatesTags: ['Account'],
       query: (accountID: number) => ({
         url: `account/${accountID}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Account'],
     }),
     getBots: build.query<IBot[], void>({
+      providesTags: ['Bot'],
       query: () => ({
         url: 'bot',
       }),
-      providesTags: ['Bot'],
     }),
     createBot: build.mutation<IBot, { account: number; name: string; pair: string; timeframe: string }>({
+      invalidatesTags: ['Bot'],
       query: ({ account, name, pair, timeframe }) => ({
         url: 'bot',
         method: 'POST',
-        data: { account, name, pair, timeframe },
+        body: { account, name, pair, timeframe },
       }),
-      invalidatesTags: ['Bot'],
     }),
     updateBot: build.mutation<IBot, { botID: number; changes: IBotChange }>({
-      query: ({ botID, changes }) => ({
-        url: `bot/${botID}`,
-        method: 'PUT',
-        data: changes,
-      }),
       invalidatesTags: ['Bot'],
+      query: ({ botID, changes }) => ({
+        url: `bot/${botID}/`,
+        method: 'PUT',
+        body: changes,
+      }),
     }),
     deleteBot: build.mutation<IBot, number>({
+      invalidatesTags: ['Bot'],
       query: (botID) => ({
         url: `bot/${botID}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Bot'],
     }),
     getStats: build.query<ListResponse<IBotStats>, number>({
       query: (bot_id: number) => ({

@@ -2,10 +2,9 @@
   display: flex;
   color: var(--color-primary);
   flex-direction: row;
-  line-height: 1.5;
   white-space: nowrap;
   font-weight: var(--text-weight, 600);
-  font-size: var(--size-h3, 20px) !important;
+  font-size: var(--font-size-h2) !important;
   .divider {
     padding: 0 16px;
   }

@@ -1,4 +1,3 @@
-import Container from '../components/container'
 import { useAppDispatch } from '../store/hooks'
 import { addMessage } from '../store/profile.slice'
 import { IPopupOptions } from '../model'
@@ -27,9 +26,5 @@ export default function Page404(props: Page404Props) {
     })
   }
 
-  return (
-    <Container>
-      <h1 onClick={doJob}>404 URL NOT FOUND</h1>
-    </Container>
-  )
+  return <h1 onClick={doJob}>404 URL NOT FOUND</h1>
 }

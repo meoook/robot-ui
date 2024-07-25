@@ -181,8 +181,9 @@
     & button {
       border-color: transparent;
       border-radius: 50%;
-      width: 3em;
-      height: 3em;
+      width: 2em;
+      height: 2em;
+      padding: 0;
       &:hover {
         background-color: var(--color-border);
       }

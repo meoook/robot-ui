@@ -1,7 +1,7 @@
-.dropdown {
+.email {
   display: flex;
   flex-direction: column;
-  & button {
+  & > button {
     margin-top: 8px;
   }
 }

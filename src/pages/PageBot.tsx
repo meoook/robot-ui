@@ -1,23 +1,21 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import Container from '../components/container'
 import Topbar from '../components/topbar'
 import InputNumber from '../components/input-number'
 import InputSwitch from '../components/input-switch'
 import BotMonthStats from '../components/stats'
 import { useDeleteBotMutation, useGetBotsQuery, useUpdateBotMutation } from '../store/srv.api'
-import { IBot, IBotChange, IBotStats, IBotTrades } from '../model'
+import { IBot, IBotChange } from '../model'
 
 interface PageBotsProps {
   children?: React.ReactNode
 }
 export default function PageBot(props: PageBotsProps) {
   const { id } = useParams()
-  const { data: bots } = useGetBotsQuery()
+  const { data: bots, isLoading } = useGetBotsQuery()
   const [botRemove] = useDeleteBotMutation()
   const [botUpdate] = useUpdateBotMutation()
 
-  const { botid } = useParams()
   const navigate = useNavigate()
   const [edit, setEdit] = useState(false)
   const [bot, setBot] = useState<IBot>()
@@ -31,15 +29,32 @@ export default function PageBot(props: PageBotsProps) {
     delta: 0,
   })
 
+  const mutateCfg = (full: IBot): IBotChange => {
+    return {
+      name: full.name,
+      active: full.active,
+      next_month: full.next_month,
+      balance_limit: full.balance_limit,
+      circles_limit: full.circles_limit,
+      orders_limit: full.orders_limit,
+      delta: full.delta,
+    }
+  }
+
   useEffect(() => {
-    const lookup = bots?.find((b) => b.id === Number(id))
-    setBot(lookup)
-    if (lookup) setBotCfg(lookup)
-  }, [bots, botid, id])
+    if (!isLoading) {
+      const lookup = bots?.find((b) => b.id === Number(id))
+      if (!lookup) navigate('/bots', { replace: true })
+      else {
+        setBot(lookup)
+        setBotCfg(mutateCfg(lookup))
+      }
+    }
+  }, [bots, id, isLoading])
 
   const handleDelete = () => {
-    botRemove(Number(botid))
-    navigate(`/accounts/${id}`, { replace: true })
+    botRemove(Number(bot?.id))
+    navigate('/bots', { replace: true })
   }
 
   const handleSave = () => {
@@ -47,13 +62,14 @@ export default function PageBot(props: PageBotsProps) {
     if (bot) botUpdate({ botID: bot.id, changes: botCfg })
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBotCfg({ ...botCfg, [event.target.name]: event.target.value })
+  }
 
   const onChange = (name: string, value: any) => setBotCfg({ ...botCfg, [name]: value })
 
   return (
-    <Container>
+    <>
       <Topbar>
         <div>
           <button className='btn red' onClick={handleDelete}>
@@ -148,10 +164,8 @@ export default function PageBot(props: PageBotsProps) {
           <div>Trades</div>
         </div>
       ) : (
-        <div>
-          Bot with ID: {botid} for Account ID: {id} not found
-        </div>
+        <div>Bot with ID: {id} not found</div>
       )}
-    </Container>
+    </>
   )
 }
