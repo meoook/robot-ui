@@ -12,6 +12,8 @@ import {
   IBotTrade,
   IAccountUpdate,
   IBotCreate,
+  IInfo,
+  ITotal,
 } from '../model'
 import { setLoading, setToken, destroyToken } from './profile.slice'
 import { Web3Message } from './w3'
@@ -109,9 +111,7 @@ export const srvApi = createApi({
       },
     }),
     telegramNonce: build.mutation<{ nonce: number; expire: number }, void>({
-      query: () => ({
-        url: 'auth/user/telegram',
-      }),
+      query: () => 'auth/user/telegram',
     }),
     setPassword: build.mutation<void, string>({
       query: (password) => ({
@@ -144,14 +144,10 @@ export const srvApi = createApi({
       },
     }),
     getPairs: build.query<IPair[], void>({
-      query: () => ({
-        url: 'pair',
-      }),
+      query: () => 'pair',
     }),
     getTimeframes: build.query<ITimeFrame[], void>({
-      query: () => ({
-        url: 'timeframe',
-      }),
+      query: () => 'timeframe',
       transformResponse: (response: Array<string[]>) => response.map((e) => ({ timeframe: e[0], name: e[1] })),
     }),
     getAccount: build.query<IAccount, number | undefined>({
@@ -167,9 +163,7 @@ export const srvApi = createApi({
     }),
     getBots: build.query<IBot[], void>({
       providesTags: ['Bot'],
-      query: () => ({
-        url: 'bot',
-      }),
+      query: () => 'bot',
     }),
     createBot: build.mutation<IBot, IBotCreate>({
       query: ({ account, pair, timeframe, name }) => ({
@@ -227,6 +221,12 @@ export const srvApi = createApi({
         params: { pair, limit: 10 },
       }),
     }),
+    getInfo: build.query<IInfo, void>({
+      query: () => 'info',
+    }),
+    getTotal: build.query<ITotal, void>({
+      query: () => 'info/total',
+    }),
   }),
 })
 
@@ -250,4 +250,6 @@ export const {
   useDeleteBotMutation,
   useGetStatsQuery,
   useGetTradesQuery,
+  useGetInfoQuery,
+  useGetTotalQuery,
 } = srvApi

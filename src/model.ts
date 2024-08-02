@@ -106,6 +106,7 @@ export interface IBotStats {
 }
 
 export interface IBotTrade {
+  id: number
   side: string
   quantity: number
   price: number
@@ -121,4 +122,16 @@ export interface Web3Message {
   uri: string
   chainId: number
   timeout: number
+}
+
+export interface ITotal {
+  bots: number
+  buy: number
+  sell: number
+  profit: number
+  bot_fee: number
+}
+
+export interface IInfo extends ITotal {
+  month: string
 }

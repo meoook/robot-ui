@@ -5,8 +5,8 @@ export const SvgFallingStars = () => {
 
   return (
     <div className={style.night}>
-      {array.map((_) => (
-        <div className={style.shooting_star}></div>
+      {array.map((_, idx) => (
+        <div key={idx} className={style.shooting_star} />
       ))}
     </div>
   )

@@ -26,8 +26,8 @@ export default function TelegramNonce({ telegram }: TelegramNonceProps) {
             <div>
               <span>Send message with this code in telegram channel</span>
               <br />
-              <a href='https://t.me/TradeCryptoCoinsBot' className='underline'>
-                @TradeCryptoCoinsBot
+              <a href={`https://t.me/${process.env.REACT_APP_TELEGRAM_BOT}`} className='underline'>
+                @{process.env.REACT_APP_TELEGRAM_BOT}
               </a>
               <span> to activate notification</span>
             </div>

@@ -1,0 +1,14 @@
+.indicator {
+  & > h1 {
+    margin: calc(var(--padding) * 2) var(--padding) var(--padding);
+  }
+  & > div {
+    border: 1px solid var(--color-border);
+    border-radius: var(--padding);
+    background-color: var(--color-dialog);
+    padding: 1rem;
+    & h1 {
+      text-align: center;
+    }
+  }
+}

@@ -39,7 +39,7 @@ export default function BotMonthTrades({ pair }: BotMonthProps) {
           </thead>
           <tbody>
             {trades?.data.map((trade: IBotTrade) => (
-              <tr key={`${trade.quantity}`}>
+              <tr key={trade.id}>
                 <td>{trade.side}</td>
                 <td>{trade.quantity}</td>
                 <td>{trade.price}</td>

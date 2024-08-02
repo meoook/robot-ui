@@ -62,6 +62,7 @@ export default function PageLogin() {
           disabled={isLoading}
         />
         <div className='row center justify mt-2'>
+          <div />
           <button className='btn green' onClick={() => fetchSignIn(auth)} disabled={disabled || isLoading}>
             Login
           </button>

@@ -7,6 +7,7 @@ import InputNumber from '../components/input-number'
 import InputSwitch from '../components/input-switch'
 import BotMonthStats from '../components/stats'
 import BotMonthTrades from '../components/trades'
+import BotIndicator from '../components/indicator'
 
 interface PageBotsProps {
   children?: React.ReactNode
@@ -18,7 +19,7 @@ export default function PageBot(props: PageBotsProps) {
   const [botUpdate] = useUpdateBotMutation()
 
   const navigate = useNavigate()
-  const [edit, setEdit] = useState(false)
+  const [edit, setEdit] = useState<boolean>(false)
   const [bot, setBot] = useState<IBot>()
   const [botCfg, setBotCfg] = useState<IBotChange>({
     timeframe: '',
@@ -163,6 +164,7 @@ export default function PageBot(props: PageBotsProps) {
               onChange={onChange}
             />
           </div>
+          {bot.indicator && <BotIndicator values={bot.indicator} />}
           <BotMonthStats pair={bot.pair.replace(':', '')} />
           <BotMonthTrades pair={bot.pair.replace(':', '')} />
         </div>

@@ -17,7 +17,6 @@ import Notify from '../notify'
 import CoinInput from '../coin'
 import Loader from '../loader'
 import iconArray from '../ico-get/icons'
-import Icon from '../ico-get'
 
 interface BalanceProps {
   user?: IApiUser
