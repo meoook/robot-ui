@@ -5,7 +5,7 @@ interface PageBalanceProps {
   children?: React.ReactNode
 }
 export default function PageBalance(props: PageBalanceProps) {
-  const { data: user } = useGetUserQuery(null)
+  const { data: user } = useGetUserQuery()
 
-  return <Balance userAddress={user?.address} />
+  return <Balance user={user} />
 }

@@ -4,6 +4,7 @@ import Web3 from 'web3'
 import { Web3Message } from './w3'
 import { BOT_PAY_ABI, BOT_PAY_ADDRESS } from './botPay'
 import { LTR_ABI, LTR_ADDRESS } from './ltr'
+import imgToken from '../svg/token.png'
 
 export const VALID_CHAIN_ID: number = 97
 
@@ -125,21 +126,24 @@ export const setNetwork = createAsyncThunk('w3/setNetwork', async () => {
 export const addToken = async (): Promise<void> => {
   const tokenSymbol = 'LTR'
   const tokenDecimals = 18
-  const tokenImage1 = 'https://cdn1.iconfinder.com/data/icons/bots/280/bot-5-2-512.png'
+  const { origin } = window.location
+  const tokenImage1 = `${origin}${imgToken}`
 
-  const wasAdded: boolean = await window.ethereum // Or window.ethereum if you don't support EIP-6963.
-    .request({
-      method: 'wallet_watchAsset',
-      params: {
-        type: 'ERC20',
-        options: {
-          address: LTR_ADDRESS,
-          symbol: tokenSymbol,
-          decimals: tokenDecimals,
-          image: tokenImage1,
+  try {
+    await window.ethereum // Or window.ethereum if you don't support EIP-6963.
+      .request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: LTR_ADDRESS,
+            symbol: tokenSymbol,
+            decimals: tokenDecimals,
+            image: tokenImage1,
+          },
         },
-      },
-    })
+      })
+  } catch (err) {}
 }
 
 export const getAddress = createAsyncThunk('w3/getAddress', async () => {
@@ -212,7 +216,6 @@ export const w3LockFree = async (address: string, amount: number): Promise<void>
     await w3BotPayContract.methods.lockFree(wei).send({ from: address })
   } catch (err: any) {
     if (err.code === 100) console.log('User denied transaction signature')
-    console.log('lockFree', err)
   }
 }
 

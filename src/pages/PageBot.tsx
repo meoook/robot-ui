@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useDeleteBotMutation, useGetBotsQuery, useUpdateBotMutation } from '../store/srv.api'
+import { IBot, IBotChange } from '../model'
 import Topbar from '../components/topbar'
 import InputNumber from '../components/input-number'
 import InputSwitch from '../components/input-switch'
 import BotMonthStats from '../components/stats'
-import { useDeleteBotMutation, useGetBotsQuery, useUpdateBotMutation } from '../store/srv.api'
-import { IBot, IBotChange } from '../model'
+import BotMonthTrades from '../components/trades'
 
 interface PageBotsProps {
   children?: React.ReactNode
@@ -20,6 +21,7 @@ export default function PageBot(props: PageBotsProps) {
   const [edit, setEdit] = useState(false)
   const [bot, setBot] = useState<IBot>()
   const [botCfg, setBotCfg] = useState<IBotChange>({
+    timeframe: '',
     name: '',
     active: false,
     next_month: false,
@@ -31,6 +33,7 @@ export default function PageBot(props: PageBotsProps) {
 
   const mutateCfg = (full: IBot): IBotChange => {
     return {
+      timeframe: full.timeframe,
       name: full.name,
       active: full.active,
       next_month: full.next_month,
@@ -50,7 +53,7 @@ export default function PageBot(props: PageBotsProps) {
         setBotCfg(mutateCfg(lookup))
       }
     }
-  }, [bots, id, isLoading])
+  }, [bots, id, isLoading, navigate])
 
   const handleDelete = () => {
     botRemove(Number(bot?.id))
@@ -160,8 +163,8 @@ export default function PageBot(props: PageBotsProps) {
               onChange={onChange}
             />
           </div>
-          <BotMonthStats bot={bot.id} />
-          <div>Trades</div>
+          <BotMonthStats pair={bot.pair.replace(':', '')} />
+          <BotMonthTrades pair={bot.pair.replace(':', '')} />
         </div>
       ) : (
         <div>Bot with ID: {id} not found</div>

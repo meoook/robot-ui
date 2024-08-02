@@ -6,7 +6,6 @@ import PageHome from './pages/PageHome'
 import PageLogin from './pages/PageLogin'
 import PageUser from './pages/PageUser'
 import PageBalance from './pages/PageBalance'
-import PageAccounts from './pages/PageAccounts'
 import PageBots from './pages/PageBots'
 import PageBot from './pages/PageBot'
 import Container from './components/container'
@@ -23,8 +22,6 @@ export default function NavRouter() {
           <Route element={<LayoutProtected />}>
             <Route path='/profile' element={<PageUser />} />
             <Route path='/balance' element={<PageBalance />} />
-            <Route path='/accounts' element={<PageAccounts />} />
-            <Route path='/accounts/:id' element={<Page404 />} />
             <Route path='/bots' element={<PageBots />} />
             <Route path='/bots/:id' element={<PageBot />} />
           </Route>

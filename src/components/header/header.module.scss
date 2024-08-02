@@ -75,6 +75,7 @@
 .address {
   position: relative;
   cursor: pointer;
+  transition: color 0.2s ease-in;
   &:hover {
     color: var(--color-secondary);
     & .dropdown {

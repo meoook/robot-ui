@@ -5,32 +5,35 @@ import Modal from '../components/modal'
 import Bot from '../components/bot'
 import {
   useCreateBotMutation,
-  useGetAccountsQuery,
   useGetBotsQuery,
   useGetPairsQuery,
   useGetTimeframesQuery,
+  useGetUserQuery,
 } from '../store/srv.api'
+import Notify from '../components/notify'
+import Select, { StylesConfig } from 'react-select'
+import { IBotCreate } from '../model'
 
 interface PageBotsProps {
   children?: React.ReactNode
 }
 export default function PageBots(props: PageBotsProps) {
   const { data: bots } = useGetBotsQuery()
-  const { data: accounts } = useGetAccountsQuery()
-  const canAdd = accounts?.filter((acc) => acc.trade)
+  const { data: user } = useGetUserQuery()
 
   const { modal, open } = useContext(ModalContext)
 
+  const usedPairs = bots?.map((b) => b.pair.replace(':', '')) || []
   return (
     <>
-      {modal && (
+      {modal && user?.account && (
         <Modal title='Create bot'>
-          <ModalAddBot />
+          <ModalAddBot accountID={user.account.id} usedPairs={usedPairs} />
         </Modal>
       )}
       <Topbar>
         <div>
-          <button className='btn green' onClick={open} disabled={!Boolean(canAdd)}>
+          <button className='btn green' onClick={open} disabled={!user?.account.trade}>
             Add bot
           </button>
         </div>
@@ -38,27 +41,26 @@ export default function PageBots(props: PageBotsProps) {
       {bots?.map((bot) => (
         <Bot key={bot.id} bot={bot} />
       ))}
-      {bots?.length === 0 && <div>Add bot to continue</div>}
+      {!user?.account.trade && <Notify type='warning'>Enable exchange account to add Bots</Notify>}
+      {user?.account.trade && bots?.length === 0 && <div>Add bot to continue</div>}
     </>
   )
 }
 
-function ModalAddBot() {
+function ModalAddBot({ accountID, usedPairs }: { accountID: number; usedPairs: string[] }) {
+  const [botAdd] = useCreateBotMutation()
   const { data: pairs } = useGetPairsQuery()
   const { data: timeframes } = useGetTimeframesQuery()
-  const { data: accounts } = useGetAccountsQuery()
-  const [botAdd] = useCreateBotMutation()
   const { close } = useContext(ModalContext)
-  const [params, setParams] = useState({
-    name: '',
-    pair: '',
-    timeframe: '',
-    account: accounts?.filter((acc) => acc.trade)[0].id || 0,
-  })
+  const [params, setParams] = useState<IBotCreate>({ name: '', pair: '', timeframe: '', account: accountID })
   const [error, setError] = useState('')
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setParams({ ...params, [event.target.name]: event.target.value.trim() })
+    if (error) setError('')
+  }
+  const onSelect = (newValue: any, actionMeta: any) => {
+    setParams({ ...params, [actionMeta.name]: newValue?.value })
     if (error) setError('')
   }
 
@@ -67,44 +69,55 @@ function ModalAddBot() {
       setError('Enter bot name')
       return
     }
-    if (!params.pair.trim()) {
-      setError('Enter pair')
+    if (!params.pair) {
+      setError('Select pair')
       return
     }
-    if (!params.timeframe.trim()) {
-      setError('Enter timeframe')
+    if (!params.timeframe) {
+      setError('Select timeframe')
       return
     }
-    const timeframe = timeframes?.find((e) => e.name === params.timeframe)?.timeframe
-    if (timeframe) botAdd(params)
-    else {
+    const timeframe = timeframes?.find((e) => e.timeframe === params.timeframe)?.timeframe
+    if (!timeframe) {
       setError(`Invalid timeframe ${params.timeframe}`)
       return
     }
+    botAdd(params)
     close()
-    // TODO: callback redirect
+    // TODO: callback redirect to bot page
+  }
+
+  const optionsPairs = pairs
+    ?.filter((p) => !usedPairs.includes(p.symbol))
+    .map((pair) => ({
+      value: pair.symbol,
+      label: `${pair.coin_base}:${pair.coin_quote} x${pair.leverage}`,
+    }))
+
+  const optionsTf = timeframes?.map((tf) => ({ value: tf.timeframe, label: tf.name })) || []
+
+  const colourStyles: StylesConfig = {
+    control: (styles) => ({ ...styles, backgroundColor: 'var(--color-head)', border: '1px solid var(--color-border)' }),
+    menu: (styles) => ({ ...styles, backgroundColor: 'var(--color-head)' }),
+    singleValue: (styles) => ({ ...styles, color: 'var(--color-primary)' }),
+    option: (styles, { isFocused, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? 'var(--color-active)' : isFocused ? 'var(--color-input)' : 'var(--color-head)',
+        color: isSelected ? 'var(--color-brand)' : 'var(--color-primary)',
+      }
+    },
+    placeholder: (styles) => ({ ...styles, color: 'var(--color-secondary)' }),
   }
 
   return (
     <>
-      <label>bot name</label>
-      <input type='text' name='name' onChange={onChange} />
-      <label>Account</label>
-      <Dropdown
-        name='account'
-        choices={accounts?.map((e) => e.name) || []}
-        selected={`${params.account}`}
-        onChange={onChange}
-      />
-      <label>pair</label>
-      <Dropdown name='pair' choices={pairs?.map((e) => e.symbol) || []} selected={params.pair} onChange={onChange} />
-      <label>timeframe</label>
-      <Dropdown
-        name='timeframe'
-        choices={timeframes?.map((e) => e.name) || []} // FIXME
-        selected={params.timeframe}
-        onChange={onChange}
-      />
+      <label>Bot title</label>
+      <input type='text' name='name' onChange={onChange} placeholder='Enter bot title...' />
+      <label>Pair</label>
+      <Select name='pair' options={optionsPairs} onChange={onSelect} styles={colourStyles} />
+      <label>Timeframe</label>
+      <Select name='timeframe' options={optionsTf} onChange={onSelect} styles={colourStyles} />
       <small className='red'>{error}&nbsp;</small>
 
       <div className='row justify'>
@@ -114,28 +127,5 @@ function ModalAddBot() {
         </button>
       </div>
     </>
-  )
-}
-
-interface DropdownProps {
-  children?: React.ReactNode
-  name: string
-  choices: string[]
-  selected: string
-  onChange: (event: React.ChangeEvent<any>) => void
-}
-
-function Dropdown(props: DropdownProps) {
-  return (
-    <div>
-      <select name={props.name} value={props.selected} onChange={props.onChange}>
-        <option value=''>Select {props.name}</option>
-        {props.choices.map((e) => (
-          <option value={e} key={e}>
-            {e}
-          </option>
-        ))}
-      </select>
-    </div>
   )
 }

@@ -3,18 +3,11 @@ import { IBotStats } from '../../model'
 import { useGetStatsQuery } from '../../store/srv.api'
 
 interface BotMonthProps {
-  bot: number
+  pair: string
 }
 
-export default function BotMonthStats({ bot }: BotMonthProps) {
-  const { data: stats } = useGetStatsQuery(bot)
-  // setStat(
-  //   botStats.sort((a, b) =>
-  //     Math.round(
-  //       Number(b.month.substring(0, 7).replace('-', '')) - Number(a.month.substring(0, 7).replace('-', ''))
-  //     )
-  //   )
-  // )
+export default function BotMonthStats({ pair }: BotMonthProps) {
+  const { data: stats } = useGetStatsQuery(pair)
   const haveStats: boolean = stats?.data.length !== 0
   return (
     <div className={style.stats}>
@@ -24,24 +17,26 @@ export default function BotMonthStats({ bot }: BotMonthProps) {
           <thead>
             <tr>
               <th>month</th>
-              <th>buy</th>
-              <th>sell</th>
-              {/* <th>delta</th> */}
-              <th>quantity</th>
+              <th>buy qty</th>
+              <th>buy avg</th>
+              <th>sell qty</th>
+              <th>sell avg</th>
               <th>fee</th>
+              <th>result</th>
               <th>profit</th>
               <th>bot fee</th>
             </tr>
           </thead>
           <tbody>
-            {stats?.data.map((st) => (
+            {stats?.data.map((st: IBotStats) => (
               <tr key={`${st.bot}${st.month}`}>
                 <td>{st.month.substring(0, 7)}</td>
-                <td>{st.buy ? st.buy : '-'}</td>
-                <td>{st.sell ? st.sell : '-'}</td>
-                {/* <td>{((st.sell || 0) - (st.buy || 0)).toFixed(2)}</td> */}
-                <td>{st.quantity ? st.quantity : '-'}</td>
+                <td>{st.buy_qty ? st.buy_qty : '-'}</td>
+                <td>{st.buy_avg ? st.buy_avg : '-'}</td>
+                <td>{st.sell_qty ? st.sell_qty : '-'}</td>
+                <td>{st.sell_avg ? st.sell_avg : '-'}</td>
                 <td>{st.fee ? st.fee : '-'}</td>
+                <td>{st.result ? st.result : '-'}</td>
                 <td>{st.profit ? st.profit : '-'}</td>
                 <td>{st.bot_fee ? st.bot_fee : '-'}</td>
               </tr>

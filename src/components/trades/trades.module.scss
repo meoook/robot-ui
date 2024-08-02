@@ -1,4 +1,4 @@
-.stats {
+.trades {
   & > h1 {
     margin: calc(var(--padding) * 2) var(--padding) var(--padding);
   }
@@ -29,7 +29,6 @@
   }
   td {
     color: var(--color-secondary);
-    // width: 12.5%;
-    width: 11.1%;
+    width: 20%;
   }
 }

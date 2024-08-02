@@ -20,6 +20,7 @@ export interface IApiUser {
   email_validated: boolean
   telegram_id: string
   locked: number
+  account: IAccount
 }
 
 export interface ITimeFrame {
@@ -34,23 +35,23 @@ export interface IPair {
   leverage: number
 }
 
-export interface IAccountCreate {
-  name: string
+export interface IAccountUpdate {
+  id: number
   api_key: string
   api_secret: string
 }
 
 export interface IAccount {
   id: number
-  name: string
   error: string
   trade: boolean
   loan: boolean
 }
 
 export interface IBotIndicator {
-  orders: number
+  work: number
   circles: number
+  circle: number
   base: number
   quote: number
   base_borrowed: number
@@ -59,7 +60,15 @@ export interface IBotIndicator {
   balance: number
 }
 
+export interface IBotCreate {
+  account: number
+  pair: string
+  timeframe: string
+  name: string
+}
+
 export interface IBotChange {
+  timeframe: string
   name: string
   active: boolean
   next_month: boolean
@@ -67,35 +76,40 @@ export interface IBotChange {
   circles_limit: number
   orders_limit: number
   delta: number
+  // balance_stop: 0
+  // balance_out: 0
 }
 
 export interface IBot extends IBotChange {
   id: number
   account: number
   pair: string
-  timeframe: string
   error: string
-  locked: number
-  indicator: IBotIndicator
+  warning: string
+  indicator?: IBotIndicator
 }
 
 export interface IBotStats {
+  id: number
   bot: number
   month: string
-  quantity: number
   buy: number
+  buy_qty: number
+  buy_avg: number
   sell: number
+  sell_qty: number
+  sell_avg: number
   fee: number
+  result: number
   profit: number
   bot_fee: number
 }
 
-export interface IBotTrades {
+export interface IBotTrade {
   side: string
   quantity: number
   price: number
   fee: number
-  total: number
   time: number
 }
 

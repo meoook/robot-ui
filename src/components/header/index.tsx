@@ -9,7 +9,7 @@ import Icon from '../ico-get'
 export default function Header() {
   const { token, loading } = useAppSelector((state) => state.profile)
   const [signOut, { isLoading }] = useSingOutMutation()
-  const { data: user } = useGetUserQuery(null, { skip: !Boolean(token) || isLoading })
+  const { data: user } = useGetUserQuery(undefined, { skip: !Boolean(token) || isLoading })
   const navigate = useNavigate()
 
   const logOut = () => {
@@ -26,9 +26,6 @@ export default function Header() {
         </div>
         <div className={`${style.item} w-100`}>
           <nav>
-            <NavLink to='/' className={style.link}>
-              About
-            </NavLink>
             {Boolean(token) && (
               <>
                 <NavLink to='/profile' className={style.link}>
@@ -36,9 +33,6 @@ export default function Header() {
                 </NavLink>
                 <NavLink to='/balance' className={style.link}>
                   Balance
-                </NavLink>
-                <NavLink to='/accounts' className={style.link}>
-                  Accounts
                 </NavLink>
                 <NavLink to='/bots' className={style.link}>
                   Bots
@@ -69,7 +63,6 @@ function UserAddress({ address, logOut }: { address: string; logOut: () => void 
 
   return (
     <>
-      {/* <Icon name='wallet' /> */}
       <div className={style.address}>
         {iconArray.wallet}
         <div title={address}>{formatAddress(address)}</div>

@@ -11,7 +11,7 @@ export default function Valid({ valid }: ValidProps) {
   return (
     <>
       {valid === undefined ? (
-        <span>
+        <span className={style.load}>
           <Loader />
         </span>
       ) : valid ? (

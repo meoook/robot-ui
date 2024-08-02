@@ -9,8 +9,9 @@ import {
   IBot,
   IBotChange,
   IBotStats,
-  IBotTrades,
-  IAccountCreate,
+  IBotTrade,
+  IAccountUpdate,
+  IBotCreate,
 } from '../model'
 import { setLoading, setToken, destroyToken } from './profile.slice'
 import { Web3Message } from './w3'
@@ -92,18 +93,19 @@ export const srvApi = createApi({
         } catch {}
       },
     }),
-    getUser: build.query<IApiUser, null>({
+    getUser: build.query<IApiUser, void>({
       query: () => ({
         url: 'auth/user',
       }),
       providesTags: ['User'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
-          await queryFulfilled
-          dispatch(setLoading(false))
+          const { data: user } = await queryFulfilled
+          dispatch(srvApi.util.upsertQueryData('getAccount', user.account.id, user.account))
         } catch (error) {
           dispatch(destroyToken())
         }
+        dispatch(setLoading(false))
       },
     }),
     telegramNonce: build.mutation<{ nonce: number; expire: number }, void>({
@@ -134,7 +136,7 @@ export const srvApi = createApi({
         try {
           await queryFulfilled
           dispatch(
-            srvApi.util.updateQueryData('getUser', null, (draft) => {
+            srvApi.util.updateQueryData('getUser', undefined, (draft) => {
               draft.email = email
             })
           )
@@ -152,25 +154,15 @@ export const srvApi = createApi({
       }),
       transformResponse: (response: Array<string[]>) => response.map((e) => ({ timeframe: e[0], name: e[1] })),
     }),
-    getAccounts: build.query<IAccount[], void>({
+    getAccount: build.query<IAccount, number | undefined>({
       providesTags: ['Account'],
-      query: () => ({
-        url: 'account',
-      }),
+      query: (id) => `account/${id}`,
     }),
-    createAccount: build.mutation<IAccount, IAccountCreate>({
-      invalidatesTags: ['Account'],
+    updateAccount: build.mutation<IAccount, IAccountUpdate>({
       query: (account) => ({
-        url: 'account',
-        method: 'POST',
+        url: `account/${account.id}/`,
+        method: 'PUT',
         body: account,
-      }),
-    }),
-    deleteAccount: build.mutation<void, number>({
-      invalidatesTags: ['Account'],
-      query: (accountID: number) => ({
-        url: `account/${accountID}`,
-        method: 'DELETE',
       }),
     }),
     getBots: build.query<IBot[], void>({
@@ -179,13 +171,22 @@ export const srvApi = createApi({
         url: 'bot',
       }),
     }),
-    createBot: build.mutation<IBot, { account: number; name: string; pair: string; timeframe: string }>({
-      invalidatesTags: ['Bot'],
-      query: ({ account, name, pair, timeframe }) => ({
-        url: 'bot',
+    createBot: build.mutation<IBot, IBotCreate>({
+      query: ({ account, pair, timeframe, name }) => ({
+        url: 'bot/',
         method: 'POST',
-        body: { account, name, pair, timeframe },
+        body: { account, pair, timeframe, name },
       }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data: createdBot } = await queryFulfilled
+          dispatch(
+            srvApi.util.updateQueryData('getBots', undefined, (draft) => {
+              draft.push(createdBot)
+            })
+          )
+        } catch {}
+      },
     }),
     updateBot: build.mutation<IBot, { botID: number; changes: IBotChange }>({
       invalidatesTags: ['Bot'],
@@ -196,22 +197,34 @@ export const srvApi = createApi({
       }),
     }),
     deleteBot: build.mutation<IBot, number>({
-      invalidatesTags: ['Bot'],
       query: (botID) => ({
         url: `bot/${botID}`,
         method: 'DELETE',
       }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          dispatch(
+            srvApi.util.updateQueryData('getBots', undefined, (draft) => {
+              const indexToRemove = draft.findIndex((b) => b.id === id)
+              if (indexToRemove !== -1) {
+                draft.splice(indexToRemove, 1)
+              }
+            })
+          )
+        } catch {}
+      },
     }),
-    getStats: build.query<ListResponse<IBotStats>, number>({
-      query: (bot_id: number) => ({
+    getStats: build.query<ListResponse<IBotStats>, string>({
+      query: (pair: string) => ({
         url: 'stats',
-        params: { bot_id, limit: 10 },
+        params: { pair, limit: 10 },
       }),
     }),
-    getTrades: build.query<ListResponse<IBotTrades>, number>({
-      query: (bot_id: number) => ({
-        url: 'bot',
-        params: { bot_id, limit: 10 },
+    getTrades: build.query<ListResponse<IBotTrade>, string>({
+      query: (pair: string) => ({
+        url: 'trade',
+        params: { pair, limit: 10 },
       }),
     }),
   }),
@@ -228,9 +241,9 @@ export const {
   useSetEmailMutation,
   useGetPairsQuery,
   useGetTimeframesQuery,
-  useGetAccountsQuery,
-  useCreateAccountMutation,
-  useDeleteAccountMutation,
+  useGetAccountQuery,
+  useLazyGetAccountQuery,
+  useUpdateAccountMutation,
   useGetBotsQuery,
   useCreateBotMutation,
   useUpdateBotMutation,

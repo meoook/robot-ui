@@ -1,5 +1,5 @@
 import styles from './input.module.scss'
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import InputFieldButtons from './components/InputFieldButtons'
 import InputFieldIcon from './components/InputFieldIcon'
 import InputFieldOutline from './components/InputFieldOutline'
@@ -24,11 +24,11 @@ export default function InputTextField(props: InputTextProps) {
   // State
   const inRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (inRef.current) {
-      inRef.current.focus()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (inRef.current) {
+  //     inRef.current.focus()
+  //   }
+  // }, [])
 
   // Const state
   const required = props.icon ? false : true

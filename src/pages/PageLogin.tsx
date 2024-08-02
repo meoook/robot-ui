@@ -23,7 +23,6 @@ export default function PageLogin() {
       const { message, signature } = await dispatch(handleSignMessage(msg.data)).unwrap()
       await authW3({ message, signature })
     } catch (err: any) {
-      console.log('THIS IS ERR', err)
       const text = err.message ? err.message : err
       dispatch(addMessage({ type: 'error', text, title: 'Web3 Error', nofade: false }))
     }
@@ -49,7 +48,6 @@ export default function PageLogin() {
           ph='укажите почту'
           outColor='brand'
           disabled={isLoading}
-          helpText='some text'
         />
         <InputTextField
           name='password'

@@ -1,13 +1,11 @@
 .topbar {
   font-size: var(--font-size);
   color: var(--color-primary);
-  background-color: var(--color-body);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   box-sizing: border-box;
   padding: 16px 0px;
-  line-height: 1.5;
   white-space: nowrap;
   button {
     margin-left: 1em;

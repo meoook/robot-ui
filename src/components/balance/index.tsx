@@ -1,7 +1,6 @@
 import style from './balance.module.scss'
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { useGetBotsQuery } from '../../store/srv.api'
 import {
   getAddress,
   getBalance,
@@ -10,60 +9,68 @@ import {
   VALID_CHAIN_ID,
   setNetwork,
   w3LockFree,
+  addToken,
 } from '../../store/w3.slice'
+import { IApiUser } from '../../model'
 import Card from '../card'
 import Notify from '../notify'
 import CoinInput from '../coin'
 import Loader from '../loader'
+import iconArray from '../ico-get/icons'
+import Icon from '../ico-get'
 
 interface BalanceProps {
-  userAddress?: string
+  user?: IApiUser
 }
 
 const ALLOWENCE_MIN: number = 10_000
 const ALLOWENCE_MAX: number = 24_000_000
 
-export default function Balance({ userAddress }: BalanceProps) {
+export default function Balance({ user }: BalanceProps) {
   return (
     <Card border={true} nopadding={true}>
-      {!userAddress && <Loader />}
-      {userAddress && <BalanceHead />}
-      {userAddress && <AddBlock userAddress={userAddress} />}
+      {!user && <Loader />}
+      {user && <BalanceHead botsUsed={user.locked} />}
+      {user && <AddBlock userAddress={user.address} />}
     </Card>
   )
 }
 
-function BalanceHead() {
+function BalanceHead({ botsUsed }: { botsUsed: number }) {
   const { allowence, locked, symbol, perBot } = useAppSelector((state) => state.w3)
-  const { data: bots } = useGetBotsQuery()
-  const botsUsed: number = bots?.reduce((prev, curr) => prev + curr.locked, 0) || 0
 
   return (
     <div className={style.head}>
-      <h1>Lock for bots</h1>
+      <h1 className='row justify center'>
+        <span>Lock for bots</span>
+        <button onClick={addToken} className={style.metamask}>
+          {/* <Icon name='metamask' /> */}
+          {iconArray.metamask}
+        </button>
+      </h1>
       <div className='row'>
         <div className='col-4'>used for bots</div>
-        <div className='col-3'>
+        <div className='col'>
           {botsUsed.toFixed(2)} {symbol}
         </div>
       </div>
       <div className='row'>
         <div className='col-4'>locked</div>
-        <div className='col-3'>
+        <div className='col'>
           {locked.toFixed(2)} {symbol}
         </div>
       </div>
       {perBot > 0 && (
         <div className='row'>
           <div className='col-4'>to enable one bot</div>
-          <div className='col-3'>
+          <div className='col'>
             {perBot.toFixed(2)} {symbol}
           </div>
         </div>
       )}
       <div className='row'>
         <div className='col-4'>allowence (debug)</div>
-        <div className='col-3'>
+        <div className='col'>
           {allowence.toFixed(2)} {symbol}
         </div>
       </div>
