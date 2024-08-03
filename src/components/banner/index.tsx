@@ -18,11 +18,6 @@ export default function Banner({ title, subtitle, children }: BannerProps) {
   )
 }
 
-interface BannerSmProps {
-  children?: React.ReactNode // image
-  title: string
-  subtitle?: string
-}
 // { title, subtitle, children }: BannerSmProps
 export function BannerSm() {
   return (
