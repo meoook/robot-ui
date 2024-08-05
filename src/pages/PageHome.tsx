@@ -14,11 +14,16 @@ export default function PageHome(props: PageHomeProps) {
       <Banner title={`Everyone's Favorite BOT`} subtitle='Earn maximum buy/sell delta with minimum amount of orders'>
         <img src={imgRobo} alt='Favorit BOT' width={448} height={448} />
       </Banner>
-      <BannerSm />
       {total && <TotalStats total={total} />}
-      {/* <Banner title='Real time statistic' subtitle='Get actual information about trades'>
-        <div />
-      </Banner> */}
+      <BannerSm />
     </>
   )
 }
+
+/*-- 
+Real time statistic
+ - Get actual information about trades
+ - Powerfull statistic
+ - Info about balance indicators and earn status
+Notification system
+--*/

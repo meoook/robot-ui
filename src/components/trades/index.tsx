@@ -1,14 +1,15 @@
 import style from './trades.module.scss'
 import { IBotTrade } from '../../model'
 import { useGetTradesQuery } from '../../store/srv.api'
+import Loader from '../loader'
 
 interface BotMonthProps {
   pair: string
 }
 
 export default function BotMonthTrades({ pair }: BotMonthProps) {
-  const { data: trades } = useGetTradesQuery(pair)
-  const haveTrades: boolean = trades?.data.length !== 0
+  const { data: trades, isFetching } = useGetTradesQuery(pair)
+  const haveTrades: boolean = Boolean(trades?.data.length)
 
   const tsToDate = (timestamp: number): string => {
     const date = new Date(timestamp)
@@ -26,6 +27,7 @@ export default function BotMonthTrades({ pair }: BotMonthProps) {
   return (
     <div className={style.trades}>
       <h1>{haveTrades && 'Trades'} </h1>
+      {isFetching && <Loader />}
       {haveTrades && (
         <table className={style.table}>
           <thead>

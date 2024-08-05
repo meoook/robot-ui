@@ -17,6 +17,7 @@ interface InputTextProps {
   outColor?: string // if set - display outline border & label control
   loading?: boolean // State for field loading (choices and icon)
   disabled?: boolean // disable ui control
+  autoComplete?: boolean
   onChange: (name: string, value: string) => void
 }
 
@@ -59,8 +60,7 @@ export default function InputTextField(props: InputTextProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (props.disabled) return
-    const value = event.target.value
-    props.onChange(props.name, value)
+    props.onChange(props.name, event.target.value)
   }
 
   const handleReset = (event: React.PointerEvent<HTMLInputElement>) => {
@@ -85,7 +85,7 @@ export default function InputTextField(props: InputTextProps) {
           // className={styles.field}
           tabIndex={0}
           type={props.type || 'text'}
-          autoComplete='off'
+          autoComplete={props.autoComplete ? 'off' : 'new-password'}
           ref={inRef}
           value={props.value}
           onChange={handleChange}

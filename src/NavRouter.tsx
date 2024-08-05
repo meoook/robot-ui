@@ -4,7 +4,7 @@ import { useAppSelector } from './store/hooks'
 import Page404 from './pages/Page404'
 import PageHome from './pages/PageHome'
 import PageLogin from './pages/PageLogin'
-import PageUser from './pages/PageUser'
+import PageProfile from './pages/PageUser'
 import PageBalance from './pages/PageBalance'
 import PageBots from './pages/PageBots'
 import PageBot from './pages/PageBot'
@@ -20,7 +20,7 @@ export default function NavRouter() {
         <ScrollToTop />
         <Routes>
           <Route element={<LayoutProtected />}>
-            <Route path='/profile' element={<PageUser />} />
+            <Route path='/profile' element={<PageProfile />} />
             <Route path='/balance' element={<PageBalance />} />
             <Route path='/bots' element={<PageBots />} />
             <Route path='/bots/:id' element={<PageBot />} />

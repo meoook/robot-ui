@@ -5,17 +5,22 @@ import InputTextField from '../input-field'
 
 interface EmailProps {
   children?: React.ReactNode
-  email?: string
+  email: string
 }
 
 export default function Email({ email }: EmailProps) {
   const [setEmail, { isSuccess, isError, error }] = useSetEmailMutation()
   const [editable, setEditable] = useState(!email)
-  const [field, setField] = useState(email || '')
+  const [field, setField] = useState(email)
 
   useEffect(() => {
     if (isSuccess) setEditable(!isSuccess)
   }, [isSuccess])
+
+  useEffect(() => {
+    setField(email)
+    setEditable(!email)
+  }, [email])
 
   const handleChange = (name: string, value: string) => setField(value.trim())
 

@@ -1,18 +1,19 @@
 import React, { useContext, useState } from 'react'
+import Select, { StylesConfig } from 'react-select'
 import { ModalContext } from '../store/ModalContext'
+import { IBotCreate } from '../model'
 import Topbar from '../components/topbar'
 import Modal from '../components/modal'
 import Bot from '../components/bot'
 import {
   useCreateBotMutation,
+  useGetAccountQuery,
   useGetBotsQuery,
   useGetPairsQuery,
   useGetTimeframesQuery,
   useGetUserQuery,
 } from '../store/srv.api'
 import Notify from '../components/notify'
-import Select, { StylesConfig } from 'react-select'
-import { IBotCreate } from '../model'
 
 interface PageBotsProps {
   children?: React.ReactNode
@@ -20,20 +21,21 @@ interface PageBotsProps {
 export default function PageBots(props: PageBotsProps) {
   const { data: bots } = useGetBotsQuery()
   const { data: user } = useGetUserQuery()
+  const { data: account } = useGetAccountQuery(user?.account.id, { skip: !user?.account.id })
 
   const { modal, open } = useContext(ModalContext)
 
   const usedPairs = bots?.map((b) => b.pair.replace(':', '')) || []
   return (
     <>
-      {modal && user?.account && (
+      {modal && account && (
         <Modal title='Create bot'>
-          <ModalAddBot accountID={user.account.id} usedPairs={usedPairs} />
+          <ModalAddBot accountID={account.id} usedPairs={usedPairs} />
         </Modal>
       )}
       <Topbar>
         <div>
-          <button className='btn green' onClick={open} disabled={!user?.account.trade}>
+          <button className='btn green' onClick={open} disabled={!account?.trade}>
             Add bot
           </button>
         </div>
@@ -41,8 +43,8 @@ export default function PageBots(props: PageBotsProps) {
       {bots?.map((bot) => (
         <Bot key={bot.id} bot={bot} />
       ))}
-      {!user?.account.trade && <Notify type='warning'>Enable exchange account to add Bots</Notify>}
-      {user?.account.trade && bots?.length === 0 && <div>Add bot to continue</div>}
+      {!account?.trade && <Notify type='warning'>Enable exchange account to add Bots</Notify>}
+      {account?.trade && bots?.length === 0 && <div>Add bot to continue</div>}
     </>
   )
 }

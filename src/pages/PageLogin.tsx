@@ -48,6 +48,7 @@ export default function PageLogin() {
           ph='укажите почту'
           outColor='brand'
           disabled={isLoading}
+          autoComplete={true}
         />
         <InputTextField
           name='password'
@@ -60,6 +61,7 @@ export default function PageLogin() {
           ph='укажите пароль'
           outColor='brand'
           disabled={isLoading}
+          autoComplete={true}
         />
         <div className='row center justify mt-2'>
           <div />

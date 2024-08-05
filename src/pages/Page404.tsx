@@ -38,6 +38,7 @@ export default function Page404(props: Page404Props) {
         <Icon name='arrows' />
         <Icon name='arr_down' />
         <Icon name='apartment' />
+        <Icon name='bots' />
         <Icon name='backup' />
         <Icon name='close' />
         <Icon name='check' />
@@ -52,6 +53,7 @@ export default function Page404(props: Page404Props) {
         <Icon name='logout2' />
         <Icon name='menu' />
         <Icon name='metamask' />
+        <Icon name='money' />
         <Icon name='more' />
         <Icon name='info' />
         <Icon name='search' />

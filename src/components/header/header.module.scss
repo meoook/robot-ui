@@ -5,28 +5,26 @@
   display: flex;
   padding: 16px 32px;
   white-space: nowrap;
-  & > :last-child {
-    margin-right: 0px !important;
-  }
-  .item,
-  .address {
-    display: flex;
-    margin-right: 16px;
+  justify-content: space-between;
+  & > * {
+    display: inline-flex;
     align-self: stretch;
     align-items: center;
     flex-wrap: nowrap;
   }
+  & .logo {
+    margin-right: var(--padding);
+  }
   a {
+    font-weight: 500;
+    margin-right: 16px;
+    white-space: nowrap;
     &:hover {
       color: var(--color-secondary);
     }
-  }
-  .link {
-    padding: 16px 0;
-    margin: calc(-1 * var(--base-size-16)) 0;
-    font-weight: 500;
-    margin-right: var(--base-size-16, 16px);
-    white-space: nowrap;
+    &:last-child {
+      margin-right: 0px !important;
+    }
   }
   svg {
     display: inline-block;
@@ -34,9 +32,13 @@
     vertical-align: middle;
   }
   nav {
-    display: flex;
-    flex-direction: row;
-    align-self: auto;
+    width: 100%;
+    & svg {
+      visibility: hidden;
+    }
+    & .active {
+      color: var(--color-brand);
+    }
   }
   &:after {
     content: '';
@@ -47,6 +49,30 @@
     left: 0;
     right: 0;
     bottom: 0px;
+  }
+  @media screen and (max-width: 600px) {
+    & {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    & nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-head);
+      justify-content: space-between;
+      padding: 16px 32px;
+      z-index: 10;
+      & a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      & svg {
+        visibility: visible;
+      }
+    }
   }
 }
 

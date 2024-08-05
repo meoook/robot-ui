@@ -22,7 +22,7 @@ export default function Banner({ title, subtitle, children }: BannerProps) {
 export function BannerSm() {
   return (
     <>
-      <div className='row justify'>
+      <div className={style.cards}>
         <div className={style.card}>
           <h1>Your Funds Protected</h1>
           <div>No direct access to your funds</div>
@@ -44,13 +44,3 @@ export function BannerSm() {
     </>
   )
 }
-
-/*-- 
-Real time statistic
- - Get actual information about trades
- - Powerfull statistic
- - Info about balance indicators and earn status
-Notification system
-
-
---*/
