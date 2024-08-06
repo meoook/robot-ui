@@ -1,10 +1,8 @@
 import React, { useContext, useState } from 'react'
-import Select, { StylesConfig } from 'react-select'
-import { ModalContext } from '../store/ModalContext'
+import Select from 'react-select'
+import { selectStyle } from '../utils'
 import { IBotCreate } from '../model'
-import Topbar from '../components/topbar'
-import Modal from '../components/modal'
-import Bot from '../components/bot'
+import { ModalContext } from '../store/ModalContext'
 import {
   useCreateBotMutation,
   useGetAccountQuery,
@@ -14,6 +12,9 @@ import {
   useGetUserQuery,
 } from '../store/srv.api'
 import Notify from '../components/notify'
+import Topbar from '../components/topbar'
+import Modal from '../components/modal'
+import Bot from '../components/bot'
 
 interface PageBotsProps {
   children?: React.ReactNode
@@ -98,28 +99,14 @@ function ModalAddBot({ accountID, usedPairs }: { accountID: number; usedPairs: s
 
   const optionsTf = timeframes?.map((tf) => ({ value: tf.timeframe, label: tf.name })) || []
 
-  const colourStyles: StylesConfig = {
-    control: (styles) => ({ ...styles, backgroundColor: 'var(--color-head)', border: '1px solid var(--color-border)' }),
-    menu: (styles) => ({ ...styles, backgroundColor: 'var(--color-head)' }),
-    singleValue: (styles) => ({ ...styles, color: 'var(--color-primary)' }),
-    option: (styles, { isFocused, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? 'var(--color-active)' : isFocused ? 'var(--color-input)' : 'var(--color-head)',
-        color: isSelected ? 'var(--color-brand)' : 'var(--color-primary)',
-      }
-    },
-    placeholder: (styles) => ({ ...styles, color: 'var(--color-secondary)' }),
-  }
-
   return (
     <>
       <label>Bot title</label>
       <input type='text' name='name' onChange={onChange} placeholder='Enter bot title...' />
       <label>Pair</label>
-      <Select name='pair' options={optionsPairs} onChange={onSelect} styles={colourStyles} />
+      <Select name='pair' options={optionsPairs} onChange={onSelect} styles={selectStyle} />
       <label>Timeframe</label>
-      <Select name='timeframe' options={optionsTf} onChange={onSelect} styles={colourStyles} />
+      <Select name='timeframe' options={optionsTf} onChange={onSelect} styles={selectStyle} />
       <small className='red'>{error}&nbsp;</small>
 
       <div className='row justify'>

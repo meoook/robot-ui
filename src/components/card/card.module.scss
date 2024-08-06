@@ -6,12 +6,16 @@
   margin: 0 auto;
   border-radius: calc(var(--radius) * 3);
   overflow: hidden;
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 576px) {
     & {
+      box-sizing: border-box;
       width: 100%;
       padding: var(--padding);
       border-radius: var(--padding);
     }
+  }
+  & hr {
+    margin: 16px 0;
   }
 }
 

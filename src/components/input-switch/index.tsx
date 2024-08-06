@@ -8,7 +8,7 @@ interface InputSwitchProps {
   type?: string
   size?: string
   disabled?: boolean
-  onChange: (name: string, value: boolean) => void
+  onChange?: (name: string, value: boolean) => void
 }
 
 const InputSwitch = (props: InputSwitchProps) => {
@@ -35,7 +35,7 @@ const InputSwitch = (props: InputSwitchProps) => {
   )
 
   const toogle = () => {
-    if (!props.disabled) props.onChange(props.name, !props.value)
+    if (!props.disabled && props.onChange) props.onChange(props.name, !props.value)
   }
 
   return (

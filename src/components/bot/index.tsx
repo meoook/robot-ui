@@ -8,12 +8,8 @@ interface BotProps {
   bot: IBot
 }
 
-// preventScrollReset?: boolean;
-// relative?: RelativeRoutingType;
-// to: To;
-// unstable_viewTransition?: boolean;
-
 export default function Bot({ bot }: BotProps) {
+  const [base, quote] = bot.pair.split(':')
   return (
     <Link to={`/bots/${bot.id}`}>
       <div className={style.bot}>
@@ -24,20 +20,27 @@ export default function Bot({ bot }: BotProps) {
               <span className='pr-2'>{bot.pair}</span>
               <span>{bot.timeframe}</span>
             </div>
-            <span>💙ID: {bot.id}</span>
+            <div>ID: {bot.id}</div>
           </div>
           <hr />
-          <small className='gray'>{bot.name}</small>
         </div>
         <div className='row justify'>
-          <div className='col-2'>balance limit: {bot.balance_limit}</div>
-          <div className='col-2'>circles limit: {bot.circles_limit}</div>
-          <div className='col-2'>peak delta: {bot.delta}</div>
-        </div>
-        <div className='row justify'>
-          <div className='col-2'>{bot.error && <small className='red'>{bot.error}</small>}</div>
-          <div className='col-2'>orders limit: {bot.orders_limit}</div>
-          <div className='col-2'></div>
+          <div className='col column'>
+            <div>Balance</div>
+            <div>${bot.indicator?.balance.toFixed(2) || 0}</div>
+          </div>
+          <div className='col column'>
+            <div>Limit</div>
+            <div>{bot.balance_limit}%</div>
+          </div>
+          <div className='col column'>
+            <div>{base}</div>
+            <div>{bot.indicator?.base || 0}</div>
+          </div>
+          <div className='col column'>
+            <div>{quote}</div>
+            <div>{bot.indicator?.quote || 0}</div>
+          </div>
         </div>
       </div>
     </Link>

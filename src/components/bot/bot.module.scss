@@ -21,4 +21,9 @@
   .table {
     padding: 16px 0;
   }
+  @media screen and (max-width: 576px) {
+    & {
+      padding: var(--padding);
+    }
+  }
 }

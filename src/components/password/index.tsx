@@ -5,6 +5,7 @@ import { useSetPasswordMutation } from '../../store/srv.api'
 import { addMessage } from '../../store/profile.slice'
 import { IPopupOptions } from '../../model'
 import InputTextField from '../input-field'
+import iconArray from '../ico-get/icons'
 
 interface PasswordProps {
   children?: React.ReactNode
@@ -15,7 +16,7 @@ export default function Password(props: PasswordProps) {
   const [setPassword, { isSuccess, isLoading }] = useSetPasswordMutation()
   const [pwd, setPwd] = useState({ password: '', password2: '' })
   const [error, setError] = useState('')
-  const [hidden, setHidden] = useState(true)
+  const [edit, setEdit] = useState(false)
 
   useEffect(() => {
     if (isSuccess) {
@@ -30,8 +31,8 @@ export default function Password(props: PasswordProps) {
     setError('')
   }
 
-  const changeHidden = () => {
-    setHidden((prev) => !prev)
+  const toggle = () => {
+    setEdit((prev) => !prev)
   }
 
   const changePassword = () => {
@@ -40,13 +41,14 @@ export default function Password(props: PasswordProps) {
     else setPassword(pwd.password)
   }
 
-  const hiddenSyle = hidden ? `${style.password} ${style.password_hidden}` : style.password
+  const hiddenSyle = edit ? style.password : `${style.password} ${style.password_hidden}`
   return (
     <>
       <div className={style.title}>
         <h1>Change password</h1>
-        <button className='btn orange' onClick={changeHidden}>
-          {hidden ? 'Show' : 'Hide'}
+        <button className={edit ? style.hide : style.show} onClick={toggle}>
+          <span>{edit ? 'hide' : 'change'}</span>
+          {iconArray.arr_down}
         </button>
       </div>
       <div className={hiddenSyle}>

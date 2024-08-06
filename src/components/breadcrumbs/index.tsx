@@ -19,9 +19,7 @@ export default function BreadCrumbs(props: BreadCrumbsProps) {
         const path = `/${pathSegments.slice(0, index + 1).join('/')}`
         return (
           <div key={path}>
-            <Link to={path} className={style.segment}>
-              {segment}
-            </Link>
+            <Link to={path}>{segment}</Link>
             {index + 1 !== pathElemsAmount && <span className={style.divider}>/</span>}
           </div>
         )

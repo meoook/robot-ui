@@ -7,6 +7,11 @@
   font-size: var(--font-size-h2) !important;
   .divider {
     padding: 0 16px;
+    @media screen and (max-width: 480px) {
+      & {
+        padding: 0 4px;
+      }
+    }
   }
   a {
     color: var(--color-brand);

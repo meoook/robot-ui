@@ -15,8 +15,11 @@ export default function PageProfile(props: PageProfileProps) {
   return (
     <Card border={true}>
       {account && <Account account={account} />}
+      <hr />
       <TelegramNonce telegram={user?.telegram_id} />
+      <hr />
       <Email email={user?.email || ''} />
+      <hr />
       {user?.email && <Password />}
     </Card>
   )
