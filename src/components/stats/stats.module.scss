@@ -27,6 +27,9 @@
       &:nth-child(6) {
         display: none;
       }
+      &:nth-child(7) {
+        display: none;
+      }
     }
     @media screen and (max-width: 768px) {
       &:nth-child(2) {
@@ -45,7 +48,9 @@
   }
   td {
     color: var(--color-secondary);
-    // width: 12.5%;
-    width: 11.1%;
+    width: 10%;
+  }
+  & .result td {
+    color: inherit;
   }
 }

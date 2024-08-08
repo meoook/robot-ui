@@ -42,7 +42,7 @@ export default function Footer({ children }: FotterProps) {
         <div className={style.bottom}>
           <div>Twitter</div>
           <div>Telegram</div>
-          <div>Instagram</div>
+          {/* <div>Instagram</div> */}
           <div>Discord</div>
           <div>YouTube</div>
           <div>GitHub</div>

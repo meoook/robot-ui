@@ -1,13 +1,14 @@
 import style from './stats.module.scss'
-import { IBotStats } from '../../model'
+import { IBotIndicator, IBotStats } from '../../model'
 import { useGetStatsQuery } from '../../store/srv.api'
 import Loader from '../loader'
 
 interface BotMonthProps {
   pair: string
+  totals?: IBotIndicator
 }
 
-export default function BotMonthStats({ pair }: BotMonthProps) {
+export default function BotMonthStats({ pair, totals }: BotMonthProps) {
   const { data: stats, isFetching } = useGetStatsQuery(pair)
   const haveStats: boolean = Boolean(stats?.data.length)
   return (
@@ -24,7 +25,7 @@ export default function BotMonthStats({ pair }: BotMonthProps) {
               <th>sell qty</th>
               <th>sell avg</th>
               <th>fee</th>
-              <th>result</th>
+              <th>pnl</th>
               <th>profit</th>
               <th>bot fee</th>
             </tr>
@@ -43,6 +44,17 @@ export default function BotMonthStats({ pair }: BotMonthProps) {
                 <td>{st.bot_fee ? st.bot_fee : '-'}</td>
               </tr>
             ))}
+            <tr className={style.result}>
+              <td>All time</td>
+              <td>{totals?.buy_qty ? totals.buy_qty : '-'}</td>
+              <td>{totals?.buy_avg ? totals.buy_avg : '-'}</td>
+              <td>{totals?.sell_qty ? totals.sell_qty : '-'}</td>
+              <td>{totals?.sell_avg ? totals.sell_avg : '-'}</td>
+              <td>{totals?.fee ? totals.fee : '-'}</td>
+              <td>{totals?.profit ? totals.profit : '-'}</td>
+              <td>{totals?.profit ? totals.profit : '-'}</td>
+              <td>{totals?.bot_fee ? totals.bot_fee : '-'}</td>
+            </tr>
           </tbody>
         </table>
       )}

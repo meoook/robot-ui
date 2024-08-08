@@ -3,60 +3,62 @@ import { IBotIndicator } from '../../model'
 
 interface BotMonthProps {
   values: IBotIndicator
+  pair: string
 }
 
-export default function BotIndicator({ values }: BotMonthProps) {
+export default function BotIndicator({ values, pair }: BotMonthProps) {
+  const [base, quote] = pair.split(':')
   return (
     <div className={style.indicator}>
       <h1>Indicators</h1>
       <div className='row justify center'>
-        <div className='col-2'>
+        <div>
           <div>
             <h1>Balance</h1>
             <h1>{values.balance}</h1>
           </div>
         </div>
-        <div className='col-2'>
+        <div>
           <div className='row justify'>
-            <span>work</span>
+            <span>work&nbsp;</span>
             <span>{values.work}</span>
           </div>
           <hr />
           <div className='row justify'>
-            <span>liquidation</span>
+            <span>liquidation&nbsp;</span>
             <span>{values.liquidation}</span>
           </div>
         </div>
-        <div className='col-2'>
+        <div>
           <div className='row justify'>
-            <span>circles</span>
+            <span>circles&nbsp;</span>
             <span>{values.circles}</span>
           </div>
           <hr />
           <div className='row justify'>
-            <span>circle</span>
+            <span>circle&nbsp;</span>
             <span>{values.circle}</span>
           </div>
         </div>
-        <div className='col-2'>
+        <div>
           <div className='row justify'>
-            <span>base</span>
+            <span>{base}&nbsp;</span>
             <span>{values.base}</span>
           </div>
           <hr />
           <div className='row justify'>
-            <span>borrowed</span>
+            <span>borrowed&nbsp;</span>
             <span>{values.base_borrowed}</span>
           </div>
         </div>
-        <div className='col-2'>
+        <div>
           <div className='row justify'>
-            <span>quote</span>
+            <span>{quote}&nbsp;</span>
             <span>{values.quote}</span>
           </div>
           <hr />
           <div className='row justify'>
-            <span>borrowed</span>
+            <span>borrowed&nbsp;</span>
             <span>{values.quote_borrowed}</span>
           </div>
         </div>

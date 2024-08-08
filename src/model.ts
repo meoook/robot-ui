@@ -58,6 +58,14 @@ export interface IBotIndicator {
   quote_borrowed: number
   liquidation: number
   balance: number
+  // All time calculation
+  buy_qty: number
+  buy_avg: number
+  sell_qty: number
+  sell_avg: number
+  fee: number
+  profit: number
+  bot_fee: number
 }
 
 export interface IBotCreate {
@@ -129,6 +137,7 @@ export interface ITotal {
   buy: number
   sell: number
   profit: number
+  result: number
   bot_fee: number
 }
 

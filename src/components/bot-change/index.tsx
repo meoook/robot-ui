@@ -111,7 +111,7 @@ export default function BotChange({ bot }: BotChangeProps) {
               name='next_month'
               value={botCfg.next_month}
               disabled={!edit}
-              type='check'
+              type='toggle'
               size='big'
               onChange={onChange}
             />
@@ -159,8 +159,8 @@ export default function BotChange({ bot }: BotChangeProps) {
             />
           </div>
         </div>
-        {bot.indicator && <BotIndicator values={bot.indicator} />}
-        <BotMonthStats pair={bot.pair.replace(':', '')} />
+        {bot.indicator && <BotIndicator values={bot.indicator} pair={bot.pair} />}
+        <BotMonthStats pair={bot.pair.replace(':', '')} totals={bot.indicator} />
         <BotMonthTrades pair={bot.pair.replace(':', '')} />
       </div>
     </>
