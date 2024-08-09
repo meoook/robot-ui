@@ -38,10 +38,10 @@ export default function BotMonthStats({ pair, totals }: BotMonthProps) {
                 <td>{st.buy_avg ? st.buy_avg : '-'}</td>
                 <td>{st.sell_qty ? st.sell_qty : '-'}</td>
                 <td>{st.sell_avg ? st.sell_avg : '-'}</td>
-                <td>{st.fee ? st.fee : '-'}</td>
-                <td>{st.result ? st.result : '-'}</td>
-                <td>{st.profit ? st.profit : '-'}</td>
-                <td>{st.bot_fee ? st.bot_fee : '-'}</td>
+                <td>{st.fee ? st.fee.toFixed(2) : '-'}</td>
+                <td>{st.result ? st.result.toFixed(2) : '-'}</td>
+                <td>{st.profit ? st.profit.toFixed(2) : '-'}</td>
+                <td>{st.bot_fee ? st.bot_fee.toFixed(2) : '-'}</td>
               </tr>
             ))}
             <tr className={style.result}>
@@ -50,10 +50,10 @@ export default function BotMonthStats({ pair, totals }: BotMonthProps) {
               <td>{totals?.buy_avg ? totals.buy_avg : '-'}</td>
               <td>{totals?.sell_qty ? totals.sell_qty : '-'}</td>
               <td>{totals?.sell_avg ? totals.sell_avg : '-'}</td>
-              <td>{totals?.fee ? totals.fee : '-'}</td>
-              <td>{totals?.profit ? totals.profit : '-'}</td>
-              <td>{totals?.profit ? totals.profit : '-'}</td>
-              <td>{totals?.bot_fee ? totals.bot_fee : '-'}</td>
+              <td>{totals?.fee ? totals.fee.toFixed(2) : '-'}</td>
+              <td>{totals?.result ? totals.result.toFixed(2) : '-'}</td>
+              <td>{totals?.result ? (totals.result > 0 ? totals.result.toFixed(2) : '-') : '-'}</td>
+              <td>{totals?.bot_fee ? totals.bot_fee.toFixed(2) : '-'}</td>
             </tr>
           </tbody>
         </table>

@@ -64,7 +64,7 @@ export interface IBotIndicator {
   sell_qty: number
   sell_avg: number
   fee: number
-  profit: number
+  result: number
   bot_fee: number
 }
 
