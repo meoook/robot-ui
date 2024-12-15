@@ -2,7 +2,7 @@ import { useGetAccountQuery, useGetUserQuery } from '../store/srv.api'
 import Email from '../components/email'
 import TelegramNonce from '../components/telegram'
 import Password from '../components/password'
-import Card from '../components/card'
+import Card from '../elements/card'
 import Account from '../components/account'
 
 interface PageProfileProps {

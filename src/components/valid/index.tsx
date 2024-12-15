@@ -1,5 +1,5 @@
-import Icon from '../ico-get'
-import Loader from '../loader'
+import Icon from '../../elements/ico-get'
+import Loader from '../../elements/loader'
 import style from './valid.module.scss'
 
 interface ValidProps {

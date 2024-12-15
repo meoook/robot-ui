@@ -1,7 +1,7 @@
 import style from './trades.module.scss'
 import { IBotTrade } from '../../model'
 import { useGetTradesQuery } from '../../store/srv.api'
-import Loader from '../loader'
+import Loader from '../../elements/loader'
 
 interface BotMonthProps {
   pair: string

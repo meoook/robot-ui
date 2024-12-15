@@ -1,8 +1,8 @@
 import { useAppDispatch } from '../store/hooks'
 import { addMessage } from '../store/profile.slice'
 import { IPopupOptions } from '../model'
-import Icon from '../components/ico-get'
-import IcoLang from '../components/ico-lang'
+import Icon from '../elements/ico-get'
+import IcoLang from '../elements/ico-lang'
 import { SvgFallingStars } from '../svg/star'
 
 interface Page404Props {

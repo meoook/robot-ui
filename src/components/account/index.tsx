@@ -4,8 +4,8 @@ import { IAccount, IAccountUpdate } from '../../model'
 import { useLazyGetAccountQuery, useUpdateAccountMutation } from '../../store/srv.api'
 import Notify from '../notify'
 import Valid from '../valid'
-import iconArray from '../ico-get/icons'
-import InputTextField from '../input-field'
+import iconArray from '../../elements/ico-get/icons'
+import InputTextField from '../../elements/input-field'
 
 interface AccountProps {
   children?: React.ReactNode

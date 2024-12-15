@@ -1,7 +1,7 @@
 import style from './stats.module.scss'
 import { IBotIndicator, IBotStats } from '../../model'
 import { useGetStatsQuery } from '../../store/srv.api'
-import Loader from '../loader'
+import Loader from '../../elements/loader'
 
 interface BotMonthProps {
   pair: string

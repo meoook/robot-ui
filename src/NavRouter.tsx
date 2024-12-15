@@ -8,7 +8,7 @@ import PageProfile from './pages/PageProfile'
 import PageBalance from './pages/PageBalance'
 import PageBots from './pages/PageBots'
 import PageBot from './pages/PageBot'
-import Container from './components/container'
+import Container from './elements/container'
 import Footer from './components/footer'
 import SvgSoup from './svg/soup'
 

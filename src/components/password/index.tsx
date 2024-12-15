@@ -4,8 +4,8 @@ import { useAppDispatch } from '../../store/hooks'
 import { useSetPasswordMutation } from '../../store/srv.api'
 import { addMessage } from '../../store/profile.slice'
 import { IPopupOptions } from '../../model'
-import InputTextField from '../input-field'
-import iconArray from '../ico-get/icons'
+import InputTextField from '../../elements/input-field'
+import iconArray from '../../elements/ico-get/icons'
 
 interface PasswordProps {
   children?: React.ReactNode

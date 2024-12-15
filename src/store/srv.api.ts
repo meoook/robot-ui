@@ -16,7 +16,7 @@ import {
   ITotal,
 } from '../model'
 import { setLoading, setToken, destroyToken } from './profile.slice'
-import { Web3Message } from './w3'
+import { Web3Message } from '../model'
 
 export const srvApi = createApi({
   reducerPath: 'server/api',

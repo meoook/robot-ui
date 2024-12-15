@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { removeMessage } from '../../store/profile.slice'
 import { IPopup } from '../../model'
-import Icon from '../ico-get'
+import Icon from '../../elements/ico-get'
 
 export default function PopupMsgs() {
   const { messages } = useAppSelector((state) => state.profile)

@@ -2,9 +2,9 @@ import style from './header.module.scss'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useGetUserQuery, useSingOutMutation } from '../../store/srv.api'
 import { useAppSelector } from '../../store/hooks'
-import LoaderCar from '../loader-car'
-import iconArray from '../ico-get/icons'
-import Icon from '../ico-get'
+import LoaderCar from '../../elements/loader-car'
+import iconArray from '../../elements/ico-get/icons'
+import Icon from '../../elements/ico-get'
 
 export default function Header() {
   const navigate = useNavigate()

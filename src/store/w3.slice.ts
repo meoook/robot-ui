@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import Web3 from 'web3'
-import { Web3Message } from './w3'
+import { Web3Message } from '../model'
 import { BOT_PAY_ABI, BOT_PAY_ADDRESS } from './botPay'
 import { LTR_ABI, LTR_ADDRESS } from './ltr'
 import imgToken from '../svg/token.png'

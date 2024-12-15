@@ -1,7 +1,7 @@
 import style from './email.module.scss'
 import { useState, useEffect } from 'react'
 import { useSetEmailMutation } from '../../store/srv.api'
-import InputTextField from '../input-field'
+import InputTextField from '../../elements/input-field'
 
 interface EmailProps {
   children?: React.ReactNode

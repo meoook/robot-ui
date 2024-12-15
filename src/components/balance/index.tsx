@@ -12,11 +12,11 @@ import {
   addToken,
 } from '../../store/w3.slice'
 import { IApiUser } from '../../model'
-import Card from '../card'
+import Card from '../../elements/card'
 import Notify from '../notify'
 import CoinInput from '../coin'
-import Loader from '../loader'
-import iconArray from '../ico-get/icons'
+import Loader from '../../elements/loader'
+import iconArray from '../../elements/ico-get/icons'
 
 interface BalanceProps {
   user?: IApiUser

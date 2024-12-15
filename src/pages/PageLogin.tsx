@@ -3,7 +3,7 @@ import { useAppDispatch } from '../store/hooks'
 import { useSignInMutation, useW3nonceMutation, useW3authMutation } from '../store/srv.api'
 import { getAddress, handleSignMessage } from '../store/w3.slice'
 import { addMessage } from '../store/profile.slice'
-import InputTextField from '../components/input-field'
+import InputTextField from '../elements/input-field'
 
 export default function PageLogin() {
   const [auth, setAuth] = useState({ email: '', password: '' })

@@ -1,10 +1,10 @@
-import ReactDOM from 'react-dom/client'
 import './index.scss'
+import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import NavRouter from './NavRouter'
-import store from './store/store'
 import { ModalState } from './store/ModalContext'
+import store from './store/store'
+import NavRouter from './NavRouter'
 import PopupMsgs from './components/pop-msg'
 import Header from './components/header'
 
