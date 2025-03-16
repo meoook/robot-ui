@@ -137,7 +137,7 @@ export interface ITotal {
   buy: number
   sell: number
   profit: number
-  result: number
+  assets: number
   bot_fee: number
 }
 

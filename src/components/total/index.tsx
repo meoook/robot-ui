@@ -30,8 +30,8 @@ export default function TotalStats({ total }: TotalStatsProps) {
           <h1>${total.profit.toFixed(2)}</h1>
         </div>
         <div>
-          <div>PnL</div>
-          <h1>${total.result.toFixed(2)}</h1>
+          <div>Total assets</div>
+          <h1>${total.assets.toFixed(2)}</h1>
         </div>
       </div>
     </>
